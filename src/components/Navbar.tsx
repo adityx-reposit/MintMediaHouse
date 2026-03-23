@@ -41,11 +41,8 @@ export default function Navbar() {
           : "bg-transparent border-transparent"
       }`}
     >
-      <a
-        className="font-bebas text-2xl tracking-[0.12em] text-white no-underline"
-        href="#"
-      >
-        MINT<span className="text-[#ff3300]">MEDIA</span>HOUSE
+      <a href="#" className="flex items-center cursor-none">
+        <img src="/logo.png" alt="MintMediaHouse" className="h-6 md:h-7 w-auto object-contain" />
       </a>
       
       <div className="hidden md:flex items-center gap-10 text-[0.7rem] tracking-[0.15em] uppercase">

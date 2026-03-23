@@ -3,8 +3,8 @@ export default function Footer() {
     <footer className="bg-[#0a0a0a] border-t border-[#1e1e1e] pt-16 px-[5vw] pb-9">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-12 mb-16">
         <div>
-          <a className="font-bebas text-[1.5rem] tracking-[0.12em] text-white no-underline block mb-4 cursor-none" href="#">
-            MINT<span className="text-[#ff3300]">MEDIA</span>HOUSE
+          <a className="block mb-6 cursor-none" href="#">
+            <img src="/logo.png" alt="MintMediaHouse" className="h-7 md:h-8 w-auto object-contain" />
           </a>
           <p className="text-[0.82rem] text-[#888888] leading-[1.75] max-w-[260px] font-light">
             A creative media agency helping founders and brands build authority through world-class content, animations, and strategy.
@@ -21,7 +21,7 @@ export default function Footer() {
             ))}
           </div>
         </div>
-        
+
         <div className="flex flex-col">
           <h4 className="text-[0.62rem] tracking-[0.18em] uppercase text-muted mb-5">Services</h4>
           {["UI Animations", "Launch Videos", "Personal Growth", "Ad Creatives", "Podcast Branding"].map((lnk, i) => (
@@ -30,16 +30,16 @@ export default function Footer() {
             </a>
           ))}
         </div>
-        
+
         <div className="flex flex-col">
           <h4 className="text-[0.62rem] tracking-[0.18em] uppercase text-muted mb-5">Company</h4>
           {["About Us", "Our Work", "Process", "Testimonials", "Careers"].map((lnk, i) => (
-            <a key={i} href={lnk === "About Us" || lnk === "Careers" ? "#" : `#${lnk.toLowerCase().split(" ")[lnk.split(" ").length-1]}`} className="block text-[0.82rem] text-[#888888] no-underline mb-2.5 transition-colors duration-200 hover:text-white cursor-none">
+            <a key={i} href={lnk === "About Us" || lnk === "Careers" ? "#" : `#${lnk.toLowerCase().split(" ")[lnk.split(" ").length - 1]}`} className="block text-[0.82rem] text-[#888888] no-underline mb-2.5 transition-colors duration-200 hover:text-white cursor-none">
               {lnk}
             </a>
           ))}
         </div>
-        
+
         <div className="flex flex-col">
           <h4 className="text-[0.62rem] tracking-[0.18em] uppercase text-muted mb-5">Connect</h4>
           <a href="#quote" className="block text-[0.82rem] text-[#888888] no-underline mb-2.5 transition-colors duration-200 hover:text-white cursor-none">Get a Quote</a>
@@ -48,9 +48,9 @@ export default function Footer() {
           <a href="#" className="block text-[0.82rem] text-[#888888] no-underline mb-2.5 transition-colors duration-200 hover:text-white cursor-none">Privacy Policy</a>
         </div>
       </div>
-      
+
       <div className="border-t border-[#1e1e1e] pt-6 flex flex-col md:flex-row justify-between items-center text-[0.68rem] tracking-[0.08em] text-muted gap-4">
-        <span>© 2025 MintMediaHouse. All rights reserved.</span>
+        <span>© 2026 MintMediaHouse. All rights reserved.</span>
         <span>MUMBAI, IN · HELLO@MINTMEDIAHOUSE.COM</span>
       </div>
     </footer>
