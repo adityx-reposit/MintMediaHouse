@@ -4,21 +4,36 @@ export default function Footer() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-12 mb-16">
         <div>
           <a className="block mb-6 cursor-none" href="#">
-            <img src="/logo.png" alt="MintMediaHouse" className="h-7 md:h-8 w-auto object-contain" />
+            <img src="/logo.png" alt="MintMediaHouse" className="h-10 md:h-12 lg:h-16 w-auto object-contain" />
           </a>
           <p className="text-[0.82rem] text-[#888888] leading-[1.75] max-w-[260px] font-light">
             A creative media agency helping founders and brands build authority through world-class content, animations, and strategy.
           </p>
           <div className="flex gap-3 mt-6">
-            {["𝕏", "◎", "in", "▶"].map((soc, i) => (
-              <a
-                key={i}
-                href="#"
-                className="w-[34px] h-[34px] border border-[#1e1e1e] rounded-md flex items-center justify-center text-[0.7rem] text-muted no-underline transition-colors duration-200 hover:border-white hover:text-white cursor-none"
-              >
-                {soc}
-              </a>
-            ))}
+            <a
+              href="https://x.com/_adityx_"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-[34px] h-[34px] border border-[#1e1e1e] rounded-md flex items-center justify-center text-[0.85rem] text-muted no-underline transition-colors duration-200 hover:border-white hover:text-white cursor-none"
+            >
+              𝕏
+            </a>
+            <a
+              href="https://www.linkedin.com/in/adityxcodes"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-[34px] h-[34px] border border-[#1e1e1e] rounded-md flex items-center justify-center text-[0.85rem] font-medium text-muted no-underline transition-colors duration-200 hover:border-white hover:text-white cursor-none"
+            >
+              in
+            </a>
+            <a
+              href="https://www.instagram.com/mintmedia.house/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-[34px] h-[34px] border border-[#1e1e1e] rounded-md flex items-center justify-center text-[0.75rem] font-bold tracking-tight text-muted no-underline transition-colors duration-200 hover:border-white hover:text-white cursor-none"
+            >
+              IG
+            </a>
           </div>
         </div>
 
@@ -50,7 +65,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-[#1e1e1e] pt-6 flex flex-col md:flex-row justify-between items-center text-[0.68rem] tracking-[0.08em] text-muted gap-4">
-        <span>© 2026 MintMediaHouse. All rights reserved.</span>
+        <span>© 2025 MintMediaHouse. All rights reserved.</span>
         <span>MUMBAI, IN · HELLO@MINTMEDIAHOUSE.COM</span>
       </div>
     </footer>
