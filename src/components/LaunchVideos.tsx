@@ -60,7 +60,7 @@ export default function LaunchVideos() {
           />
 
           {/* Scanline pattern mask overlay for texture */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none mix-blend-overlay z-10"></div>
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none z-10"></div>
           
           {/* Animated EQ Bars */}
           <div className="absolute bottom-10 right-8 flex items-end gap-1 h-9 z-10 pointer-events-none">

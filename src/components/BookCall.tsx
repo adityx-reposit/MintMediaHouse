@@ -35,7 +35,7 @@ export default function BookCall() {
             </p>
             <a
               className="inline-flex items-center gap-3 px-9 py-[15px] border border-white rounded-full text-white text-[0.72rem] tracking-[0.14em] uppercase font-medium transition-colors duration-200 hover:bg-white hover:text-black cursor-none"
-              href="https://cal.com/aditya-connect"
+              href="https://cal.com/mintmediahouse"
               target="_blank"
             >
               📅 {"\u00A0"}OPEN CAL.COM & BOOK NOW
@@ -77,7 +77,7 @@ export default function BookCall() {
             </a>
             <a
               className="px-8 py-3.5 border border-[#ff3300] bg-[#ff3300] rounded-full text-white text-[0.7rem] tracking-[0.14em] uppercase font-medium transition-colors duration-200 hover:bg-[#e82d00] cursor-none"
-              href="https://cal.com/aditya-connect"
+              href="https://cal.com/mintmediahouse"
               target="_blank"
             >
               BOOK A CALL
