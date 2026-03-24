@@ -17,8 +17,9 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-[0.68rem] tracking-[0.2em] uppercase text-muted mb-5 flex items-center gap-3"
         >
-          <span className="block w-6 h-[1px] bg-muted"></span>
-          Creative Media Agency · Est. 2021
+          <h2 className="block w-6 h-[1px] bg-muted"></h2>
+          <span className="sr-only">Mint Media House</span>
+          Mint Media House · Creative Media Agency · Est. 2025
         </motion.div>
 
         <motion.h1
@@ -41,7 +42,7 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mt-8 max-w-[440px] text-[0.95rem] font-light text-[#888888] leading-relaxed"
         >
-          UI animations, launch videos & personal growth content built for founders who refuse to be ignored by their audience.
+          <strong>Mint Media House</strong> (MintMedia) creates premium UI animations, launch videos & personal growth content built for founders who refuse to be ignored by their audience.
         </motion.p>
 
         <motion.div
@@ -83,41 +84,38 @@ export default function Hero() {
             transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
           >
             <path id="cp" d="M 95 95 m -74 0 a 74 74 0 1 1 148 0 a 74 74 0 1 1 -148 0" fill="none" />
-            <text fontFamily="Inter,sans-serif" fontSize="10.5" fill="#444444" letterSpacing="10">
+            <text fontFamily="Inter,sans-serif" fontSize="10.5" fill="#ffffff" letterSpacing="10" style={{ textShadow: "0 0 8px rgba(255,255,255,0.4)" }}>
               <textPath href="#cp">CREATIVE AGENCY · UI · VIDEO · GROWTH · </textPath>
             </text>
           </motion.svg>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-[#ff3300] rounded-full flex items-center justify-center text-3xl">
-            🎬
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full flex items-center justify-center shadow-2xl overflow-hidden z-10">
+            <img src="/android-chrome-512x512.png" alt="Mint Media Logo" className="w-full h-full object-contain" />
           </div>
         </div>
 
-        {/* Floating Cards */}
+        {/* Floating Cards - Logos */}
         <motion.div
-          animate={{ y: [0, -12, 0] }}
+          animate={{ y: [0, -15, 0] }}
           transition={{ duration: 3.1, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[10%] left-[-5%] bg-[#111111] border border-[#1e1e1e] rounded-[10px] px-4 py-3 text-[0.72rem] tracking-[0.06em] text-[#888888]"
+          className="absolute top-[8%] left-[-10%] bg-[#111111] border border-[#2a2a2a] rounded-[16px] p-6 flex items-center justify-center shadow-2xl z-20"
         >
-          <strong className="block text-white font-bebas text-base tracking-[0.08em] mb-0.5">15+</strong>
-          Brands Elevated
+          <img src="/blackbox logo.png" alt="Blackbox AI - Mint Media Client" className="h-[80px] object-contain" />
         </motion.div>
 
         <motion.div
-          animate={{ y: [0, -12, 0] }}
+          animate={{ y: [0, -15, 0] }}
           transition={{ duration: 2.7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-          className="absolute top-[38%] right-[-2%] bg-[#111111] border border-[#1e1e1e] rounded-[10px] px-4 py-3 text-[0.72rem] tracking-[0.06em] text-[#888888]"
+          className="absolute top-[42%] right-[-8%] bg-[#111111] border border-[#2a2a2a] rounded-[16px] p-6 flex items-center justify-center shadow-2xl z-20"
         >
-          <strong className="block text-white font-bebas text-base tracking-[0.08em] mb-0.5">10M+</strong>
-          Views Generated
+          <img src="/playai.png" alt="Play AI - Mint Media Partners" className="h-[80px] object-contain" />
         </motion.div>
 
         <motion.div
-          animate={{ y: [0, -12, 0] }}
+          animate={{ y: [0, -15, 0] }}
           transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.9 }}
-          className="absolute bottom-[12%] left-[6%] bg-[#111111] border border-[#1e1e1e] rounded-[10px] px-4 py-3 text-[0.72rem] tracking-[0.06em] text-[#888888]"
+          className="absolute bottom-[5%] left-[2%] bg-[#111111] border border-[#2a2a2a] rounded-[16px] p-6 flex items-center justify-center shadow-2xl z-20"
         >
-          <strong className="block text-white font-bebas text-base tracking-[0.08em] mb-0.5">5-DAY</strong>
-          Delivery
+          <img src="/base logo.png" alt="Base - MintMedia Case Study" className="h-[80px] object-contain" />
         </motion.div>
       </motion.div>
     </section>

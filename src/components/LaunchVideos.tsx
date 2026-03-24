@@ -1,17 +1,23 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 export default function LaunchVideos() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const isInView = useInView(containerRef, { margin: "-20%" });
 
   useEffect(() => {
-    if (videoRef.current) {
-      // Catch and ignore the play interruption error caused by React Strict Mode
+    if (!videoRef.current) return;
+    
+    if (isInView) {
       videoRef.current.play().catch(() => {});
+    } else {
+      videoRef.current.pause();
     }
-  }, []);
+  }, [isInView]);
+
   return (
     <section id="launch" className="bg-[#111111] py-[110px] px-[5vw]">
       <motion.div
@@ -32,6 +38,7 @@ export default function LaunchVideos() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center mt-14">
         {/* Video Box */}
         <motion.div
+          ref={containerRef}
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10%" }}
@@ -48,11 +55,10 @@ export default function LaunchVideos() {
             <span className="sr-only">View Tweet</span>
           </a>
 
-          {/* Native HTML Video Element */}
+          {/* Trimmed Video Element */}
           <video 
             ref={videoRef}
-            src="/video preview.mp4" 
-            autoPlay 
+            src="/video preview.mp4#t=10,25" 
             muted 
             loop 
             playsInline 
@@ -67,7 +73,7 @@ export default function LaunchVideos() {
             {[22, 14, 32, 18, 38, 12, 28, 20, 36, 16, 26, 10].map((h, i) => (
               <motion.div
                 key={i}
-                animate={{ height: ["4px", `${h}px`, "4px"], opacity: [0.3, 0.9, 0.3] }}
+                animate={{ height: ["4px", `${h}px`, "4px"], opacity: isInView ? [0.3, 0.9, 0.3] : 0.3 }}
                 transition={{
                   duration: 0.5 + Math.random() * 0.9,
                   repeat: Infinity,

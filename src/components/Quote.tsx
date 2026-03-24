@@ -7,15 +7,30 @@ export default function Quote() {
   const [btnText, setBtnText] = useState("SEND QUOTE REQUEST →");
   const [isSent, setIsSent] = useState(false);
 
-  const handleQuote = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleQuote = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSent(true);
-    setBtnText("✓ SENT — WE'LL REPLY WITHIN 24H");
+    setBtnText("SENDING...");
     
+    const formData = new FormData(e.currentTarget);
+    // Anti-spam honeypot handled by FormSubmit implicitly, but let's submit cleanly via AJAX.
+    try {
+      await fetch("https://formsubmit.co/ajax/mintmediaconnect@gmail.com", {
+        method: "POST",
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+      });
+      setBtnText("✓ SENT — WE'LL REPLY WITHIN 24H");
+      (e.target as HTMLFormElement).reset();
+    } catch {
+      setBtnText("ERROR. TRY AGAIN.");
+    }
+
     setTimeout(() => {
       setBtnText("SEND QUOTE REQUEST →");
       setIsSent(false);
-      (e.target as HTMLFormElement).reset();
     }, 4500);
   };
 
@@ -36,7 +51,7 @@ export default function Quote() {
           SOMETHING <em className="not-italic text-[#ff3300]">GREAT</em>
         </h2>
         <p className="text-[#888888] text-[0.88rem] mt-4 font-light">
-          Tell us about your project — we'll reply within 24 hours with a custom proposal.
+          Tell <strong>Mint Media House</strong> about your project — our production team will reply within 24 hours with a custom proposal.
         </p>
       </motion.div>
 
@@ -51,19 +66,19 @@ export default function Quote() {
         >
           <div className="flex flex-col gap-2 py-6 px-8 bg-[#111111]">
             <label className="text-[0.62rem] tracking-[0.16em] uppercase text-muted">Your Name</label>
-            <input type="text" placeholder="Alex Johnson" required className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white placeholder:text-[#555] cursor-none" />
+            <input type="text" name="name" placeholder="Alex Johnson" required className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white placeholder:text-[#555] cursor-none" />
           </div>
           <div className="flex flex-col gap-2 py-6 px-8 bg-[#111111]">
             <label className="text-[0.62rem] tracking-[0.16em] uppercase text-muted">Email Address</label>
-            <input type="email" placeholder="alex@company.com" required className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white placeholder:text-[#555] cursor-none" />
+            <input type="email" name="email" placeholder="alex@company.com" required className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white placeholder:text-[#555] cursor-none" />
           </div>
           <div className="flex flex-col gap-2 py-6 px-8 bg-[#111111]">
             <label className="text-[0.62rem] tracking-[0.16em] uppercase text-muted">Company / Brand</label>
-            <input type="text" placeholder="Your Brand" className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white placeholder:text-[#555] cursor-none" />
+            <input type="text" name="company" placeholder="Your Brand" className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white placeholder:text-[#555] cursor-none" />
           </div>
           <div className="flex flex-col gap-2 py-6 px-8 bg-[#111111]">
             <label className="text-[0.62rem] tracking-[0.16em] uppercase text-muted">Service Needed</label>
-            <select className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white cursor-none [&>option]:bg-[#111111]">
+            <select name="service" className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white cursor-none [&>option]:bg-[#111111]">
               <option>UI Animations</option>
               <option>Launch Video</option>
               <option>Personal Growth Content</option>
@@ -74,7 +89,7 @@ export default function Quote() {
           </div>
           <div className="flex flex-col gap-2 py-6 px-8 bg-[#111111]">
             <label className="text-[0.62rem] tracking-[0.16em] uppercase text-muted">Budget Range</label>
-            <select className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white cursor-none [&>option]:bg-[#111111]">
+            <select name="budget" className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white cursor-none [&>option]:bg-[#111111]">
               <option>₹25,000 – ₹50,000</option>
               <option>₹50,000 – ₹1,00,000</option>
               <option>₹1,00,000 – ₹2,50,000</option>
@@ -83,7 +98,7 @@ export default function Quote() {
           </div>
           <div className="flex flex-col gap-2 py-6 px-8 bg-[#111111]">
             <label className="text-[0.62rem] tracking-[0.16em] uppercase text-muted">Timeline</label>
-            <select className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white cursor-none [&>option]:bg-[#111111]">
+            <select name="timeline" className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white cursor-none [&>option]:bg-[#111111]">
               <option>ASAP (rush)</option>
               <option>1–2 weeks</option>
               <option>1 month</option>
@@ -92,7 +107,7 @@ export default function Quote() {
           </div>
           <div className="flex flex-col gap-2 py-6 px-8 bg-[#111111] md:col-span-2">
             <label className="text-[0.62rem] tracking-[0.16em] uppercase text-muted">Tell Us About Your Project</label>
-            <textarea placeholder="Describe your goals, audience, and what success looks like…" className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white placeholder:text-[#555] cursor-none resize-y min-h-[100px]"></textarea>
+            <textarea name="project_details" placeholder="Describe your goals, audience, and what success looks like…" className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white placeholder:text-[#555] cursor-none resize-y min-h-[100px]"></textarea>
           </div>
           <div className="md:col-span-2 py-8 px-8 bg-[#111111] border-t border-[#1e1e1e] flex justify-center">
             <button

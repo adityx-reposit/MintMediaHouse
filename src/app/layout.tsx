@@ -3,7 +3,8 @@ import { Inter, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
 import CustomCursor from "@/components/CustomCursor";
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next"
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -16,8 +17,55 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: "MintMediaHouse — Creative Media Agency",
-  description: "UI animations, launch videos & personal growth content built for founders who refuse to be ignored by their audience.",
+  title: "Mint Media House | The Elite Creative Media Agency | MintMedia",
+  description: "Mint Media House (MintMedia) creates viral UI animations, premium launch videos & personal growth content for founders. Rank #1 with Mint Media's elite video production.",
+  keywords: [
+    "Mint Media", 
+    "MintMedia", 
+    "Mint Media House", 
+    "MintMediaHouse", 
+    "Creative Media Agency", 
+    "UI animations", 
+    "Launch videos", 
+    "Viral branding", 
+    "Video production for founders"
+  ],
+  openGraph: {
+    title: "Mint Media House | The Elite Creative Media Agency",
+    description: "Mint Media House creates viral UI animations and premium launch videos for founders. Work with MintMedia today.",
+    url: "https://mintmediahouse.com",
+    siteName: "Mint Media House",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Mint Media House Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mint Media House | The Elite Creative Media Agency",
+    description: "Mint Media House creates viral UI animations and premium launch videos for founders. Work with MintMedia today.",
+    images: ["/logo.png"],
+  },
+  alternates: {
+    canonical: "https://mintmediahouse.com",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },

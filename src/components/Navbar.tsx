@@ -44,6 +44,8 @@ export default function Navbar() {
       <a
         className="font-bebas text-2xl tracking-[0.12em] text-white no-underline border-none cursor-none"
         href="#"
+        aria-label="Mint Media House | MintMedia Website Home"
+        title="Mint Media House"
       >
         MINT<span className="text-[#ff3300]">MEDIA</span>HOUSE
       </a>
