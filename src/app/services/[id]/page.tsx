@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Play, ExternalLink } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -252,101 +252,40 @@ export default function ServiceDetailPage({ params }: PageProps) {
                   </p>
                 </div>
 
-                {/* Floating Video Gallery */}
+                {/* Video Gallery - Auto-Playing Videos */}
                 <div className="mb-12">
                   <h3 className="font-bebas text-[1.3rem] tracking-[0.04em] text-white mb-8">
                     Real Examples & Case Studies
                   </h3>
 
-                  {/* Floating Videos Container - Inspired by Hero floating logos */}
-                  <div className="relative h-[600px] rounded-2xl border border-[#1e1e1e] bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] overflow-hidden flex items-center justify-center">
-                    {/* Center circle */}
-                    <motion.div
-                      animate={{ scale: [1, 1.05, 1] }}
-                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                      className="absolute w-24 h-24 rounded-full border border-[#1e1e1e] flex items-center justify-center z-10"
-                    >
-                      <div className="text-center">
-                        <div className="text-[0.7rem] tracking-[0.2em] uppercase text-[#888888] mb-1">
-                          {service.num}
+                  {/* Video Grid Container */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {service.videos.map((video, idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="group"
+                      >
+                        <div className="relative rounded-lg overflow-hidden border border-[#1e1e1e] bg-[#0a0a0a] aspect-video mb-4 hover:border-[#ff3300] transition-colors duration-300">
+                          <video
+                            src={video.url}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            preload="auto"
+                            className="w-full h-full object-cover"
+                          />
                         </div>
-                        <Play size={20} className="text-[#ff3300] mx-auto" />
-                      </div>
-                    </motion.div>
-
-                    {/* Floating Video Cards */}
-                    {service.videos.map((video, idx) => {
-                      const angle = (idx / service.videos.length) * Math.PI * 2;
-                      const radius = 180;
-                      const xOffset = Math.cos(angle) * radius;
-                      const yOffset = Math.sin(angle) * radius;
-
-                      const durations = [3.1, 2.7, 3.5];
-                      const delays = [0, 0.5, 0.9];
-
-                      return (
-                        <motion.a
-                          key={idx}
-                          href={video.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          initial={{ opacity: 0, scale: 0 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          viewport={{ once: true }}
-                          whileHover={{ scale: 1.15 }}
-                          animate={{ y: [0, -20, 0] }}
-                          style={{
-                            position: "absolute",
-                            left: `calc(50% + ${xOffset}px)`,
-                            top: `calc(50% + ${yOffset}px)`,
-                            transform: "translate(-50%, -50%)",
-                          }}
-                          transition={{
-                            duration: 0.8,
-                            delay: idx * 0.2,
-                          }}
-                          className="group bg-[#111111] border border-[#2a2a2a] hover:border-[#ff3300] rounded-[12px] p-4 flex flex-col items-center justify-center shadow-2xl transition-all duration-300 w-[150px] z-20"
-                        >
-                          <motion.div
-                            animate={{ y: [0, -20, 0] }}
-                            transition={{
-                              duration: [3.1, 2.7, 3.5][idx % 3],
-                              repeat: Infinity,
-                              ease: "easeInOut",
-                              delay: [0, 0.5, 0.9][idx % 3],
-                            }}
-                          >
-                            <div className="relative w-full aspect-video bg-[#0a0a0a] rounded-lg overflow-hidden mb-3 flex items-center justify-center group-hover:border group-hover:border-[#ff3300] transition-colors">
-                              <motion.div
-                                animate={{ scale: [1, 1.2, 1] }}
-                                transition={{ duration: 2, repeat: Infinity }}
-                              >
-                                <Play
-                                  size={32}
-                                  className="text-[#ff3300] opacity-60 group-hover:opacity-100 transition-opacity"
-                                  fill="#ff3300"
-                                />
-                              </motion.div>
-                            </div>
-                            <p className="text-[0.7rem] text-[#888888] group-hover:text-[#ff3300] transition-colors text-center font-medium line-clamp-2">
-                              {video.title}
-                            </p>
-                          </motion.div>
-                        </motion.a>
-                      );
-                    })}
+                        <h4 className="text-[0.9rem] text-white font-medium group-hover:text-[#ff3300] transition-colors">
+                          {video.title}
+                        </h4>
+                      </motion.div>
+                    ))}
                   </div>
-
-                  {/* Info text */}
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.5 }}
-                    className="text-[0.8rem] text-[#888888] mt-6 text-center"
-                  >
-                    ✨ Hover over any video to preview, click to view the full work on X/Twitter
-                  </motion.p>
                 </div>
               </motion.div>
             </div>

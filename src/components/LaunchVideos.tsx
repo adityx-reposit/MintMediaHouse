@@ -41,8 +41,7 @@ export default function LaunchVideos() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10%" }}
           transition={{ duration: 0.65, delay: 0.1 }}
-          className="aspect-[16/10] bg-[#161616] border border-[#1e1e1e] relative overflow-hidden flex items-center justify-center transform-gpu group cursor-pointer"
-          onClick={() => window.open("https://x.com/playAInetwork/status/1985679479017259182?s=20", "_blank")}
+          className="aspect-[16/10] bg-[#161616] border border-[#1e1e1e] relative overflow-hidden flex items-center justify-center transform-gpu group"
         >
           {/* Trimmed Video Element */}
           <video 
