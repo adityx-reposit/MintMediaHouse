@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useRef, useEffect } from "react";
 
 export default function LaunchVideos() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -9,14 +9,12 @@ export default function LaunchVideos() {
   const isInView = useInView(containerRef, { margin: "-20%" });
 
   useEffect(() => {
-    if (!videoRef.current) return;
-    
-    if (isInView) {
-      videoRef.current.play().catch(() => {});
-    } else {
-      videoRef.current.pause();
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {
+        // Autoplay blocked by browser
+      });
     }
-  }, [isInView]);
+  }, []);
 
   return (
     <section id="launch" className="bg-[#111111] py-[110px] px-[5vw]">
@@ -44,24 +42,17 @@ export default function LaunchVideos() {
           viewport={{ once: true, margin: "-10%" }}
           transition={{ duration: 0.65, delay: 0.1 }}
           className="aspect-[16/10] bg-[#161616] border border-[#1e1e1e] relative overflow-hidden flex items-center justify-center transform-gpu group cursor-pointer"
+          onClick={() => window.open("https://x.com/playAInetwork/status/1985679479017259182?s=20", "_blank")}
         >
-          {/* Invisible overlay link that captures clicks */}
-          <a 
-            href="https://x.com/playAInetwork/status/1985679479017259182?s=20" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="absolute inset-0 z-20 block cursor-none"
-          >
-            <span className="sr-only">View Tweet</span>
-          </a>
-
           {/* Trimmed Video Element */}
           <video 
             ref={videoRef}
             src="/video preview.mp4#t=10,25" 
+            autoPlay
             muted 
             loop 
-            playsInline 
+            playsInline
+            preload="auto"
             className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03] z-0"
           />
 
@@ -83,10 +74,6 @@ export default function LaunchVideos() {
                 className="w-[3px] rounded-sm bg-[#ff3300] opacity-70"
               />
             ))}
-          </div>
-
-          <div className="absolute bottom-5 left-5 text-[0.62rem] tracking-[0.16em] uppercase text-white font-medium flex items-center gap-2 z-10 pointer-events-none bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg">
-            <span className="text-[#ff3300]">▶</span> PREVIEW VIDEO
           </div>
         </motion.div>
 

@@ -1,12 +1,36 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
 export default function Services() {
   const [selectedService, setSelectedService] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Handle video play/pause
+  const handleVideoToggle = () => {
+    if (videoRef.current) {
+      if (isVideoPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsVideoPlaying(!isVideoPlaying);
+    }
+  };
+
+  // Reset video when component unmounts
+  useEffect(() => {
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.pause();
+        setIsVideoPlaying(false);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -18,7 +42,7 @@ export default function Services() {
       const script = document.createElement("script");
       script.src = "https://platform.twitter.com/widgets.js";
       script.async = true;
-      script.charSet = "utf-8";
+      script.charset = "utf-8";
       document.body.appendChild(script);
     }
   }, [selectedService, mounted]);
@@ -174,9 +198,142 @@ export default function Services() {
             </motion.button>
           ))}
         </div>
-      </motion.div>
 
-      {/* Modal Overlay */}
+        {/* Video Preview Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-10%" }}
+          transition={{ duration: 0.7 }}
+          className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center"
+        >
+          {/* Left - Video Preview */}
+          <div className="group relative rounded-xl overflow-hidden border border-[#1e1e1e] hover:border-[#ff3300] transition-colors">
+            <div className="relative w-full aspect-video bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] overflow-hidden">
+              {/* Decorative BG */}
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
+              
+              {/* Video Background Thumbnail */}
+              <div 
+                className="absolute inset-0 bg-cover bg-center z-0"
+                style={{
+                  backgroundImage: "url('/thumbnails/launch-1.svg')"
+                }}
+              />
+              
+              {/* Video Player - Always visible */}
+              <video
+                ref={videoRef}
+                src="/video preview.mp4"
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-10"
+                poster="/thumbnails/launch-1.svg"
+                preload="metadata"
+                playsInline
+                controlsList="nodownload"
+                onPlay={() => setIsVideoPlaying(true)}
+                onPause={() => setIsVideoPlaying(false)}
+              />
+
+              {/* Play Button Overlay - Only show when paused */}
+              {!isVideoPlaying && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-colors z-20">
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleVideoToggle}
+                    className="w-16 h-16 rounded-full bg-[#ff3300] flex items-center justify-center text-white hover:bg-[#e82d00] transition-colors group-hover:scale-110 shadow-lg"
+                  >
+                    <span className="text-xl ml-1">▶</span>
+                  </motion.button>
+                </div>
+              )}
+
+              {/* Pause Button - Show when playing */}
+              {isVideoPlaying && (
+                <motion.button
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={handleVideoToggle}
+                  className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[#ff3300]/90 hover:bg-[#ff3300] flex items-center justify-center text-white transition-colors z-20 shadow-lg"
+                >
+                  <span className="text-sm">⏸</span>
+                </motion.button>
+              )}
+
+              {/* Bottom Label */}
+              <div className="absolute bottom-4 left-4 z-20">
+                <span className="text-[0.7rem] tracking-[0.2em] uppercase text-[#ff3300] bg-[#0a0a0a]/80 backdrop-blur-sm px-3 py-2 rounded-full inline-block">
+                  ▶ PREVIEW VIDEO
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right - Features */}
+          <div>
+            <div className="mb-8">
+              <div className="text-[0.65rem] tracking-[0.2em] uppercase text-muted mb-4 flex items-center gap-3">
+                <span className="text-[#ff3300]">//</span> Launch Videos
+              </div>
+              <h2 className="font-bebas text-[clamp(2.2rem,5vw,3.8rem)] leading-[1.1] tracking-[0.04em] text-white mb-2">
+                VIDEOS THAT
+              </h2>
+              <h2 className="font-bebas text-[clamp(2.2rem,5vw,3.8rem)] leading-[1.1] tracking-[0.04em] text-white">
+                <em className="not-italic text-[#ff3300]">LAUNCH</em> IDEAS
+              </h2>
+            </div>
+
+            {/* Features List */}
+            <div className="space-y-5">
+              {[
+                { num: "01", title: "CINEMATIC QUALITY", desc: "4K production with professional colour grading, motion graphics, and original sound design based in from day one." },
+                { num: "02", title: "FAST TURNAROUND", desc: "First cut in 5 business days. Revisions are fast and unlimited on our monthly retainer plan." },
+                { num: "03", title: "CONVERSION-OPTIMISED", desc: "Scripts written by strategists, not just editors — every scene has a measurable objective and goal." },
+                { num: "04", title: "REPURPOSING BUNDLE", desc: "One hero video becomes five social cuts, infographics, and email assets — maximum ROI per shoot." },
+              ].map((feature, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="flex gap-4"
+                >
+                  <div className="flex-shrink-0">
+                    <div className="text-[0.75rem] font-bold tracking-[0.2em] text-[#ff3300]">
+                      {feature.num}
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-[0.85rem] font-medium text-white tracking-[0.05em] mb-1">
+                      {feature.title}
+                    </h3>
+                    <p className="text-[0.8rem] text-[#888888] leading-[1.6]">
+                      {feature.desc}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* CTA */}
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              onClick={() => {
+                handleVideoToggle();
+              }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="mt-8 px-6 py-3 bg-[#ff3300] hover:bg-[#e82d00] text-white rounded-lg font-medium tracking-[0.1em] uppercase text-[0.75rem] transition-colors"
+            >
+              {isVideoPlaying ? "Pause Video" : "Play Video"} →
+            </motion.button>
+          </div>
+        </motion.div>
+      </motion.div>
       <AnimatePresence>
         {selectedService !== null && mounted && (
           <motion.div
@@ -281,6 +438,77 @@ export default function Services() {
                           </div>
                         </div>
                       </motion.a>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Full Video Details Section */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35 }}
+                  className="mb-10"
+                >
+                  <h3 className="font-bebas text-[1.3rem] tracking-[0.06em] text-white mb-6">
+                    Full Video Details
+                  </h3>
+
+                  {/* Full Video Cards Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {services[selectedService].videos.map((video, idx) => (
+                      <div
+                        key={idx}
+                        className="bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-[#1e1e1e] rounded-lg p-5 hover:border-[#ff3300] transition-colors"
+                      >
+                        {/* Thumbnail Preview */}
+                        <div className="w-full h-[140px] bg-gradient-to-br from-[#ff3300] to-orange-600 rounded-lg mb-4 overflow-hidden flex items-center justify-center">
+                          <img
+                            src={`/thumbnails/${video.thumbnail}.svg`}
+                            alt={video.title}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+
+                        {/* Video Info */}
+                        <div className="space-y-3">
+                          <div>
+                            <h4 className="text-[0.9rem] font-medium text-white mb-1 line-clamp-2">
+                              {video.title}
+                            </h4>
+                            <p className="text-[0.75rem] text-[#888888]">{video.author}</p>
+                          </div>
+
+                          {/* Full Stats */}
+                          <div className="grid grid-cols-2 gap-3 py-3 border-t border-[#1e1e1e]">
+                            <div>
+                              <p className="text-[0.65rem] text-[#888888] mb-1">Views</p>
+                              <p className="text-[0.85rem] font-bold text-white">{video.views}</p>
+                            </div>
+                            <div>
+                              <p className="text-[0.65rem] text-[#888888] mb-1">Likes</p>
+                              <p className="text-[0.85rem] font-bold text-[#ff3300]">{video.likes}</p>
+                            </div>
+                            <div>
+                              <p className="text-[0.65rem] text-[#888888] mb-1">RTs</p>
+                              <p className="text-[0.85rem] font-bold text-white">{video.retweets}</p>
+                            </div>
+                            <div>
+                              <p className="text-[0.65rem] text-[#888888] mb-1">Replies</p>
+                              <p className="text-[0.85rem] font-bold text-white">{video.replies}</p>
+                            </div>
+                          </div>
+
+                          {/* View Tweet Link */}
+                          <a
+                            href={`https://twitter.com/${video.author.replace("@", "")}/status/${video.tweetId}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block text-center py-2 mt-3 border border-[#1e1e1e] hover:border-[#ff3300] hover:bg-[#ff3300] hover:bg-opacity-10 text-[#ff3300] text-[0.75rem] font-medium tracking-[0.1em] uppercase rounded transition-colors"
+                          >
+                            View on X →
+                          </a>
+                        </div>
+                      </div>
                     ))}
                   </div>
                 </motion.div>
