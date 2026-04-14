@@ -18,7 +18,7 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: "UI Animation & Launch Video Agency for SaaS | Mint Media House Mumbai",
+  title: "Mint Media House",
   description: "Viral video content for SaaS founders. Custom UI animations, launch videos & brand films that generated 10M+ views. Mumbai-based. Get custom quote in 24h →",
   keywords: [
     "video production agency Mumbai",
