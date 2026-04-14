@@ -59,14 +59,14 @@ export default function Footer() {
           <h4 className="text-[0.62rem] tracking-[0.18em] uppercase text-muted mb-5">Connect</h4>
           <a href="#quote" className="block text-[0.82rem] text-[#888888] no-underline mb-2.5 transition-colors duration-200 hover:text-white cursor-none">Get a Quote</a>
           <a href="#book" className="block text-[0.82rem] text-[#888888] no-underline mb-2.5 transition-colors duration-200 hover:text-white cursor-none">Book a Call</a>
-          <a href="mailto:hello@mintmediahouse.com" className="block text-[0.82rem] text-[#888888] no-underline mb-2.5 transition-colors duration-200 hover:text-white cursor-none">hello@mintmediahouse.com</a>
+          <a href="mintmediaconnect@gmail.com" className="block text-[0.82rem] text-[#888888] no-underline mb-2.5 transition-colors duration-200 hover:text-white cursor-none">hello@mintmediahouse.com</a>
           <a href="#" className="block text-[0.82rem] text-[#888888] no-underline mb-2.5 transition-colors duration-200 hover:text-white cursor-none">Privacy Policy</a>
         </div>
       </div>
 
       <div className="border-t border-[#1e1e1e] pt-6 flex flex-col md:flex-row justify-between items-center text-[0.68rem] tracking-[0.08em] text-muted gap-4">
         <span>© 2025 MintMediaHouse. All rights reserved.</span>
-        <span>MUMBAI, IN · HELLO@MINTMEDIAHOUSE.COM</span>
+        <span>MUMBAI, IN · MINTMEDIACONNECT@GMAIL.COM</span>
       </div>
     </footer>
   );

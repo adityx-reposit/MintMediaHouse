@@ -19,7 +19,7 @@ export default function Hero() {
         >
           <h2 className="block w-6 h-[1px] bg-muted"></h2>
           <span className="sr-only">Mint Media House</span>
-          Mint Media House · Creative Media Agency · Est. 2025
+          🎬 10M+ VIEWS GENERATED · 15+ HAPPY FOUNDERS
         </motion.div>
 
         <motion.h1
@@ -29,10 +29,9 @@ export default function Hero() {
           transition={{ duration: 0.7, delay: 0.25 }}
           className="font-bebas text-[clamp(4.5rem,9vw,9rem)] leading-[0.9] tracking-[0.04em] text-white"
         >
-          WE<br />
-          MAKE<br />
-          BRANDS<br />
-          <span className="text-[#ff3300]">VIRAL.</span>
+          LAUNCH VIDEOS<br />
+          THAT<br />
+          <span className="text-[#ff3300]">CONVERT.</span>
         </motion.h1>
 
         <motion.p
@@ -42,7 +41,7 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mt-8 max-w-[440px] text-[0.95rem] font-light text-[#888888] leading-relaxed"
         >
-          <strong>Mint Media House</strong> (MintMedia) creates premium UI animations, launch videos & personal growth content built for founders who refuse to be ignored by their audience.
+          <strong>Mint Media House</strong> creates custom UI animations, launch videos & personal brand content for SaaS founders. We've helped 15+ startups generate millions of organic views and scale their revenue.
         </motion.p>
 
         <motion.div
@@ -53,16 +52,16 @@ export default function Hero() {
           className="mt-10 flex gap-4 flex-wrap"
         >
           <a
+            className="px-8 py-3.5 bg-[#ff3300] hover:bg-[#e82d00] rounded-full text-white text-[0.7rem] tracking-[0.14em] uppercase font-medium transition-colors duration-200 cursor-none"
+            href="#quote"
+          >
+            Get Custom Quote →
+          </a>
+          <a
             className="px-8 py-3.5 border border-white rounded-full text-white text-[0.7rem] tracking-[0.14em] uppercase font-medium transition-colors duration-200 hover:bg-white hover:text-black cursor-none"
             href="#work"
           >
-            SEE OUR WORK
-          </a>
-          <a
-            className="px-8 py-3.5 border border-[#ff3300] bg-[#ff3300] rounded-full text-white text-[0.7rem] tracking-[0.14em] uppercase font-medium transition-colors duration-200 hover:bg-[#e82d00] cursor-none"
-            href="#quote"
-          >
-            GET A QUOTE
+            See Our Work
           </a>
         </motion.div>
       </div>

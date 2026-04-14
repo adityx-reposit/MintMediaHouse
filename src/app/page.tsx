@@ -1,17 +1,17 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Stats from "@/components/Stats";
-import Marquee from "@/components/Marquee";
 import Services from "@/components/Services";
 import Work from "@/components/Work";
-import LaunchVideos from "@/components/LaunchVideos";
-import Growth from "@/components/Growth";
+import CaseStudies from "@/components/CaseStudies";
+import TrustSignals from "@/components/TrustSignals";
+import Pricing from "@/components/Pricing";
 import Testimonials from "@/components/Testimonials";
 import Process from "@/components/Process";
-import Quote from "@/components/Quote";
-import BookCall from "@/components/BookCall";
-import Footer from "@/components/Footer";
+import FAQ from "@/components/FAQ";
+import ImprovedLeadForm from "@/components/ImprovedLeadForm";
 import FloatingCTA from "@/components/FloatingCTA";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -21,17 +21,18 @@ export default function Home() {
       <main className="w-full">
         <Hero />
         <Stats />
-        <Marquee />
         <Services />
         <Work />
-        <LaunchVideos />
-        <Growth />
+        <CaseStudies />
+        <TrustSignals />
+        <Pricing />
         <Testimonials />
         <Process />
-        <Quote />
-        <BookCall />
+        <FAQ />
+        <ImprovedLeadForm />
       </main>
       <Footer />
     </>
   );
 }
+

@@ -50,28 +50,33 @@ export default function Navbar() {
         MINT<span className="text-[#ff3300]">MEDIA</span>HOUSE
       </a>
       
-      <div className="hidden md:flex items-center gap-10 text-[0.7rem] tracking-[0.15em] uppercase">
-        {["Services", "Work", "Videos", "Growth", "Book"].map((item) => (
+      <div className="hidden md:flex items-center gap-8 text-[0.7rem] tracking-[0.15em] uppercase">
+        {[
+          { label: "Services", href: "/services" },
+          { label: "Portfolio", href: "#work" },
+          { label: "Pricing", href: "#pricing" },
+          { label: "FAQ", href: "#faq" },
+        ].map((item) => (
           <a
-            key={item}
-            href={`#${item.toLowerCase()}`}
-            className="text-muted no-underline transition-colors duration-200 hover:text-white"
+            key={item.label}
+            href={item.href}
+            className="text-muted no-underline transition-colors duration-200 hover:text-[#ff3300]"
           >
-            {item}
+            {item.label}
           </a>
         ))}
       </div>
 
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-4">
         <div className="hidden md:flex flex-col items-end text-[0.65rem] tracking-[0.1em] text-muted leading-tight">
           <span>MUMBAI, IN</span>
           <span>{time || "12:00 PM"}</span>
         </div>
         <a
-          className="inline-block px-6 py-2.5 border border-white rounded-full text-white text-[0.7rem] tracking-[0.14em] uppercase font-medium transition-colors duration-200 hover:bg-white hover:text-black"
+          className="inline-block px-5 py-2.5 bg-[#ff3300] hover:bg-[#e82d00] rounded-full text-white text-[0.7rem] tracking-[0.14em] uppercase font-medium transition-colors duration-200"
           href="#quote"
         >
-          GET QUOTE
+          Get Quote
         </a>
       </div>
     </nav>

@@ -3,6 +3,7 @@ import { Inter, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
 import CustomCursor from "@/components/CustomCursor";
+import SchemaMarkup from "@/components/SchemaMarkup";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
 const inter = Inter({
@@ -17,43 +18,45 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: "Mint Media House | The Elite Creative Media Agency | MintMedia",
-  description: "Mint Media House (MintMedia) creates viral UI animations, premium launch videos & personal growth content for founders. Rank #1 with Mint Media's elite video production.",
+  title: "UI Animation & Launch Video Agency for SaaS | Mint Media House Mumbai",
+  description: "Viral video content for SaaS founders. Custom UI animations, launch videos & brand films that generated 10M+ views. Mumbai-based. Get custom quote in 24h →",
   keywords: [
-    "Mint Media", 
-    "MintMedia", 
-    "Mint Media House", 
-    "MintMediaHouse", 
-    "Creative Media Agency", 
-    "UI animations", 
-    "Launch videos", 
-    "Viral branding", 
-    "Video production for founders"
+    "video production agency Mumbai",
+    "UI animation services",
+    "SaaS video marketing",
+    "launch video production",
+    "product demo videos",
+    "explainer video agency India",
+    "personal brand videos",
+    "motion design studio",
+    "video production for startups",
+    "viral video agency"
   ],
   openGraph: {
-    title: "Mint Media House | The Elite Creative Media Agency",
-    description: "Mint Media House creates viral UI animations and premium launch videos for founders. Work with MintMedia today.",
-    url: "https://mintmediahouse.com",
+    title: "UI Animation & Launch Video Agency for SaaS | Mint Media House",
+    description: "Viral video content for SaaS founders. 10M+ views generated. Custom UI animations, launch videos & brand films. Mumbai-based. Get quote →",
+    url: "https://mintmediahouse.in",
     siteName: "Mint Media House",
     images: [
       {
-        url: "/logo.png",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Mint Media House Logo",
+        alt: "Mint Media House - Video Production for SaaS",
       },
     ],
-    locale: "en_US",
+    locale: "en_IN",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mint Media House | The Elite Creative Media Agency",
-    description: "Mint Media House creates viral UI animations and premium launch videos for founders. Work with MintMedia today.",
-    images: ["/logo.png"],
+    title: "UI Animation & Launch Video Agency | Mint Media House",
+    description: "Viral video content for SaaS founders. 10M+ views generated.",
+    images: ["/og-image.png"],
+    creator: "@mintmediahouse",
   },
   alternates: {
-    canonical: "https://mintmediahouse.com",
+    canonical: "https://mintmediahouse.in",
   },
   robots: {
     index: true,
@@ -88,6 +91,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${bebasNeue.variable} antialiased`}>
+      <head>
+        <SchemaMarkup />
+      </head>
       <body className="flex flex-col">
         <CustomCursor />
         <LenisProvider>
