@@ -12,6 +12,7 @@ import FAQ from "@/components/FAQ";
 import ImprovedLeadForm from "@/components/ImprovedLeadForm";
 import FloatingCTA from "@/components/FloatingCTA";
 import Footer from "@/components/Footer";
+import LaunchVideos from "@/components/LaunchVideos";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
         <Hero />
         <Stats />
         <Services />
+        <LaunchVideos />
         <Work />
         <CaseStudies />
         <TrustSignals />
