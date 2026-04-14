@@ -78,7 +78,7 @@ export default function CaseStudies() {
   };
 
   return (
-    <section className="bg-[#0a0a0a] py-[100px] px-[5vw]">
+    <section className="bg-[#0a0a0a] py-[110px] px-[5vw]">
       <motion.div
         initial="hidden"
         whileInView="visible"

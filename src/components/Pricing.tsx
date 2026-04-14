@@ -7,7 +7,7 @@ export default function Pricing() {
   const plans = [
     {
       name: "UI Animations",
-      price: "₹50,000",
+      price: "$600",
       description: "Perfect for SaaS products needing micro-interactions",
       features: [
         "10-15 custom animations",
@@ -21,7 +21,7 @@ export default function Pricing() {
     },
     {
       name: "Launch Videos",
-      price: "₹75,000",
+      price: "$900",
       description: "Product launch videos that convert",
       features: [
         "1 premium launch video",
@@ -36,7 +36,7 @@ export default function Pricing() {
     },
     {
       name: "Personal Brand",
-      price: "₹1,00,000",
+      price: "$1,200",
       description: "10+ videos building your founder brand",
       features: [
         "Monthly video strategy",
@@ -72,7 +72,7 @@ export default function Pricing() {
   };
 
   return (
-    <section id="pricing" className="bg-[#0a0a0a] py-[100px] px-[5vw]">
+    <section id="pricing" className="bg-[#0a0a0a] py-[110px] px-[5vw]">
       <motion.div
         initial="hidden"
         whileInView="visible"

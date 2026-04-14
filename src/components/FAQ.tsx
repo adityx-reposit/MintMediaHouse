@@ -72,7 +72,7 @@ export default function FAQ() {
   };
 
   return (
-    <section id="faq" className="bg-[#0a0a0a] py-[100px] px-[5vw]">
+    <section id="faq" className="bg-[#0a0a0a] py-[110px] px-[5vw]">
       <motion.div
         initial="hidden"
         whileInView="visible"
