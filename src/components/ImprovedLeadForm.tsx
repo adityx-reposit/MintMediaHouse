@@ -10,6 +10,8 @@ export default function ImprovedLeadForm() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -23,13 +25,33 @@ export default function ImprovedLeadForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Connect to backend/email service
-    console.log("Form submitted:", formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch("/api/send-quote", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send quote request");
+      }
+
+      setSubmitted(true);
       setFormData({ name: "", email: "", message: "" });
-    }, 3000);
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 3000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+      console.error("Error submitting form:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -67,6 +89,28 @@ export default function ImprovedLeadForm() {
             <p className="text-[#888888]">
               We'll review your project and get back to you within 24 hours.
             </p>
+          </motion.div>
+        ) : error ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center py-16 bg-[#1a1a1a] border border-red-900 rounded-lg"
+          >
+            <div className="text-5xl mb-4">⚠</div>
+            <h3 className="text-2xl font-bold text-white mb-2">
+              Oops! Something went wrong
+            </h3>
+            <p className="text-red-500 mb-6">
+              {error}
+            </p>
+            <button
+              onClick={() => {
+                setError("");
+              }}
+              className="px-6 py-2 bg-[#ff3300] hover:bg-[#e82d00] text-white rounded-lg text-[0.7rem] tracking-[0.14em] uppercase font-bold transition-colors"
+            >
+              Try Again
+            </button>
           </motion.div>
         ) : (
           <form
@@ -136,12 +180,17 @@ export default function ImprovedLeadForm() {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full py-4 px-6 bg-[#ff3300] hover:bg-[#e82d00] text-white rounded-lg text-[0.7rem] tracking-[0.14em] uppercase font-bold transition-colors flex items-center justify-center gap-2 group"
+              disabled={loading}
+              className="w-full py-4 px-6 bg-[#ff3300] hover:bg-[#e82d00] disabled:bg-[#666666] disabled:cursor-not-allowed text-white rounded-lg text-[0.7rem] tracking-[0.14em] uppercase font-bold transition-colors flex items-center justify-center gap-2 group"
             >
-              <span>Get My Custom Quote</span>
-              <span className="group-hover:translate-x-1 transition-transform">
-                →
+              <span>
+                {loading ? "Sending..." : "Get My Custom Quote"}
               </span>
+              {!loading && (
+                <span className="group-hover:translate-x-1 transition-transform">
+                  →
+                </span>
+              )}
             </button>
 
             {/* Trust Signal */}
