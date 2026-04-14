@@ -50,22 +50,41 @@ export default function ImprovedLeadForm() {
     setLoading(true);
     setError("");
 
+    // Validate form
+    if (!formData.name || !formData.email) {
+      setError("Please fill in all required fields");
+      setLoading(false);
+      return;
+    }
+
     const selectedService = SERVICES.find((s) => s.id === service)?.label ?? service;
     const selectedBudget = BUDGETS.find((b) => b.id === budget)?.label ?? "Not specified";
 
     const message = `Service: ${selectedService}\nBudget: ${selectedBudget}${formData.note ? `\n\nNote: ${formData.note}` : ""}`;
 
     try {
+      console.log("[Form] Submitting quote request", { name: formData.name, email: formData.email });
+      
       const res = await fetch("/api/send-quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: formData.name, email: formData.email, message }),
       });
 
-      if (!res.ok) throw new Error("Failed to send");
+      const data = await res.json();
+
+      if (!res.ok) {
+        const errorMsg = data.error || `Error: ${res.status}`;
+        console.error("[Form] Request failed:", errorMsg);
+        throw new Error(errorMsg);
+      }
+
+      console.log("[Form] Request successful:", data);
       setSubmitted(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      const errorMsg = err instanceof Error ? err.message : "Something went wrong. Please try again or contact us directly.";
+      console.error("[Form] Error:", errorMsg);
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
