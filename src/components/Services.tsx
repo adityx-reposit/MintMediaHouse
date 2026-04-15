@@ -1,132 +1,290 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { X, Play } from "lucide-react";
+
+type ServiceVideo = {
+  title: string;
+  author: string;
+  src: string;
+  poster: string;
+  tweetUrl: string;
+};
+
+type Service = {
+  id: number;
+  num: string;
+  name: string;
+  shortDesc: string;
+  fullDesc: string;
+  color: string;
+  features: string[];
+  videos: ServiceVideo[];
+};
+
+const services: Service[] = [
+  {
+    id: 0,
+    num: "01",
+    name: "LAUNCH VIDEOS",
+    shortDesc: "Premium product launch videos designed to generate buzz and conversions",
+    fullDesc:
+      "Cinematic quality launch videos that average 60K+ views per video. Every frame is crafted to captivate your audience. 4K delivery with professional color grading, music, and sound design.",
+    features: [
+      "1 premium launch video",
+      "4K quality delivery",
+      "Average 60K+ views per video",
+      "Multiple cuts included",
+      "Music & sound design",
+      "3 rounds of revisions",
+    ],
+    color: "from-orange-600 to-orange-500",
+    videos: [
+      {
+        title: "PlayAI Network Launch",
+        author: "@playAInetwork",
+        src: "/videos/launch-1.mp4",
+        poster: "/thumbnails/launch-1.svg",
+        tweetUrl: "https://x.com/playAInetwork/status/1985679479017259182",
+      },
+      {
+        title: "SolixDB Launch Campaign",
+        author: "@solixdb",
+        src: "/videos/launch-2.mp4",
+        poster: "/thumbnails/launch-2.svg",
+        tweetUrl: "https://x.com/solixdb/status/2011794480241000812",
+      },
+      {
+        title: "GTE Launch Video",
+        author: "@gte_xyz",
+        src: "/videos/launch-3.mp4",
+        poster: "/thumbnails/launch-3.svg",
+        tweetUrl: "https://x.com/gte_xyz/status/1983177368605995108",
+      },
+    ],
+  },
+  {
+    id: 1,
+    num: "02",
+    name: "UI ANIMATIONS",
+    shortDesc: "10-15 custom micro-interactions that make users stop and engage",
+    fullDesc:
+      "Create stunning micro-interactions that reduce bounce rate by 30%+. Smooth, buttery animations that delight users at every interaction. Lottie files, CSS animations, and WebGL ready for production.",
+    features: [
+      "10-15 custom animations",
+      "Lottie files (web & mobile)",
+      "Reduces bounce rate 30%+",
+      "Developer handoff docs",
+      "2 rounds of revisions",
+      "5-7 business days",
+    ],
+    color: "from-orange-600 to-orange-500",
+    videos: [
+      {
+        title: "Smooth Loading Animation",
+        author: "@playAInetwork",
+        src: "/videos/ui-1.mp4",
+        poster: "/thumbnails/ui-1.svg",
+        tweetUrl: "https://x.com/playAInetwork/status/1985679479017259182",
+      },
+      {
+        title: "Button Micro-Interaction",
+        author: "@solixdb",
+        src: "/videos/ui-2.mp4",
+        poster: "/thumbnails/ui-2.svg",
+        tweetUrl: "https://x.com/solixdb/status/2011794480241000812",
+      },
+      {
+        title: "Page Transition Effect",
+        author: "@gte_xyz",
+        src: "/videos/ui-3.mp4",
+        poster: "/thumbnails/ui-3.svg",
+        tweetUrl: "https://x.com/gte_xyz/status/1983177368605995108",
+      },
+    ],
+  },
+  {
+    id: 2,
+    num: "03",
+    name: "AD CREATIVES",
+    shortDesc: "Performance-optimized video ads with average 60K+ views",
+    fullDesc:
+      "Data-driven video ads engineered for maximum CTR and conversions. Native formats optimized for Meta, Google, and TikTok. Proven to increase campaign performance and ROI.",
+    features: [
+      "Performance-optimized",
+      "2.1%+ conversion rates",
+      "Meta, Google, TikTok native",
+      "A/B test variants",
+      "Full asset delivery",
+      "Unlimited revisions",
+    ],
+    color: "from-orange-600 to-orange-500",
+    videos: [
+      {
+        title: "Blackbox AI Ad Creative",
+        author: "@_adityx_",
+        src: "/videos/ad-1.mp4",
+        poster: "/thumbnails/ad-1.svg",
+        tweetUrl: "https://x.com/_adityx_/status/2008546933867245847",
+      },
+      {
+        title: "Blackbox AI Campaign",
+        author: "@_adityx_",
+        src: "/videos/ad-2.mp4",
+        poster: "/thumbnails/ad-2.svg",
+        tweetUrl: "https://x.com/_adityx_/status/2000964886084596121",
+      },
+    ],
+  },
+];
+
+/**
+ * HoverVideo — shows a poster thumbnail, crossfades into a muted
+ * looping video while hovered / focused / touched, then pauses and
+ * rewinds on leave. Also auto-plays briefly when scrolled into view
+ * inside its scroll container so the gallery feels alive.
+ */
+function HoverVideo({ video }: { video: ServiceVideo }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+
+  const start = useCallback(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    const p = el.play();
+    if (p && typeof p.then === "function") p.catch(() => {});
+    setPlaying(true);
+  }, []);
+
+  const stop = useCallback(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    el.pause();
+    el.currentTime = 0;
+    setPlaying(false);
+  }, []);
+
+  // Auto-play when scrolled into view within the modal's scroll container
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    const wrap = el.parentElement;
+    if (!wrap) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.55) start();
+          else stop();
+        }
+      },
+      { threshold: [0, 0.55, 1] }
+    );
+    io.observe(wrap);
+    return () => io.disconnect();
+  }, [start, stop]);
+
+  return (
+    <div
+      onMouseEnter={start}
+      onMouseLeave={stop}
+      onFocus={start}
+      onBlur={stop}
+      tabIndex={0}
+      className="group relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10 bg-black/60 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#ff3300]/60"
+    >
+      {/* Poster */}
+      <img
+        src={video.poster}
+        alt={video.title}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+          playing ? "opacity-0" : "opacity-100"
+        }`}
+      />
+
+      {/* Video */}
+      <video
+        ref={videoRef}
+        src={video.src}
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+          playing ? "opacity-100" : "opacity-0"
+        }`}
+      />
+
+      {/* Gradient wash */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+
+      {/* Play-hint pill */}
+      <div
+        className={`absolute top-3 left-3 pointer-events-none transition-all duration-500 ${
+          playing ? "opacity-0 -translate-y-1" : "opacity-100 translate-y-0"
+        }`}
+      >
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
+          <Play size={10} className="text-white fill-white" />
+          <span className="text-[0.55rem] tracking-[0.2em] uppercase text-white font-medium">
+            Hover
+          </span>
+        </div>
+      </div>
+
+      {/* Caption */}
+      <div className="absolute bottom-0 inset-x-0 p-4 pointer-events-none">
+        <p className="text-[0.85rem] font-medium text-white line-clamp-1">{video.title}</p>
+        <p className="text-[0.7rem] text-white/70">{video.author}</p>
+      </div>
+
+      {/* Orange glow while playing */}
+      <div
+        className={`absolute inset-0 pointer-events-none transition-opacity duration-500 ${
+          playing ? "opacity-100" : "opacity-0"
+        }`}
+        style={{ boxShadow: "inset 0 0 120px rgba(255, 51, 0, 0.28)" }}
+      />
+    </div>
+  );
+}
 
 export default function Services() {
   const [selectedService, setSelectedService] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  // Handle video play/pause
-  const handleVideoToggle = () => {
-    if (videoRef.current) {
-      if (isVideoPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsVideoPlaying(!isVideoPlaying);
-    }
-  };
-
-  // Reset video when component unmounts
-  useEffect(() => {
-    return () => {
-      if (videoRef.current) {
-        videoRef.current.pause();
-        setIsVideoPlaying(false);
-      }
-    };
-  }, []);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Load Twitter embed script
+  // ESC to close
   useEffect(() => {
-    if (selectedService !== null && mounted) {
-      const script = document.createElement("script");
-      script.src = "https://platform.twitter.com/widgets.js";
-      script.async = true;
-      script.charset = "utf-8";
-      document.body.appendChild(script);
-    }
-  }, [selectedService, mounted]);
+    if (selectedService === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedService(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selectedService]);
 
-  // Prevent body scroll when modal is open
+  // Prevent page scroll + stop Lenis smooth-scroll while modal is open
   useEffect(() => {
-    if (selectedService !== null) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-
+    if (selectedService === null) return;
+    const prevOverflow = document.body.style.overflow;
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    // Lenis exposes an instance on window via react-lenis
+    const lenis = (window as unknown as { lenis?: { stop: () => void; start: () => void } }).lenis;
+    lenis?.stop?.();
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = prevOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+      lenis?.start?.();
     };
   }, [selectedService]);
 
-  const services = [
-    {
-      id: 0,
-      num: "01",
-      name: "LAUNCH VIDEOS",
-      shortDesc: "Premium product launch videos designed to generate buzz and conversions",
-      fullDesc:
-        "Cinematic quality launch videos that average 60K+ views per video. Every frame is crafted to captivate your audience. 4K delivery with professional color grading, music, and sound design.",
-      features: [
-        "1 premium launch video",
-        "4K quality delivery",
-        "Average 60K+ views per video",
-        "Multiple cuts included",
-        "Music & sound design",
-        "3 rounds of revisions",
-      ],
-      color: "from-orange-600 to-orange-500",
-      videos: [
-        { title: "PlayAI Network Launch", tweetId: "1985679479017259182", author: "@playAInetwork", views: "87.4K", likes: "3.6K", retweets: "1.2K", replies: "567", thumbnail: "launch-1" },
-        { title: "SolixDB Launch Campaign", tweetId: "2011794480241000812", author: "@solixdb", views: "62.1K", likes: "2.8K", retweets: "945", replies: "423", thumbnail: "launch-2" },
-        { title: "GTE Launch Video", tweetId: "1983177368605995108", author: "@gte_xyz", views: "95.3K", likes: "4.2K", retweets: "1.5K", replies: "689", thumbnail: "launch-3" },
-      ],
-    },
-    {
-      id: 1,
-      num: "02",
-      name: "UI ANIMATIONS",
-      shortDesc: "10-15 custom micro-interactions that make users stop and engage",
-      fullDesc:
-        "Create stunning micro-interactions that reduce bounce rate by 30%+. Smooth, buttery animations that delight users at every interaction. Lottie files, CSS animations, and WebGL ready for production.",
-      features: [
-        "10-15 custom animations",
-        "Lottie files (web & mobile)",
-        "Reduces bounce rate 30%+",
-        "Developer handoff docs",
-        "2 rounds of revisions",
-        "5-7 business days",
-      ],
-      color: "from-orange-600 to-orange-500",
-      videos: [
-        { title: "Smooth Loading Animation", tweetId: "1985679479017259182", author: "@playAInetwork", views: "24.5K", likes: "1.2K", retweets: "342", replies: "189", thumbnail: "ui-1" },
-        { title: "Button Micro-Interaction", tweetId: "2011794480241000812", author: "@solixdb", views: "18.9K", likes: "892", retweets: "245", replies: "156", thumbnail: "ui-2" },
-        { title: "Page Transition Effect", tweetId: "1983177368605995108", author: "@gte_xyz", views: "31.2K", likes: "1.8K", retweets: "567", replies: "312", thumbnail: "ui-3" },
-      ],
-    },
-    {
-      id: 2,
-      num: "03",
-      name: "AD CREATIVES",
-      shortDesc: "Performance-optimized video ads with average 60K+ views",
-      fullDesc:
-        "Data-driven video ads engineered for maximum CTR and conversions. Native formats optimized for Meta, Google, and TikTok. Proven to increase campaign performance and ROI.",
-      features: [
-        "Performance-optimized",
-        "2.1%+ conversion rates",
-        "Meta, Google, TikTok native",
-        "A/B test variants",
-        "Full asset delivery",
-        "Unlimited revisions",
-      ],
-      color: "from-orange-600 to-orange-500",
-      videos: [
-        { title: "Blackbox AI Ad Creative", tweetId: "2008546933867245847", author: "@_adityx_", views: "156.8K", likes: "5.7K", retweets: "2.1K", replies: "893", thumbnail: "ad-1" },
-        { title: "Blackbox AI Campaign", tweetId: "2000964886084596121", author: "@_adityx_", views: "203.5K", likes: "7.2K", retweets: "2.8K", replies: "1.2K", thumbnail: "ad-2" },
-      ],
-    },
-  ];
+  const active = selectedService !== null ? services[selectedService] : null;
 
   return (
     <section id="services" className="bg-[#111111] py-[110px] px-[5vw]">
@@ -148,7 +306,8 @@ export default function Services() {
             </h2>
           </div>
           <p className="text-sm text-[#888888] font-light leading-[1.8]">
-            Three core services engineered to stop the scroll and start the conversation. Click to explore each service and see real examples of our work.
+            Three core services engineered to stop the scroll and start the conversation. Click any
+            service to open an interactive preview.
           </p>
         </div>
 
@@ -156,7 +315,7 @@ export default function Services() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {services.map((service, idx) => (
             <motion.button
-              key={idx}
+              key={service.id}
               onClick={() => setSelectedService(idx)}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -164,14 +323,10 @@ export default function Services() {
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               className="group relative h-[400px] rounded-xl overflow-hidden border border-[#1e1e1e] hover:border-[#ff3300] transition-all duration-300 cursor-pointer text-left w-full"
             >
-              {/* Background Gradient with 20% opacity */}
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-20`}
               />
-
-              {/* Content */}
               <div className="relative h-full bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] p-8 flex flex-col justify-between">
-                {/* Top - Number & Title */}
                 <div>
                   <div className="text-[0.75rem] tracking-[0.2em] uppercase text-[#ff3300] mb-3">
                     {service.num} //
@@ -180,8 +335,6 @@ export default function Services() {
                     {service.name}
                   </h3>
                 </div>
-
-                {/* Bottom - Description & Arrow */}
                 <div>
                   <p className="text-[0.9rem] text-[#888888] line-clamp-3 mb-6">
                     {service.shortDesc}
@@ -191,240 +344,165 @@ export default function Services() {
                     <span className="group-hover:translate-x-1 transition-transform">→</span>
                   </div>
                 </div>
-
-                {/* Hover Border Effect */}
                 <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#ff3300] to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
               </div>
             </motion.button>
           ))}
         </div>
-
       </motion.div>
+
+      {/* Modal */}
       <AnimatePresence>
-        {selectedService !== null && mounted && (
+        {active !== null && mounted && (
           <motion.div
+            key="services-modal"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
             onClick={() => setSelectedService(null)}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            data-lenis-prevent
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${active.name} details`}
           >
-            {/* Modal Content */}
+            {/* Ambient glow */}
+            <div
+              aria-hidden
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(60% 50% at 50% 40%, rgba(255,51,0,0.18), transparent 70%)",
+              }}
+            />
+
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              initial={{ opacity: 0, scale: 0.92, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: "spring", damping: 26, stiffness: 280 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] border border-[#1e1e1e] rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col overflow-hidden"
+              className="relative w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0d0d0d]/90 backdrop-blur-xl shadow-[0_30px_120px_rgba(0,0,0,0.6),0_0_60px_rgba(255,51,0,0.15)]"
             >
-              {/* Close Button */}
-              <div className="sticky top-0 right-0 px-6 pt-6 pb-0 flex justify-end bg-gradient-to-b from-[#1a1a1a] to-transparent z-10">
+              {/* Gradient edge */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 rounded-2xl"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(255,51,0,0.12), transparent 30%, transparent 70%, rgba(255,51,0,0.08))",
+                }}
+              />
+
+              {/* Close button */}
+              <div className="absolute top-4 right-4 z-20">
                 <motion.button
-                  whileHover={{ rotate: 90, scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ rotate: 90, scale: 1.08 }}
+                  whileTap={{ scale: 0.92 }}
                   onClick={() => setSelectedService(null)}
-                  className="p-2 hover:bg-[#1e1e1e] rounded-lg transition-colors"
+                  aria-label="Close"
+                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-md transition-colors"
                 >
-                  <X size={24} className="text-[#ff3300]" />
+                  <X size={20} className="text-white" />
                 </motion.button>
               </div>
 
-              {/* Scrollable Content */}
-              <div className="flex-1 overflow-y-auto scrollbar-hide px-8 pb-8">
-                {/* Service Header */}
+              {/* Scrollable modal content — isolated from Lenis */}
+              <div
+                data-lenis-prevent
+                className="relative flex-1 overflow-y-auto overscroll-contain scrollbar-hide p-6 md:p-10"
+              >
+                {/* Header */}
+                <motion.div
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.12 }}
+                  className="mb-8"
+                >
+                  <div className="text-[0.7rem] tracking-[0.2em] uppercase text-[#ff3300] mb-3">
+                    {active.num} //
+                  </div>
+                  <h2 className="font-bebas text-[2.4rem] md:text-[3.4rem] leading-[0.95] tracking-[0.04em] text-white mb-4">
+                    {active.name}
+                  </h2>
+                  <p className="text-sm md:text-[0.95rem] text-[#9a9a9a] max-w-2xl leading-[1.75]">
+                    {active.fullDesc}
+                  </p>
+                </motion.div>
+
+                {/* Video gallery — hover to play, auto-play when scrolled into view */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="mb-10 pt-4"
+                  className="mb-10"
                 >
-                  <div className="text-[0.75rem] tracking-[0.2em] uppercase text-[#ff3300] mb-3">
-                    {services[selectedService].num} //
+                  <h3 className="font-bebas text-[1.3rem] tracking-[0.06em] text-white mb-5">
+                    Real Examples
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {active.videos.map((video, idx) => (
+                      <motion.a
+                        key={idx}
+                        href={video.tweetUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.25 + idx * 0.08 }}
+                        whileHover={{ y: -4 }}
+                        className="block"
+                      >
+                        <HoverVideo video={video} />
+                      </motion.a>
+                    ))}
                   </div>
-                  <h2 className="font-bebas text-[2.5rem] md:text-[3.5rem] tracking-[0.06em] text-white mb-4">
-                    {services[selectedService].name}
-                  </h2>
-                  <p className="text-sm text-[#888888] max-w-2xl">
-                    {services[selectedService].fullDesc}
-                  </p>
                 </motion.div>
 
-                {/* Embedded Tweets Section */}
+                {/* Features */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
                   className="mb-10"
                 >
-                  <h3 className="font-bebas text-[1.3rem] tracking-[0.06em] text-white mb-6">
-                    Real Examples
+                  <h3 className="font-bebas text-[1.3rem] tracking-[0.06em] text-white mb-5">
+                    What&apos;s Included
                   </h3>
-
-                  {/* Horizontal Scrollable Container */}
-                  <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-                    {services[selectedService].videos.map((video, idx) => (
-                      <motion.a
-                        key={idx}
-                        href={`https://twitter.com/${video.author.replace("@", "")}/status/${video.tweetId}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 + idx * 0.1 }}
-                        whileHover={{ scale: 1.02, y: -4 }}
-                        className="group flex-shrink-0 w-[320px] bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-[#1e1e1e] hover:border-[#ff3300] rounded-xl overflow-hidden transition-all flex flex-col"
-                      >
-                        {/* Thumbnail Image */}
-                        <div className="w-full h-[160px] bg-gradient-to-br from-[#ff3300] to-orange-600 flex items-center justify-center overflow-hidden">
-                          <img
-                            src={`/thumbnails/${video.thumbnail}.svg`}
-                            alt={video.title}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-
-                        {/* Content */}
-                        <div className="flex-1 flex flex-col p-4">
-                          {/* Title */}
-                          <p className="text-[0.85rem] text-[#888888] group-hover:text-white transition-colors line-clamp-2 flex-1 mb-4">
-                            {video.title}
-                          </p>
-
-                          {/* Stats Row - Only Views & Likes */}
-                          <div className="grid grid-cols-2 gap-3 pt-3 border-t border-[#1e1e1e]">
-                            <div className="text-center">
-                              <p className="text-[0.65rem] text-[#888888] mb-1">Views</p>
-                              <p className="text-[0.85rem] font-bold text-white">{video.views}</p>
-                            </div>
-                            <div className="text-center">
-                              <p className="text-[0.65rem] text-[#888888] mb-1">Likes</p>
-                              <p className="text-[0.85rem] font-bold text-[#ff3300]">{video.likes}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </motion.a>
-                    ))}
-                  </div>
-                </motion.div>
-
-                {/* Full Video Details Section */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.35 }}
-                  className="mb-10"
-                >
-                  <h3 className="font-bebas text-[1.3rem] tracking-[0.06em] text-white mb-6">
-                    Full Video Details
-                  </h3>
-
-                  {/* Full Video Cards Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {services[selectedService].videos.map((video, idx) => (
-                      <div
-                        key={idx}
-                        className="bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-[#1e1e1e] rounded-lg p-5 hover:border-[#ff3300] transition-colors"
-                      >
-                        {/* Thumbnail Preview */}
-                        <div className="w-full h-[140px] bg-gradient-to-br from-[#ff3300] to-orange-600 rounded-lg mb-4 overflow-hidden flex items-center justify-center">
-                          <img
-                            src={`/thumbnails/${video.thumbnail}.svg`}
-                            alt={video.title}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-
-                        {/* Video Info */}
-                        <div className="space-y-3">
-                          <div>
-                            <h4 className="text-[0.9rem] font-medium text-white mb-1 line-clamp-2">
-                              {video.title}
-                            </h4>
-                            <p className="text-[0.75rem] text-[#888888]">{video.author}</p>
-                          </div>
-
-                          {/* Full Stats */}
-                          <div className="grid grid-cols-2 gap-3 py-3 border-t border-[#1e1e1e]">
-                            <div>
-                              <p className="text-[0.65rem] text-[#888888] mb-1">Views</p>
-                              <p className="text-[0.85rem] font-bold text-white">{video.views}</p>
-                            </div>
-                            <div>
-                              <p className="text-[0.65rem] text-[#888888] mb-1">Likes</p>
-                              <p className="text-[0.85rem] font-bold text-[#ff3300]">{video.likes}</p>
-                            </div>
-                            <div>
-                              <p className="text-[0.65rem] text-[#888888] mb-1">RTs</p>
-                              <p className="text-[0.85rem] font-bold text-white">{video.retweets}</p>
-                            </div>
-                            <div>
-                              <p className="text-[0.65rem] text-[#888888] mb-1">Replies</p>
-                              <p className="text-[0.85rem] font-bold text-white">{video.replies}</p>
-                            </div>
-                          </div>
-
-                          {/* View Tweet Link */}
-                          <a
-                            href={`https://twitter.com/${video.author.replace("@", "")}/status/${video.tweetId}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="block text-center py-2 mt-3 border border-[#1e1e1e] hover:border-[#ff3300] hover:bg-[#ff3300] hover:bg-opacity-10 text-[#ff3300] text-[0.75rem] font-medium tracking-[0.1em] uppercase rounded transition-colors"
-                          >
-                            View on X →
-                          </a>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-
-                {/* Features Section */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  className="mb-10"
-                >
-                  <h3 className="font-bebas text-[1.3rem] tracking-[0.06em] text-white mb-6">
-                    What's Included
-                  </h3>
-
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {services[selectedService].features.map((feature, idx) => (
+                    {active.features.map((feature, idx) => (
                       <motion.div
                         key={idx}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.6 + idx * 0.05 }}
-                        className="flex items-start gap-3"
+                        transition={{ delay: 0.35 + idx * 0.05 }}
+                        className="flex items-start gap-3 rounded-lg border border-white/5 bg-white/[0.02] backdrop-blur-sm px-4 py-3"
                       >
-                        <span className="text-[#ff3300] mt-1 flex-shrink-0">✓</span>
-                        <span className="text-[0.9rem] text-[#888888]">
-                          {feature}
-                        </span>
+                        <span className="text-[#ff3300] mt-0.5 flex-shrink-0">✓</span>
+                        <span className="text-[0.88rem] text-[#cfcfcf]">{feature}</span>
                       </motion.div>
                     ))}
                   </div>
                 </motion.div>
 
-                {/* CTA Button */}
+                {/* CTA */}
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
-                  className="flex flex-col sm:flex-row gap-4 sticky bottom-0 bg-gradient-to-t from-[#0a0a0a] to-transparent pt-6"
+                  transition={{ delay: 0.45 }}
+                  className="flex flex-col sm:flex-row gap-3"
                 >
                   <a
                     href="#quote"
                     onClick={() => setSelectedService(null)}
-                    className="flex-1 py-4 px-6 bg-[#ff3300] hover:bg-[#e82d00] text-white rounded-lg font-medium tracking-[0.1em] uppercase text-[0.75rem] transition-colors text-center"
+                    className="flex-1 py-4 px-6 bg-[#ff3300] hover:bg-[#e82d00] text-white rounded-lg font-medium tracking-[0.1em] uppercase text-[0.75rem] transition-colors text-center shadow-[0_10px_40px_rgba(255,51,0,0.35)]"
                   >
-                    Get {services[selectedService].name} Quote
+                    Get {active.name} Quote
                   </a>
                   <button
                     onClick={() => setSelectedService(null)}
-                    className="px-6 py-4 border border-[#1e1e1e] hover:border-[#ff3300] text-[#888888] hover:text-white rounded-lg font-medium tracking-[0.1em] uppercase text-[0.75rem] transition-colors"
+                    className="px-6 py-4 border border-white/10 hover:border-[#ff3300] text-[#9a9a9a] hover:text-white rounded-lg font-medium tracking-[0.1em] uppercase text-[0.75rem] transition-colors"
                   >
                     Close
                   </button>

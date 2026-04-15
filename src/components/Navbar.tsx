@@ -52,7 +52,7 @@ export default function Navbar() {
       
       <div className="hidden md:flex items-center gap-8 text-[0.7rem] tracking-[0.15em] uppercase">
         {[
-          { label: "Services", href: "/services" },
+          { label: "Services", href: "#services" },
           { label: "Portfolio", href: "#work" },
           { label: "Pricing", href: "#pricing" },
           { label: "FAQ", href: "#faq" },
