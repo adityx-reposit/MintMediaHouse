@@ -4,33 +4,13 @@ import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [time, setTime] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
-
-    // Clock
-    const tick = () => {
-      const n = new Date();
-      setTime(
-        n.toLocaleTimeString("en-IN", {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: true,
-          timeZone: "Asia/Kolkata",
-        })
-      );
-    };
-    tick();
-    const interval = setInterval(tick, 10000);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      clearInterval(interval);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
@@ -43,7 +23,7 @@ export default function Navbar() {
     >
       <a
         className="font-bebas text-2xl tracking-[0.12em] text-white no-underline border-none cursor-none"
-        href="#"
+        href="/"
         aria-label="Mint Media House | MintMedia Website Home"
         title="Mint Media House"
       >
@@ -68,10 +48,6 @@ export default function Navbar() {
       </div>
 
       <div className="flex items-center gap-4">
-        <div className="hidden md:flex flex-col items-end text-[0.65rem] tracking-[0.1em] text-muted leading-tight">
-          <span>MUMBAI, IN</span>
-          <span>{time || "12:00 PM"}</span>
-        </div>
         <a
           className="inline-block px-5 py-2.5 bg-[#ff3300] hover:bg-[#e82d00] rounded-full text-white text-[0.7rem] tracking-[0.14em] uppercase font-medium transition-colors duration-200"
           href="#quote"

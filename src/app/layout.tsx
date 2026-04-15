@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
 import CustomCursor from "@/components/CustomCursor";
-import SchemaMarkup from "@/components/SchemaMarkup";
+import { schemaMarkup } from "@/lib/schema";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
 const inter = Inter({
@@ -17,9 +17,21 @@ const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#0a0a0a",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
-  title: "Mint Media House",
-  description: "Viral video content for SaaS founders. Custom UI animations, launch videos & brand films that generated 10M+ views. Mumbai-based. Get custom quote in 24h →",
+  metadataBase: new URL("https://mintmediahouse.in"),
+  title: {
+    default:
+      "Mint Media House — UI Animation & Launch Video Agency for SaaS Founders",
+    template: "%s | Mint Media House",
+  },
+  description:
+    "UI animations, launch videos & ad creatives for SaaS founders. Mumbai-based creative studio — 10M+ views generated. Custom quote in 24 hours.",
   keywords: [
     "video production agency Mumbai",
     "UI animation services",
@@ -92,13 +104,20 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${bebasNeue.variable} antialiased`}>
       <head>
-        <SchemaMarkup />
+        <link rel="preconnect" href="https://cal.com" />
+        <link rel="preconnect" href="https://video.twimg.com" />
+        <link rel="dns-prefetch" href="https://cal.com" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
+        />
       </head>
       <body className="flex flex-col">
         <CustomCursor />
         <LenisProvider>
           {children}
         </LenisProvider>
+        <SpeedInsights />
         <Analytics />
       </body>
     </html>
