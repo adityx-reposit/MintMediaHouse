@@ -115,7 +115,7 @@ export default function LaunchVideos() {
           <div className="relative aspect-video bg-black border border-[#1e1e1e] overflow-hidden z-10 group">
             <video
               ref={videoRef}
-              src="/video preview.mp4"
+              src="/video-preview.mp4"
               muted
               playsInline
               preload="auto"
@@ -218,7 +218,7 @@ export default function LaunchVideos() {
               >
                 {/* Tiny video thumbnail (same source, offset by clip) */}
                 <video
-                  src={`/video preview.mp4#t=${clip.start}`}
+                  src={`/video-preview.mp4#t=${clip.start}`}
                   muted
                   playsInline
                   preload="metadata"
