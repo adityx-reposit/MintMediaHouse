@@ -19,7 +19,6 @@ body {
   @apply bg-black text-white font-inter;
   font-size: 15px;
   line-height: 1.6;
-  cursor: none;
 }
 
 html.lenis, html.lenis body {
@@ -49,6 +48,13 @@ html.lenis, html.lenis body {
 /* Remove default link outline for clean aesthetics */
 a, button, input, select, textarea {
   outline: none;
+}
+
+/* GPU-promote scroll-animated elements to avoid paint jank */
+[data-framer-motion-mount],
+.framer-motion-animate {
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 /* Hide scrollbar while keeping scroll functionality */

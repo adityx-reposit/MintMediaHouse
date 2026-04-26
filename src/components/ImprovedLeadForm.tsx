@@ -191,12 +191,12 @@ export default function ImprovedLeadForm() {
               onSubmit={handleSubmit}
               initial={{ opacity: 1 }}
               exit={{ opacity: 0, y: -10 }}
-              className="bg-[#0a0a0a] border border-[#1e1e1e] rounded-2xl p-8 space-y-8"
+              className="bg-[#1a1a1a] border border-[#2e2e2e] rounded-2xl p-8 space-y-8"
             >
 
               {/* STEP 1 — Service selection */}
               <div>
-                <p className="text-[0.62rem] tracking-[0.2em] uppercase text-[#555] mb-4">
+                <p className="text-[0.62rem] tracking-[0.2em] uppercase text-[#888] mb-4">
                   01 &nbsp;/&nbsp; What do you need?
                 </p>
                 <div className="grid grid-cols-3 gap-3">
@@ -210,7 +210,7 @@ export default function ImprovedLeadForm() {
                       className={`relative flex flex-col items-center text-center gap-2 py-5 px-3 rounded-xl border transition-all duration-200 cursor-pointer ${
                         service === s.id
                           ? "border-[#ff3300] bg-[#ff3300]/8 shadow-[0_0_20px_rgba(255,51,0,0.15)]"
-                          : "border-[#1e1e1e] bg-[#111] hover:border-[#333]"
+                          : "border-[#2e2e2e] bg-[#222] hover:border-[#444]"
                       }`}
                     >
                       {service === s.id && (
@@ -220,13 +220,13 @@ export default function ImprovedLeadForm() {
                           transition={{ type: "spring", stiffness: 300, damping: 28 }}
                         />
                       )}
-                      <span className={`relative z-10 text-xl ${service === s.id ? "text-[#ff3300]" : "text-[#444]"}`}>
+                      <span className={`relative z-10 text-xl ${service === s.id ? "text-[#ff3300]" : "text-[#666]"}`}>
                         {s.icon}
                       </span>
-                      <span className={`relative z-10 font-bebas text-[1rem] tracking-[0.06em] ${service === s.id ? "text-white" : "text-[#888]"}`}>
+                      <span className={`relative z-10 font-bebas text-[1rem] tracking-[0.06em] ${service === s.id ? "text-white" : "text-[#bbb]"}`}>
                         {s.label}
                       </span>
-                      <span className={`relative z-10 text-[0.65rem] leading-tight ${service === s.id ? "text-[#aaa]" : "text-[#555]"}`}>
+                      <span className={`relative z-10 text-[0.65rem] leading-tight ${service === s.id ? "text-[#ccc]" : "text-[#888]"}`}>
                         {s.desc}
                       </span>
                     </motion.button>
@@ -236,7 +236,7 @@ export default function ImprovedLeadForm() {
 
               {/* STEP 2 — Budget */}
               <div>
-                <p className="text-[0.62rem] tracking-[0.2em] uppercase text-[#555] mb-4">
+                <p className="text-[0.62rem] tracking-[0.2em] uppercase text-[#888] mb-4">
                   02 &nbsp;/&nbsp; What's your budget?
                 </p>
                 <div className="grid grid-cols-4 gap-2">
@@ -249,11 +249,11 @@ export default function ImprovedLeadForm() {
                       className={`flex flex-col items-center gap-0.5 py-3 rounded-lg border text-center transition-all duration-200 ${
                         budget === b.id
                           ? "border-[#ff3300] bg-[#ff3300]/8 text-white"
-                          : "border-[#1e1e1e] bg-[#111] text-[#666] hover:border-[#333] hover:text-[#aaa]"
+                          : "border-[#2e2e2e] bg-[#222] text-[#aaa] hover:border-[#444] hover:text-[#ddd]"
                       }`}
                     >
                       <span className="text-[0.82rem] font-semibold">{b.label}</span>
-                      <span className={`text-[0.6rem] tracking-[0.1em] uppercase ${budget === b.id ? "text-[#ff3300]" : "text-[#444]"}`}>
+                      <span className={`text-[0.6rem] tracking-[0.1em] uppercase ${budget === b.id ? "text-[#ff3300]" : "text-[#777]"}`}>
                         {b.sub}
                       </span>
                     </motion.button>
@@ -263,12 +263,12 @@ export default function ImprovedLeadForm() {
 
               {/* STEP 3 — Contact info */}
               <div>
-                <p className="text-[0.62rem] tracking-[0.2em] uppercase text-[#555] mb-4">
+                <p className="text-[0.62rem] tracking-[0.2em] uppercase text-[#888] mb-4">
                   03 &nbsp;/&nbsp; Your details
                 </p>
                 <div className="grid grid-cols-2 gap-3 mb-3">
                   <div>
-                    <label htmlFor="name" className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#555] mb-1.5">
+                    <label htmlFor="name" className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5">
                       Full Name
                     </label>
                     <input
@@ -279,11 +279,11 @@ export default function ImprovedLeadForm() {
                       onChange={handleChange}
                       required
                       placeholder="Alex Johnson"
-                      className="w-full px-4 py-3 bg-[#111] border border-[#1e1e1e] rounded-lg text-white text-[0.88rem] placeholder-[#333] focus:outline-none focus:border-[#ff3300] focus:ring-1 focus:ring-[#ff3300]/40 transition-colors"
+                      className="w-full px-4 py-3 bg-[#252525] border border-[#2e2e2e] rounded-lg text-white text-[0.88rem] placeholder-[#555] focus:outline-none focus:border-[#ff3300] focus:ring-1 focus:ring-[#ff3300]/40 transition-colors"
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#555] mb-1.5">
+                    <label htmlFor="email" className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5">
                       Email
                     </label>
                     <input
@@ -294,12 +294,12 @@ export default function ImprovedLeadForm() {
                       onChange={handleChange}
                       required
                       placeholder="alex@company.com"
-                      className="w-full px-4 py-3 bg-[#111] border border-[#1e1e1e] rounded-lg text-white text-[0.88rem] placeholder-[#333] focus:outline-none focus:border-[#ff3300] focus:ring-1 focus:ring-[#ff3300]/40 transition-colors"
+                      className="w-full px-4 py-3 bg-[#252525] border border-[#2e2e2e] rounded-lg text-white text-[0.88rem] placeholder-[#555] focus:outline-none focus:border-[#ff3300] focus:ring-1 focus:ring-[#ff3300]/40 transition-colors"
                     />
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="note" className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#555] mb-1.5">
+                  <label htmlFor="note" className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5">
                     Anything else? <span className="normal-case text-[#333]">(optional)</span>
                   </label>
                   <textarea
@@ -309,7 +309,7 @@ export default function ImprovedLeadForm() {
                     onChange={handleChange}
                     placeholder="Deadline, platform, reference links..."
                     rows={3}
-                    className="w-full px-4 py-3 bg-[#111] border border-[#1e1e1e] rounded-lg text-white text-[0.88rem] placeholder-[#333] focus:outline-none focus:border-[#ff3300] focus:ring-1 focus:ring-[#ff3300]/40 transition-colors resize-none"
+                    className="w-full px-4 py-3 bg-[#252525] border border-[#2e2e2e] rounded-lg text-white text-[0.88rem] placeholder-[#555] focus:outline-none focus:border-[#ff3300] focus:ring-1 focus:ring-[#ff3300]/40 transition-colors resize-none"
                   />
                 </div>
               </div>
@@ -336,7 +336,7 @@ export default function ImprovedLeadForm() {
                 whileTap={!loading && service ? { scale: 0.99 } : {}}
                 className={`w-full py-4 rounded-xl text-[0.72rem] tracking-[0.16em] uppercase font-bold flex items-center justify-center gap-3 transition-all duration-300 ${
                   !service
-                    ? "bg-[#1a1a1a] text-[#444] cursor-not-allowed border border-[#1e1e1e]"
+                    ? "bg-[#252525] text-[#666] cursor-not-allowed border border-[#2e2e2e]"
                     : loading
                     ? "bg-[#ff3300]/70 text-white cursor-not-allowed"
                     : "bg-[#ff3300] hover:bg-[#e82d00] text-white shadow-[0_4px_24px_rgba(255,51,0,0.3)] hover:shadow-[0_4px_32px_rgba(255,51,0,0.45)]"
@@ -365,7 +365,7 @@ export default function ImprovedLeadForm() {
               </motion.button>
 
               {/* Trust line */}
-              <div className="pt-2 border-t border-[#1a1a1a] flex items-center justify-center gap-5 text-[0.65rem] tracking-[0.1em] uppercase text-[#444]">
+              <div className="pt-2 border-t border-[#2e2e2e] flex items-center justify-center gap-5 text-[0.65rem] tracking-[0.1em] uppercase text-[#777]">
                 <span><span className="text-[#ff3300]">✓</span> 24hr reply</span>
                 <span><span className="text-[#ff3300]">✓</span> Zero pressure</span>
                 <span><span className="text-[#ff3300]">✓</span> Custom pricing</span>
