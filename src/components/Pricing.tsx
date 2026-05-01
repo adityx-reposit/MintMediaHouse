@@ -1,74 +1,202 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Check, Clock } from "lucide-react";
+
+const plans = [
+  {
+    id: "signal",
+    badge: null,
+    name: "The Signal",
+    tagline: "Perfect for testing cold email & LinkedIn outreach with video for the first time",
+    usPrice: 3700,
+    ourPrice: 1500,
+    suffix: "",
+    delivery: "7 business days",
+    features: [
+      "1 × UI/Product Animation Video (30–60s)",
+      "The mintmedia Motion Brief™",
+      "Feature-to-Feeling Script™",
+      "2 export formats: 16:9 + 1:1",
+      "2 rounds of revisions",
+      "Full commercial rights",
+    ],
+    cta: "Get Started",
+    isPrimary: false,
+  },
+  {
+    id: "launch",
+    badge: "Most Popular",
+    name: "The Launch Stack",
+    tagline: "Launching a feature, running ads, or going outbound at scale",
+    usPrice: 14100,
+    ourPrice: 4500,
+    suffix: "",
+    delivery: "14 business days",
+    features: [
+      "1 × Launch/Explainer Video (60–90s)",
+      "2 × UI Animation Clips (30–45s each)",
+      "3 × Ad Creative Variants (15s each)",
+      "Motion Brief™ + Feature-to-Feeling Script™",
+      "SaaS Objection Overlay™",
+      "All aspect ratios: 16:9, 9:16, 1:1",
+      "LinkedIn caption copy (3 videos)",
+      "3 rounds of revisions",
+      "Full commercial rights",
+    ],
+    cta: "Get Started",
+    isPrimary: true,
+  },
+  {
+    id: "motion-os",
+    badge: null,
+    name: "Motion OS",
+    tagline: "Build video as a compounding growth channel with a monthly retainer",
+    usPrice: 13800,
+    ourPrice: 3200,
+    suffix: "/mo",
+    delivery: "5-day turnaround · 2-month minimum",
+    features: [
+      "4 × UI/Product Animation Videos/mo",
+      "6 × Ad Creative Variants/mo",
+      "Unlimited minor revision requests",
+      "Monthly Content Strategy Call (30 min)",
+      "The Motion Content Calendar™",
+      "All aspect ratios & formats",
+      "Full commercial rights",
+    ],
+    cta: "Book a Call",
+    isPrimary: false,
+  },
+];
+
+function PriceReveal({
+  usPrice,
+  ourPrice,
+  suffix,
+}: {
+  usPrice: number;
+  ourPrice: number;
+  suffix: string;
+}) {
+  const [phase, setPhase] = useState<"hidden" | "counting" | "done">("hidden");
+  const [displayPrice, setDisplayPrice] = useState(usPrice);
+
+  const startReveal = useCallback(() => {
+    if (phase !== "hidden") return;
+    setPhase("counting");
+    setDisplayPrice(usPrice);
+
+    const DURATION = 2200;
+    const startTime = performance.now();
+
+    const tick = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / DURATION, 1);
+      // ease-out quart: fast drop, satisfying deceleration near final price
+      const eased = 1 - Math.pow(1 - progress, 4);
+      const current = Math.round(usPrice - (usPrice - ourPrice) * eased);
+      setDisplayPrice(current);
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        setDisplayPrice(ourPrice);
+        setPhase("done");
+      }
+    };
+
+    // Short pause so user sees the US price before countdown starts
+    setTimeout(() => requestAnimationFrame(tick), 700);
+  }, [phase, usPrice, ourPrice]);
+
+  const savings = usPrice - ourPrice;
+  const savingsPct = Math.round((savings / usPrice) * 100);
+
+  return (
+    <div className="mb-6 min-h-[84px] flex flex-col justify-center">
+      <AnimatePresence mode="wait">
+        {phase === "hidden" ? (
+          <motion.button
+            key="reveal-btn"
+            onClick={startReveal}
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 0.85, transition: { duration: 0.18 } }}
+            whileHover={{ scale: 1.02, boxShadow: "0 6px 32px rgba(255,51,0,0.5)" }}
+            whileTap={{ scale: 0.97 }}
+            className="w-full py-3.5 rounded-xl text-white text-[0.72rem] tracking-[0.18em] uppercase font-bold flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#ff3300] to-[#cc2900] shadow-[0_4px_24px_rgba(255,51,0,0.32)]"
+          >
+            <span className="text-[1rem] leading-none">✦</span>
+            Reveal Price
+          </motion.button>
+        ) : (
+          <motion.div
+            key="price-display"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.22 }}
+          >
+            {/* US agency rate — strikethrough once counting done */}
+            <div className="flex items-center gap-1.5 mb-0.5">
+              <span className="text-[0.58rem] tracking-[0.14em] uppercase text-[#555]">
+                US agencies charge
+              </span>
+              <span
+                className={`text-[0.82rem] font-semibold tabular-nums transition-all duration-500 ${
+                  phase === "done"
+                    ? "line-through text-[#333]"
+                    : "text-[#888]"
+                }`}
+              >
+                ${usPrice.toLocaleString()}
+                {suffix}
+              </span>
+            </div>
+
+            {/* Animated main price */}
+            <div className="flex items-baseline gap-1">
+              <span className={`font-bebas text-[3.5rem] leading-none tracking-[0.02em] tabular-nums transition-colors duration-500 ${phase === "done" ? "text-[#22c55e]" : "text-white"}`}>
+                ${displayPrice.toLocaleString()}
+              </span>
+              {suffix && (
+                <span className="text-[#777] text-[0.88rem] mb-0.5">{suffix}</span>
+              )}
+            </div>
+
+            {/* Savings badge — pops in after count finishes */}
+            <AnimatePresence>
+              {phase === "done" && (
+                <motion.div
+                  initial={{ opacity: 0, x: -8, scale: 0.9 }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  transition={{ type: "spring", stiffness: 320, damping: 22, delay: 0.08 }}
+                  className="mt-1.5 flex items-center gap-2"
+                >
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ff3300]/12 border border-[#ff3300]/25 text-[#ff5533] text-[0.6rem] tracking-[0.1em] uppercase font-bold">
+                    <span>✓</span> You save ${savings.toLocaleString()} ({savingsPct}% off)
+                  </span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 export default function Pricing() {
-  const plans = [
-    {
-      name: "UI Animations",
-      price: "$600",
-      description: "Perfect for SaaS products needing micro-interactions",
-      features: [
-        "10-15 custom animations",
-        "Lottie files (web & mobile)",
-        "Developer handoff docs",
-        "2 rounds of revisions",
-        "5-7 business days",
-      ],
-      cta: "Get Custom Quote",
-      isPrimary: false,
-    },
-    {
-      name: "Launch Videos",
-      price: "$900",
-      description: "Product launch videos that convert",
-      features: [
-        "1 premium launch video",
-        "4K quality delivery",
-        "Multiple cuts included",
-        "Music & sound design",
-        "6-8 business days",
-        "3 rounds of revisions",
-      ],
-      cta: "Get Custom Quote",
-      isPrimary: true,
-    },
-    {
-      name: "Personal Brand",
-      price: "$1,200",
-      description: "10+ videos building your founder brand",
-      features: [
-        "Monthly video strategy",
-        "10+ videos per month",
-        "Full video production",
-        "Editing & color grading",
-        "Unlimited revisions",
-        "Priority support",
-      ],
-      cta: "Schedule a Call",
-      isPrimary: false,
-    },
-  ];
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
+      transition: { staggerChildren: 0.12, delayChildren: 0.15 },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 },
-    },
+    hidden: { opacity: 0, y: 24 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.55 } },
   };
 
   return (
@@ -80,95 +208,124 @@ export default function Pricing() {
         variants={containerVariants}
         className="max-w-7xl mx-auto"
       >
-        <motion.div
-          variants={itemVariants}
-          className="text-center mb-16"
-        >
+        {/* Header */}
+        <motion.div variants={itemVariants} className="text-center mb-16">
           <div className="text-[0.65rem] tracking-[0.2em] uppercase text-muted mb-4 flex items-center justify-center gap-2">
-            <span className="text-[#ff3300]">//</span> TRANSPARENT PRICING
+            <span className="text-[#ff3300]">//</span> The Grand Slam Offer
           </div>
           <h2 className="font-bebas text-[clamp(2.8rem,6vw,5.5rem)] leading-[0.95] tracking-[0.04em] text-white">
-            Simple, <em className="not-italic text-[#ff3300]">No Hidden</em><br />
-            Pricing
+            Motion Content That
+            <br />
+            <em className="not-italic text-[#ff3300]">Pays For Itself</em>
           </h2>
-          <p className="text-[0.95rem] text-[#888888] mt-4 max-w-2xl mx-auto">
-            Custom quotes based on your needs. All packages include revisions & support.
+          <p className="text-[0.95rem] text-[#888] mt-4 max-w-2xl mx-auto leading-relaxed">
+            US prices. Our prices. <span className="text-[#ff3300] font-semibold">Big difference.</span>
           </p>
         </motion.div>
 
+        {/* Cards */}
         <motion.div
           variants={containerVariants}
-          className="grid md:grid-cols-3 gap-6 mt-12"
+          className="grid md:grid-cols-3 gap-6"
         >
-          {plans.map((plan, idx) => (
+          {plans.map((plan) => (
             <motion.div
-              key={idx}
+              key={plan.id}
               variants={itemVariants}
-              className={`relative rounded-lg border p-8 transition-all ${
+              className={`relative rounded-2xl border flex flex-col transition-all duration-300 ${
                 plan.isPrimary
-                  ? "bg-[#1a1a1a] border-[#ff3300] scale-105 shadow-xl shadow-[#ff3300]/20"
-                  : "bg-[#111111] border-[#1e1e1e] hover:border-[#333333]"
+                  ? "bg-[#161616] border-[#ff3300] shadow-[0_0_60px_rgba(255,51,0,0.12)] scale-[1.025]"
+                  : "bg-[#111] border-[#1e1e1e] hover:border-[#2e2e2e]"
               }`}
             >
-              {plan.isPrimary && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-3 py-1 bg-[#ff3300] text-white text-[0.65rem] tracking-[0.1em] uppercase font-bold rounded-full">
-                  Most Popular
+              {/* Popular badge */}
+              {plan.badge && (
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#ff3300] text-white text-[0.6rem] tracking-[0.14em] uppercase font-bold rounded-full shadow-[0_4px_12px_rgba(255,51,0,0.4)]">
+                  {plan.badge}
                 </div>
               )}
 
-              <h3 className="text-xl font-bold text-white mb-2">
-                {plan.name}
-              </h3>
-              <p className="text-[0.85rem] text-[#666666] mb-4">
-                {plan.description}
-              </p>
-
-              <div className="mb-6">
-                <div className="text-4xl font-bold text-white">
-                  {plan.price}
+              <div className="p-7 flex flex-col flex-1">
+                {/* Plan name */}
+                <div className="mb-4">
+                  <p className="text-[0.6rem] tracking-[0.2em] uppercase text-[#ff3300] mb-1.5">
+                    {plan.id === "signal" ? "01 //" : plan.id === "launch" ? "02 //" : "03 //"}
+                  </p>
+                  <h3 className="font-bebas text-[1.7rem] tracking-[0.05em] text-white leading-none mb-2">
+                    {plan.name}
+                  </h3>
+                  <p className="text-[0.8rem] text-[#666] leading-relaxed">
+                    {plan.tagline}
+                  </p>
                 </div>
-                <p className="text-[0.75rem] text-[#666666] mt-1">
-                  Starting price
-                </p>
+
+                {/* Price reveal */}
+                <PriceReveal
+                  usPrice={plan.usPrice}
+                  ourPrice={plan.ourPrice}
+                  suffix={plan.suffix}
+                />
+
+                {/* Delivery */}
+                <div className="flex items-center gap-2 mb-5 text-[0.7rem] text-[#555]">
+                  <Clock size={12} className="text-[#ff3300] flex-shrink-0" />
+                  <span>{plan.delivery}</span>
+                </div>
+
+                {/* Feature list */}
+                <ul className="space-y-2.5 mb-6">
+                  {plan.features.map((feature, fidx) => (
+                    <li key={fidx} className="flex items-start gap-2.5">
+                      <Check
+                        size={13}
+                        className="text-[#ff3300] mt-[3px] flex-shrink-0"
+                      />
+                      <span className="text-[0.8rem] text-[#888] leading-snug">
+                        {feature}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA — always at card bottom */}
+                <a
+                  href="#quote"
+                  className={`w-full py-3 rounded-xl text-[0.7rem] tracking-[0.12em] uppercase font-bold text-center transition-all duration-200 mt-auto block ${
+                    plan.isPrimary
+                      ? "bg-[#ff3300] hover:bg-[#e82d00] text-white shadow-[0_4px_20px_rgba(255,51,0,0.3)]"
+                      : "border border-[#2a2a2a] text-[#aaa] hover:border-[#ff3300] hover:text-white"
+                  }`}
+                >
+                  {plan.cta}
+                </a>
               </div>
 
-              <a
-                href={plan.cta === "Schedule a Call" ? "https://cal.com/mintmediahouse" : "#quote"}
-                target={plan.cta === "Schedule a Call" ? "_blank" : undefined}
-                rel={plan.cta === "Schedule a Call" ? "noopener noreferrer" : undefined}
-                className={`block w-full py-3 px-4 rounded-lg text-[0.7rem] tracking-[0.1em] uppercase font-medium transition-all mb-6 text-center ${
-                  plan.isPrimary
-                    ? "bg-[#ff3300] text-white hover:bg-[#e82d00]"
-                    : "border border-white text-white hover:bg-white hover:text-black"
-                }`}
-              >
-                {plan.cta}
-              </a>
-
-              <ul className="space-y-3">
-                {plan.features.map((feature, fidx) => (
-                  <li key={fidx} className="flex items-start gap-3">
-                    <Check size={16} className="text-[#ff3300] mt-0.5 flex-shrink-0" />
-                    <span className="text-[0.85rem] text-[#888888]">
-                      {feature}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              {/* Bottom accent line on primary */}
+              {plan.isPrimary && (
+                <div className="h-[2px] rounded-b-2xl bg-gradient-to-r from-transparent via-[#ff3300] to-transparent" />
+              )}
             </motion.div>
           ))}
         </motion.div>
 
+        {/* Guarantee strip */}
         <motion.div
           variants={itemVariants}
-          className="text-center mt-12"
+          className="mt-12 rounded-2xl border border-[#1e1e1e] bg-[#111] px-8 py-6 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left"
         >
-          <p className="text-[0.9rem] text-[#666666] mb-4">
-            Need a custom package or retainer?
-          </p>
+          <div className="text-3xl flex-shrink-0">🛡️</div>
+          <div>
+            <p className="text-[0.75rem] tracking-[0.14em] uppercase text-[#ff3300] font-semibold mb-1">
+              Love It or Redo It Guarantee
+            </p>
+            <p className="text-[0.82rem] text-[#777] leading-relaxed">
+              If the video doesn&apos;t feel right after revisions, we redo it — different angle, different approach, no extra charge. Still not happy?{" "}
+              <span className="text-white">Full refund, no questions asked.</span>
+            </p>
+          </div>
           <a
             href="#quote"
-            className="inline-block px-8 py-3 border border-[#ff3300] bg-[#ff3300] text-white rounded-full text-[0.7rem] tracking-[0.14em] uppercase font-medium hover:bg-[#e82d00] transition-colors"
+            className="flex-shrink-0 px-6 py-3 rounded-full bg-[#ff3300] hover:bg-[#e82d00] text-white text-[0.68rem] tracking-[0.14em] uppercase font-bold transition-colors shadow-[0_4px_16px_rgba(255,51,0,0.3)]"
           >
             Get a Custom Quote
           </a>

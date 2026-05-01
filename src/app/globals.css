@@ -19,7 +19,6 @@ body {
   @apply bg-black text-white font-inter;
   font-size: 16px;
   line-height: 1.6;
-  cursor: none;
 }
 
 html.lenis, html.lenis body {
@@ -51,9 +50,11 @@ a, button, input, select, textarea {
   outline: none;
 }
 
-a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-  outline: 2px solid #ff3300;
-  outline-offset: 2px;
+/* GPU-promote scroll-animated elements to avoid paint jank */
+[data-framer-motion-mount],
+.framer-motion-animate {
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 /* Hide scrollbar while keeping scroll functionality */
