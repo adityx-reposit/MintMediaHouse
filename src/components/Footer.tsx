@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-12 mb-16">
         <div>
           <a className="block mb-6 cursor-none" href="/" aria-label="Mint Media House home">
-            <img src="/logo.png" alt="Mint Media House — UI animation & launch video agency for SaaS" className="h-10 md:h-12 lg:h-16 w-auto object-contain" />
+            <img src="/logo.png" alt="Mint Media House — UI animation & launch video agency for SaaS" width={200} height={64} className="h-10 md:h-12 lg:h-16 w-auto object-contain" />
           </a>
           <p className="text-[0.82rem] text-[#888888] leading-[1.75] max-w-[260px] font-light">
             A creative media agency helping founders and brands build authority through world-class content, animations, and strategy.

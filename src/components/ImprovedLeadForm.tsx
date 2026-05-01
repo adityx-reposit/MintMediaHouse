@@ -63,8 +63,6 @@ export default function ImprovedLeadForm() {
     const message = `Service: ${selectedService}\nBudget: ${selectedBudget}${formData.note ? `\n\nNote: ${formData.note}` : ""}`;
 
     try {
-      console.log("[Form] Submitting quote request", { name: formData.name, email: formData.email });
-      
       const res = await fetch("/api/send-quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -74,16 +72,12 @@ export default function ImprovedLeadForm() {
       const data = await res.json();
 
       if (!res.ok) {
-        const errorMsg = data.error || `Error: ${res.status}`;
-        console.error("[Form] Request failed:", errorMsg);
-        throw new Error(errorMsg);
+        throw new Error(data.error || `Error: ${res.status}`);
       }
 
-      console.log("[Form] Request successful:", data);
       setSubmitted(true);
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "Something went wrong. Please try again or contact us directly.";
-      console.error("[Form] Error:", errorMsg);
       setError(errorMsg);
     } finally {
       setLoading(false);

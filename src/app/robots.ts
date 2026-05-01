@@ -10,6 +10,5 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: "https://mintmediahouse.in/sitemap.xml",
-    host: "https://mintmediahouse.in",
   };
 }

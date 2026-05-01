@@ -132,15 +132,18 @@ export default function Pricing() {
                 </p>
               </div>
 
-              <button
-                className={`w-full py-3 px-4 rounded-lg text-[0.7rem] tracking-[0.1em] uppercase font-medium transition-all mb-6 ${
+              <a
+                href={plan.cta === "Schedule a Call" ? "https://cal.com/mintmediahouse" : "#quote"}
+                target={plan.cta === "Schedule a Call" ? "_blank" : undefined}
+                rel={plan.cta === "Schedule a Call" ? "noopener noreferrer" : undefined}
+                className={`block w-full py-3 px-4 rounded-lg text-[0.7rem] tracking-[0.1em] uppercase font-medium transition-all mb-6 text-center ${
                   plan.isPrimary
                     ? "bg-[#ff3300] text-white hover:bg-[#e82d00]"
                     : "border border-white text-white hover:bg-white hover:text-black"
                 }`}
               >
                 {plan.cta}
-              </button>
+              </a>
 
               <ul className="space-y-3">
                 {plan.features.map((feature, fidx) => (

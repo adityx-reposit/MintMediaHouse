@@ -17,7 +17,7 @@
 
 body {
   @apply bg-black text-white font-inter;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.6;
   cursor: none;
 }
@@ -46,9 +46,14 @@ html.lenis, html.lenis body {
 ::-webkit-scrollbar-track { background:var(--color-black); }
 ::-webkit-scrollbar-thumb { background:var(--color-accent); }
 
-/* Remove default link outline for clean aesthetics */
+/* Remove default outline for pointer users; keyboard users get a visible focus ring */
 a, button, input, select, textarea {
   outline: none;
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid #ff3300;
+  outline-offset: 2px;
 }
 
 /* Hide scrollbar while keeping scroll functionality */
