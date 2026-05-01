@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import { NextRequest, NextResponse } from "next/server";
+import type { Transporter } from "nodemailer";
 
 export async function POST(request: NextRequest) {
   try {
@@ -31,27 +32,30 @@ export async function POST(request: NextRequest) {
     const gmailPassword = process.env.GMAIL_PASSWORD;
 
     if (!gmailUser || !gmailPassword) {
-      console.error("[Quote API] Missing email credentials - GMAIL_USER:", !!gmailUser, "GMAIL_PASSWORD:", !!gmailPassword);
+      console.error("[Quote API] Missing email credentials:");
+      console.error("  GMAIL_USER set:", !!gmailUser);
+      console.error("  GMAIL_PASSWORD set:", !!gmailPassword);
+      console.error("  Environment variables available:", Object.keys(process.env).filter(k => k.includes('MAIL') || k.includes('GMAIL') || k.includes('EMAIL')).join(', '));
+      
       return NextResponse.json(
-        { error: "Email service not configured. Please contact us directly." },
+        { 
+          error: "Email service not configured. Please contact support@mintmediahouse.in",
+          code: "MISSING_CONFIG"
+        },
         { status: 503 }
       );
     }
 
-    console.log("[Quote API] Configuring nodemailer with user:", gmailUser);
+    console.log("[Quote API] Configuring nodemailer with user:", gmailUser.split('@')[0] + '@***');
 
     // Configure nodemailer with Gmail + App Password
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
+    const transporter: Transporter = nodemailer.createTransport({
+      service: "gmail",
       auth: {
         user: gmailUser,
         pass: gmailPassword,
       },
-      connectionTimeout: 10000,
-      socketTimeout: 10000,
-    });
+    } as any);
 
     // Verify connection before sending
     console.log("[Quote API] Verifying SMTP connection...");
@@ -141,26 +145,43 @@ export async function POST(request: NextRequest) {
       message: errorMessage,
       stack: errorStack,
       timestamp: new Date().toISOString(),
+      nodeEnv: process.env.NODE_ENV,
     });
 
     // Determine the appropriate error message
-    let userMessage = "Failed to send quote request. Please try again.";
+    let userMessage = "Failed to send quote request. Please try again or contact support.";
     let statusCode = 500;
+    let errorCode = "UNKNOWN_ERROR";
 
     if (errorMessage.includes("ECONNREFUSED")) {
-      userMessage = "Email service temporarily unavailable. Please try again in a moment.";
+      userMessage = "Email service connection failed. Please try again.";
       statusCode = 503;
+      errorCode = "EMAIL_CONNECTION_FAILED";
+      console.error("[Quote API] SMTP Connection refused - ensure GMAIL_USER is configured");
     } else if (errorMessage.includes("ETIMEDOUT") || errorMessage.includes("timeout")) {
       userMessage = "Request timed out. Please try again.";
       statusCode = 504;
-    } else if (errorMessage.includes("Invalid login")) {
-      userMessage = "Email service authentication failed. Contact support@mintmediahouse.in";
+      errorCode = "TIMEOUT";
+    } else if (errorMessage.includes("Invalid login") || errorMessage.includes("invalid credentials") || errorMessage.includes("535")) {
+      userMessage = "Email authentication failed. Please verify credentials.";
       statusCode = 503;
+      errorCode = "AUTH_FAILED";
+      console.error("[Quote API] Authentication failed - ensure GMAIL_PASSWORD is a valid App Password");
+    } else if (errorMessage.includes("ENOTFOUND") || errorMessage.includes("getaddrinfo")) {
+      userMessage = "Network error. Please check your connection and try again.";
+      statusCode = 503;
+      errorCode = "NETWORK_ERROR";
+    } else if (errorMessage.includes("verify")) {
+      userMessage = "Email service verification failed. Please contact support.";
+      statusCode = 503;
+      errorCode = "VERIFICATION_FAILED";
     }
 
     return NextResponse.json(
       { 
         error: userMessage,
+        code: errorCode,
+        success: false,
         details: process.env.NODE_ENV === "development" ? errorMessage : undefined 
       },
       { status: statusCode }
