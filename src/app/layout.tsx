@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
+import CustomCursor from "@/components/CustomCursor";
 import { schemaMarkup } from "@/lib/schema";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
@@ -113,6 +114,7 @@ export default function RootLayout({
       </head>
       <body className="flex flex-col">
         <LenisProvider>
+          <CustomCursor />
           {children}
         </LenisProvider>
         <SpeedInsights />
