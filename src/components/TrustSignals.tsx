@@ -17,8 +17,8 @@ export default function TrustSignals() {
     },
     {
       icon: DollarSign,
-      title: "Transparent Pricing",
-      description: "No hidden fees, no surprise costs. Clear pricing from day one",
+      title: "Fair Pricing",
+      description: "No hidden fees, no surprise costs. Tailored quotes for every project",
     },
     {
       icon: RefreshCw,

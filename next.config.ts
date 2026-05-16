@@ -8,7 +8,7 @@ const ContentSecurityPolicy = `
   img-src 'self' data: blob: https:;
   media-src 'self' blob: https:;
   connect-src 'self' https:;
-  frame-src 'self' https://cal.com https://www.youtube.com https://player.vimeo.com;
+  frame-src 'self' https://www.youtube.com https://player.vimeo.com;
   object-src 'none';
   base-uri 'self';
   form-action 'self';

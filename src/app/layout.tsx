@@ -103,9 +103,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${bebasNeue.variable} antialiased`}>
       <head>
-        <link rel="preconnect" href="https://cal.com" />
         <link rel="preconnect" href="https://video.twimg.com" />
-        <link rel="dns-prefetch" href="https://cal.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}

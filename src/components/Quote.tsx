@@ -88,12 +88,12 @@ export default function Quote() {
             </select>
           </div>
           <div className="flex flex-col gap-2 py-6 px-8 bg-[#111111]">
-            <label className="text-[0.62rem] tracking-[0.16em] uppercase text-muted">Budget Range</label>
-            <select name="budget" className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white cursor-none [&>option]:bg-[#111111]">
-              <option>₹25,000 – ₹50,000</option>
-              <option>₹50,000 – ₹1,00,000</option>
-              <option>₹1,00,000 – ₹2,50,000</option>
-              <option>₹2,50,000+</option>
+            <label className="text-[0.62rem] tracking-[0.16em] uppercase text-muted">Project Scale</label>
+            <select name="project_scale" className="bg-transparent border-b border-[#2a2a2a] py-2.5 text-white font-inter text-[0.9rem] font-light outline-none transition-colors duration-200 focus:border-white cursor-none [&>option]:bg-[#111111]">
+              <option>Single Video</option>
+              <option>Video Package</option>
+              <option>Monthly Retainer</option>
+              <option>Enterprise / Custom</option>
             </select>
           </div>
           <div className="flex flex-col gap-2 py-6 px-8 bg-[#111111]">

@@ -11,7 +11,7 @@ export default function FAQ() {
     {
       question: "How much does a launch video cost?",
       answer:
-        "Launch videos start at ₹75,000. The final price depends on complexity, length, and number of revisions. We provide custom quotes within 24 hours based on your specific project needs.",
+        "We provide fully custom quotes based on your project's complexity, length, and revision needs. Get in touch and we'll send a tailored proposal within 24 hours — no commitment required.",
     },
     {
       question: "How long does the video production process take?",
@@ -148,12 +148,10 @@ export default function FAQ() {
             Still have questions?
           </p>
           <a
-            href="https://cal.com/mintmediahouse"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#book"
             className="inline-block px-8 py-3 bg-[#ff3300] hover:bg-[#e82d00] text-white rounded-full text-[0.7rem] tracking-[0.14em] uppercase font-medium transition-colors"
           >
-            📅 Book a Free Strategy Call
+            📅 Book a Free Discovery Call
           </a>
         </motion.div>
       </motion.div>

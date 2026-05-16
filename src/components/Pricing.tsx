@@ -1,18 +1,13 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Check, Clock } from "lucide-react";
 
 const plans = [
   {
     id: "signal",
-    badge: null,
     name: "The Signal",
     tagline: "Perfect for testing cold email & LinkedIn outreach with video for the first time",
-    usPrice: 3700,
-    ourPrice: 1500,
-    suffix: "",
     delivery: "7 business days",
     features: [
       "1 × UI/Product Animation Video (30–60s)",
@@ -22,7 +17,6 @@ const plans = [
       "2 rounds of revisions",
       "Full commercial rights",
     ],
-    cta: "Get Started",
     isPrimary: false,
   },
   {
@@ -30,9 +24,6 @@ const plans = [
     badge: "Most Popular",
     name: "The Launch Stack",
     tagline: "Launching a feature, running ads, or going outbound at scale",
-    usPrice: 14100,
-    ourPrice: 4500,
-    suffix: "",
     delivery: "14 business days",
     features: [
       "1 × Launch/Explainer Video (60–90s)",
@@ -45,17 +36,12 @@ const plans = [
       "3 rounds of revisions",
       "Full commercial rights",
     ],
-    cta: "Get Started",
     isPrimary: true,
   },
   {
     id: "motion-os",
-    badge: null,
     name: "Motion OS",
     tagline: "Build video as a compounding growth channel with a monthly retainer",
-    usPrice: 13800,
-    ourPrice: 3200,
-    suffix: "/mo",
     delivery: "5-day turnaround · 2-month minimum",
     features: [
       "4 × UI/Product Animation Videos/mo",
@@ -66,124 +52,9 @@ const plans = [
       "All aspect ratios & formats",
       "Full commercial rights",
     ],
-    cta: "Book a Call",
     isPrimary: false,
   },
 ];
-
-function PriceReveal({
-  usPrice,
-  ourPrice,
-  suffix,
-}: {
-  usPrice: number;
-  ourPrice: number;
-  suffix: string;
-}) {
-  const [phase, setPhase] = useState<"hidden" | "counting" | "done">("hidden");
-  const [displayPrice, setDisplayPrice] = useState(usPrice);
-
-  const startReveal = useCallback(() => {
-    if (phase !== "hidden") return;
-    setPhase("counting");
-    setDisplayPrice(usPrice);
-
-    const DURATION = 2200;
-    const startTime = performance.now();
-
-    const tick = (now: number) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / DURATION, 1);
-      // ease-out quart: fast drop, satisfying deceleration near final price
-      const eased = 1 - Math.pow(1 - progress, 4);
-      const current = Math.round(usPrice - (usPrice - ourPrice) * eased);
-      setDisplayPrice(current);
-      if (progress < 1) {
-        requestAnimationFrame(tick);
-      } else {
-        setDisplayPrice(ourPrice);
-        setPhase("done");
-      }
-    };
-
-    // Short pause so user sees the US price before countdown starts
-    setTimeout(() => requestAnimationFrame(tick), 700);
-  }, [phase, usPrice, ourPrice]);
-
-  const savings = usPrice - ourPrice;
-  const savingsPct = Math.round((savings / usPrice) * 100);
-
-  return (
-    <div className="mb-6 min-h-[84px] flex flex-col justify-center">
-      <AnimatePresence mode="wait">
-        {phase === "hidden" ? (
-          <motion.button
-            key="reveal-btn"
-            onClick={startReveal}
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 0.85, transition: { duration: 0.18 } }}
-            whileHover={{ scale: 1.02, boxShadow: "0 6px 32px rgba(255,51,0,0.5)" }}
-            whileTap={{ scale: 0.97 }}
-            className="w-full py-3.5 rounded-xl text-white text-[0.72rem] tracking-[0.18em] uppercase font-bold flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#ff3300] to-[#cc2900] shadow-[0_4px_24px_rgba(255,51,0,0.32)]"
-          >
-            <span className="text-[1rem] leading-none">✦</span>
-            Reveal Price
-          </motion.button>
-        ) : (
-          <motion.div
-            key="price-display"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.22 }}
-          >
-            {/* US agency rate — strikethrough once counting done */}
-            <div className="flex items-center gap-1.5 mb-0.5">
-              <span className="text-[0.58rem] tracking-[0.14em] uppercase text-[#555]">
-                US agencies charge
-              </span>
-              <span
-                className={`text-[0.82rem] font-semibold tabular-nums transition-all duration-500 ${
-                  phase === "done"
-                    ? "line-through text-[#333]"
-                    : "text-[#888]"
-                }`}
-              >
-                ${usPrice.toLocaleString()}
-                {suffix}
-              </span>
-            </div>
-
-            {/* Animated main price */}
-            <div className="flex items-baseline gap-1">
-              <span className={`font-bebas text-[3.5rem] leading-none tracking-[0.02em] tabular-nums transition-colors duration-500 ${phase === "done" ? "text-[#22c55e]" : "text-white"}`}>
-                ${displayPrice.toLocaleString()}
-              </span>
-              {suffix && (
-                <span className="text-[#777] text-[0.88rem] mb-0.5">{suffix}</span>
-              )}
-            </div>
-
-            {/* Savings badge — pops in after count finishes */}
-            <AnimatePresence>
-              {phase === "done" && (
-                <motion.div
-                  initial={{ opacity: 0, x: -8, scale: 0.9 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  transition={{ type: "spring", stiffness: 320, damping: 22, delay: 0.08 }}
-                  className="mt-1.5 flex items-center gap-2"
-                >
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ff3300]/12 border border-[#ff3300]/25 text-[#ff5533] text-[0.6rem] tracking-[0.1em] uppercase font-bold">
-                    <span>✓</span> You save ${savings.toLocaleString()} ({savingsPct}% off)
-                  </span>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
 
 export default function Pricing() {
   const containerVariants = {
@@ -211,7 +82,7 @@ export default function Pricing() {
         {/* Header */}
         <motion.div variants={itemVariants} className="text-center mb-16">
           <div className="text-[0.65rem] tracking-[0.2em] uppercase text-muted mb-4 flex items-center justify-center gap-2">
-            <span className="text-[#ff3300]">//</span> The Grand Slam Offer
+            <span className="text-[#ff3300]">//</span> Our Packages
           </div>
           <h2 className="font-bebas text-[clamp(2.8rem,6vw,5.5rem)] leading-[0.95] tracking-[0.04em] text-white">
             Motion Content That
@@ -219,7 +90,8 @@ export default function Pricing() {
             <em className="not-italic text-[#ff3300]">Pays For Itself</em>
           </h2>
           <p className="text-[0.95rem] text-[#888] mt-4 max-w-2xl mx-auto leading-relaxed">
-            US prices. Our prices. <span className="text-[#ff3300] font-semibold">Big difference.</span>
+            Premium motion content tailored to your exact needs.{" "}
+            <span className="text-[#ff3300] font-semibold">Custom quote within 24 hours.</span>
           </p>
         </motion.div>
 
@@ -239,7 +111,7 @@ export default function Pricing() {
               }`}
             >
               {/* Popular badge */}
-              {plan.badge && (
+              {"badge" in plan && plan.badge && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#ff3300] text-white text-[0.6rem] tracking-[0.14em] uppercase font-bold rounded-full shadow-[0_4px_12px_rgba(255,51,0,0.4)]">
                   {plan.badge}
                 </div>
@@ -247,7 +119,7 @@ export default function Pricing() {
 
               <div className="p-7 flex flex-col flex-1">
                 {/* Plan name */}
-                <div className="mb-4">
+                <div className="mb-6">
                   <p className="text-[0.6rem] tracking-[0.2em] uppercase text-[#ff3300] mb-1.5">
                     {plan.id === "signal" ? "01 //" : plan.id === "launch" ? "02 //" : "03 //"}
                   </p>
@@ -259,12 +131,13 @@ export default function Pricing() {
                   </p>
                 </div>
 
-                {/* Price reveal */}
-                <PriceReveal
-                  usPrice={plan.usPrice}
-                  ourPrice={plan.ourPrice}
-                  suffix={plan.suffix}
-                />
+                {/* Custom pricing badge — replaces PriceReveal */}
+                <div className="mb-6 flex items-center gap-2.5">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#ff3300]/10 border border-[#ff3300]/20 text-[#ff5533] text-[0.62rem] tracking-[0.1em] uppercase font-bold">
+                    <span>✦</span> Custom Pricing
+                  </span>
+                  <span className="text-[0.7rem] text-[#555]">· tailored to you</span>
+                </div>
 
                 {/* Delivery */}
                 <div className="flex items-center gap-2 mb-5 text-[0.7rem] text-[#555]">
@@ -276,18 +149,13 @@ export default function Pricing() {
                 <ul className="space-y-2.5 mb-6">
                   {plan.features.map((feature, fidx) => (
                     <li key={fidx} className="flex items-start gap-2.5">
-                      <Check
-                        size={13}
-                        className="text-[#ff3300] mt-[3px] flex-shrink-0"
-                      />
-                      <span className="text-[0.8rem] text-[#888] leading-snug">
-                        {feature}
-                      </span>
+                      <Check size={13} className="text-[#ff3300] mt-[3px] flex-shrink-0" />
+                      <span className="text-[0.8rem] text-[#888] leading-snug">{feature}</span>
                     </li>
                   ))}
                 </ul>
 
-                {/* CTA — always at card bottom */}
+                {/* CTA */}
                 <a
                   href="#quote"
                   className={`w-full py-3 rounded-xl text-[0.7rem] tracking-[0.12em] uppercase font-bold text-center transition-all duration-200 mt-auto block ${
@@ -296,7 +164,7 @@ export default function Pricing() {
                       : "border border-[#2a2a2a] text-[#aaa] hover:border-[#ff3300] hover:text-white"
                   }`}
                 >
-                  {plan.cta}
+                  Get Quote
                 </a>
               </div>
 

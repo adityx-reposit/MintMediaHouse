@@ -3,78 +3,77 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const SERVICES = [
-  {
-    id: "launch-video",
-    label: "Launch Video",
-    icon: "▶",
-    desc: "Cinematic product launch films",
-  },
-  {
-    id: "ui-animation",
-    label: "UI Animation",
-    icon: "✦",
-    desc: "Micro-interactions & motion design",
-  },
-  {
-    id: "ad-creative",
-    label: "Ad Creative",
-    icon: "◈",
-    desc: "High-converting social video ads",
-  },
+const CHANNELS = [
+  { id: "instagram", label: "Instagram", icon: "📷" },
+  { id: "x", label: "X", icon: "𝕏" },
+  { id: "linkedin", label: "LinkedIn", icon: "💼" },
+  { id: "all", label: "All", icon: "✦" },
 ];
 
-export default function ImprovedLeadForm() {
-  const [service, setService] = useState("");
-  const [formData, setFormData] = useState({ name: "", email: "", note: "" });
+const REACH = [
+  { id: "above-100k", label: ">100k", sub: "Above 100k" },
+  { id: "below-100k", label: "<100k", sub: "Below 100k" },
+];
+
+const FREQUENCY = [
+  { id: "1-per-week", label: "1 / week", sub: "Steady" },
+  { id: "3-per-week", label: "3 / week", sub: "Active" },
+  { id: "5-per-week", label: "5 / week", sub: "Aggressive" },
+];
+
+export default function WaitlistForm() {
+  const [channel, setChannel] = useState("");
+  const [reach, setReach] = useState("");
+  const [frequency, setFrequency] = useState("");
+  const [formData, setFormData] = useState({ name: "", email: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((p) => ({ ...p, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!service) return;
-    setLoading(true);
-    setError("");
+    if (!channel || !reach || !frequency) return;
 
     if (!formData.name || !formData.email) {
       setError("Please fill in all required fields");
-      setLoading(false);
       return;
     }
 
-    const selectedService = SERVICES.find((s) => s.id === service)?.label ?? service;
-    const message = `Service: ${selectedService}${formData.note ? `\n\nNote: ${formData.note}` : ""}`;
+    setLoading(true);
+    setError("");
 
     try {
-      const res = await fetch("/api/send-quote", {
+      const res = await fetch("/api/send-waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: formData.name, email: formData.email, message }),
+        body: JSON.stringify({
+          channel: CHANNELS.find((c) => c.id === channel)?.label ?? channel,
+          reach: REACH.find((r) => r.id === reach)?.label ?? reach,
+          frequency: FREQUENCY.find((f) => f.id === frequency)?.label ?? frequency,
+          name: formData.name,
+          email: formData.email,
+        }),
       });
 
       const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || `Error: ${res.status}`);
-      }
-
+      if (!res.ok) throw new Error(data.error || "Submission failed");
       setSubmitted(true);
     } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : "Something went wrong. Please try again or contact us directly.";
-      setError(errorMsg);
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  const isComplete = channel && reach && frequency && formData.name && formData.email;
+
   return (
-    <section id="quote" className="bg-[#111111] py-[110px] px-[5vw]">
+    <section className="bg-[#111111] py-[110px] px-[5vw]">
       <motion.div
         initial={{ opacity: 0, y: 28 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -85,15 +84,15 @@ export default function ImprovedLeadForm() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="text-[0.62rem] tracking-[0.22em] uppercase text-[#666] mb-4 flex items-center justify-center gap-2">
-            <span className="text-[#ff3300]">//</span> Get Your Custom Quote
+            <span className="text-[#ff3300]">//</span> Self Growth Channel
           </div>
-          <h2 className="font-bebas text-[clamp(2.8rem,6vw,5rem)] leading-[0.93] tracking-[0.04em] text-white">
-            Tell Us About
+          <h1 className="font-bebas text-[clamp(2.8rem,6vw,5rem)] leading-[0.93] tracking-[0.04em] text-white">
+            Join The
             <br />
-            <em className="not-italic text-[#ff3300]">Your Project</em>
-          </h2>
-          <p className="text-[0.88rem] text-[#666] mt-4 leading-relaxed">
-            We'll respond with a custom quote within 24 hours. No commitment needed.
+            <em className="not-italic text-[#ff3300]">Waitlist</em>
+          </h1>
+          <p className="text-[0.88rem] text-[#666] mt-4 leading-relaxed max-w-md mx-auto">
+            Create a premium self-growth personal brand with high-performing content strategies across social platforms.
           </p>
         </div>
 
@@ -109,7 +108,6 @@ export default function ImprovedLeadForm() {
               transition={{ duration: 0.4 }}
               className="text-center py-20 bg-[#0a0a0a] border border-[#1e1e1e] rounded-2xl relative overflow-hidden"
             >
-              {/* Pulsing rings */}
               {[1, 2, 3].map((i) => (
                 <motion.div
                   key={i}
@@ -120,7 +118,6 @@ export default function ImprovedLeadForm() {
                 />
               ))}
 
-              {/* Checkmark circle */}
               <motion.div
                 initial={{ scale: 0, rotate: -30 }}
                 animate={{ scale: 1, rotate: 0 }}
@@ -130,9 +127,6 @@ export default function ImprovedLeadForm() {
                 <motion.svg
                   viewBox="0 0 24 24"
                   className="w-10 h-10"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
                 >
                   <motion.path
                     d="M5 13l4 4L19 7"
@@ -155,16 +149,16 @@ export default function ImprovedLeadForm() {
                 className="relative z-10"
               >
                 <h3 className="font-bebas text-[2rem] tracking-[0.06em] text-white mb-2">
-                  REQUEST RECEIVED!
+                  YOU&apos;RE ON THE LIST!
                 </h3>
                 <p className="text-[0.88rem] text-[#888] leading-relaxed">
-                  We'll review your project and send a custom quote
+                  We'll reach out as soon as spots open.
                   <br />
-                  to your inbox within 24 hours.
+                  Check your inbox for confirmation.
                 </p>
                 <div className="mt-8 flex items-center justify-center gap-6 text-[0.7rem] tracking-[0.12em] uppercase text-[#666]">
                   <span className="flex items-center gap-2"><span className="text-[#ff3300]">✓</span> Email confirmed</span>
-                  <span className="flex items-center gap-2"><span className="text-[#ff3300]">✓</span> 24hr response</span>
+                  <span className="flex items-center gap-2"><span className="text-[#ff3300]">✓</span> Spot reserved</span>
                 </div>
               </motion.div>
             </motion.div>
@@ -180,59 +174,110 @@ export default function ImprovedLeadForm() {
               className="bg-[#1a1a1a] border border-[#2e2e2e] rounded-2xl p-8 space-y-8"
             >
 
-              {/* STEP 1 — Service selection */}
+              {/* STEP 1 — Channel */}
               <div>
                 <p className="text-[0.62rem] tracking-[0.2em] uppercase text-[#888] mb-4">
-                  01 &nbsp;/&nbsp; What do you need?
+                  01 &nbsp;/&nbsp; Which platform?
                 </p>
-                <div className="grid grid-cols-3 gap-3">
-                  {SERVICES.map((s) => (
+                <div className="grid grid-cols-4 gap-2">
+                  {CHANNELS.map((c) => (
                     <motion.button
-                      key={s.id}
+                      key={c.id}
                       type="button"
-                      onClick={() => setService(s.id)}
+                      onClick={() => setChannel(c.id)}
                       whileHover={{ y: -2 }}
                       whileTap={{ scale: 0.97 }}
-                      className={`relative flex flex-col items-center text-center gap-2 py-5 px-3 rounded-xl border transition-all duration-200 cursor-pointer ${
-                        service === s.id
+                      className={`relative flex flex-col items-center text-center gap-2 py-5 px-2 rounded-xl border transition-all duration-200 cursor-pointer ${
+                        channel === c.id
                           ? "border-[#ff3300] bg-[#ff3300]/8 shadow-[0_0_20px_rgba(255,51,0,0.15)]"
                           : "border-[#2e2e2e] bg-[#222] hover:border-[#444]"
                       }`}
                     >
-                      {service === s.id && (
+                      {channel === c.id && (
                         <motion.div
-                          layoutId="service-selected"
+                          layoutId="channel-selected"
                           className="absolute inset-0 rounded-xl border border-[#ff3300] bg-[#ff3300]/5"
                           transition={{ type: "spring", stiffness: 300, damping: 28 }}
                         />
                       )}
-                      <span className={`relative z-10 text-xl ${service === s.id ? "text-[#ff3300]" : "text-[#666]"}`}>
-                        {s.icon}
+                      <span className={`relative z-10 text-lg ${channel === c.id ? "text-[#ff3300]" : "text-[#666]"}`}>
+                        {c.icon}
                       </span>
-                      <span className={`relative z-10 font-bebas text-[1rem] tracking-[0.06em] ${service === s.id ? "text-white" : "text-[#bbb]"}`}>
-                        {s.label}
-                      </span>
-                      <span className={`relative z-10 text-[0.65rem] leading-tight ${service === s.id ? "text-[#ccc]" : "text-[#888]"}`}>
-                        {s.desc}
+                      <span className={`relative z-10 font-bebas text-[0.95rem] tracking-[0.06em] ${channel === c.id ? "text-white" : "text-[#bbb]"}`}>
+                        {c.label}
                       </span>
                     </motion.button>
                   ))}
                 </div>
               </div>
 
-              {/* STEP 2 — Contact info */}
+              {/* STEP 2 — Minimum Reach */}
               <div>
                 <p className="text-[0.62rem] tracking-[0.2em] uppercase text-[#888] mb-4">
-                  02 &nbsp;/&nbsp; Your details
+                  02 &nbsp;/&nbsp; Minimum reach goal?
                 </p>
-                <div className="grid grid-cols-2 gap-3 mb-3">
+                <div className="grid grid-cols-2 gap-3">
+                  {REACH.map((r) => (
+                    <motion.button
+                      key={r.id}
+                      type="button"
+                      onClick={() => setReach(r.id)}
+                      whileTap={{ scale: 0.97 }}
+                      className={`flex flex-col items-center gap-1 py-4 rounded-xl border text-center transition-all duration-200 ${
+                        reach === r.id
+                          ? "border-[#ff3300] bg-[#ff3300]/8 text-white shadow-[0_0_20px_rgba(255,51,0,0.15)]"
+                          : "border-[#2e2e2e] bg-[#222] text-[#aaa] hover:border-[#444] hover:text-[#ddd]"
+                      }`}
+                    >
+                      <span className="font-bebas text-[1.4rem] tracking-[0.04em]">{r.label}</span>
+                      <span className={`text-[0.6rem] tracking-[0.12em] uppercase ${reach === r.id ? "text-[#ff3300]" : "text-[#777]"}`}>
+                        {r.sub}
+                      </span>
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+
+              {/* STEP 3 — Frequency */}
+              <div>
+                <p className="text-[0.62rem] tracking-[0.2em] uppercase text-[#888] mb-4">
+                  03 &nbsp;/&nbsp; Content frequency?
+                </p>
+                <div className="grid grid-cols-3 gap-3">
+                  {FREQUENCY.map((f) => (
+                    <motion.button
+                      key={f.id}
+                      type="button"
+                      onClick={() => setFrequency(f.id)}
+                      whileTap={{ scale: 0.97 }}
+                      className={`flex flex-col items-center gap-1 py-4 rounded-xl border text-center transition-all duration-200 ${
+                        frequency === f.id
+                          ? "border-[#ff3300] bg-[#ff3300]/8 text-white shadow-[0_0_20px_rgba(255,51,0,0.15)]"
+                          : "border-[#2e2e2e] bg-[#222] text-[#aaa] hover:border-[#444] hover:text-[#ddd]"
+                      }`}
+                    >
+                      <span className="font-bebas text-[1.1rem] tracking-[0.04em]">{f.label}</span>
+                      <span className={`text-[0.6rem] tracking-[0.12em] uppercase ${frequency === f.id ? "text-[#ff3300]" : "text-[#777]"}`}>
+                        {f.sub}
+                      </span>
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+
+              {/* STEP 4 — Contact */}
+              <div>
+                <p className="text-[0.62rem] tracking-[0.2em] uppercase text-[#888] mb-4">
+                  04 &nbsp;/&nbsp; Your details
+                </p>
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label htmlFor="name" className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5">
+                    <label htmlFor="wl-name" className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5">
                       Full Name
                     </label>
                     <input
                       type="text"
-                      id="name"
+                      id="wl-name"
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
@@ -242,12 +287,12 @@ export default function ImprovedLeadForm() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5">
+                    <label htmlFor="wl-email" className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5">
                       Email
                     </label>
                     <input
                       type="email"
-                      id="email"
+                      id="wl-email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
@@ -256,20 +301,6 @@ export default function ImprovedLeadForm() {
                       className="w-full px-4 py-3 bg-[#252525] border border-[#2e2e2e] rounded-lg text-white text-[0.88rem] placeholder-[#555] focus:outline-none focus:border-[#ff3300] focus:ring-1 focus:ring-[#ff3300]/40 transition-colors"
                     />
                   </div>
-                </div>
-                <div>
-                  <label htmlFor="note" className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5">
-                    Anything else? <span className="normal-case text-[#333]">(optional)</span>
-                  </label>
-                  <textarea
-                    id="note"
-                    name="note"
-                    value={formData.note}
-                    onChange={handleChange}
-                    placeholder="Deadline, platform, reference links..."
-                    rows={3}
-                    className="w-full px-4 py-3 bg-[#252525] border border-[#2e2e2e] rounded-lg text-white text-[0.88rem] placeholder-[#555] focus:outline-none focus:border-[#ff3300] focus:ring-1 focus:ring-[#ff3300]/40 transition-colors resize-none"
-                  />
                 </div>
               </div>
 
@@ -290,11 +321,11 @@ export default function ImprovedLeadForm() {
               {/* Submit */}
               <motion.button
                 type="submit"
-                disabled={loading || !service}
-                whileHover={!loading && service ? { scale: 1.01 } : {}}
-                whileTap={!loading && service ? { scale: 0.99 } : {}}
+                disabled={loading || !isComplete}
+                whileHover={!loading && isComplete ? { scale: 1.01 } : {}}
+                whileTap={!loading && isComplete ? { scale: 0.99 } : {}}
                 className={`w-full py-4 rounded-xl text-[0.72rem] tracking-[0.16em] uppercase font-bold flex items-center justify-center gap-3 transition-all duration-300 ${
-                  !service
+                  !isComplete
                     ? "bg-[#252525] text-[#666] cursor-not-allowed border border-[#2e2e2e]"
                     : loading
                     ? "bg-[#ff3300]/70 text-white cursor-not-allowed"
@@ -308,13 +339,13 @@ export default function ImprovedLeadForm() {
                       transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
                       className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full inline-block"
                     />
-                    Sending your request...
+                    Joining the waitlist...
                   </>
                 ) : (
                   <>
-                    Get My Custom Quote
+                    Join Waitlist
                     <motion.span
-                      animate={service ? { x: [0, 4, 0] } : {}}
+                      animate={isComplete ? { x: [0, 4, 0] } : {}}
                       transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
                     >
                       →
@@ -325,11 +356,10 @@ export default function ImprovedLeadForm() {
 
               {/* Trust line */}
               <div className="pt-2 border-t border-[#2e2e2e] flex items-center justify-center gap-5 text-[0.65rem] tracking-[0.1em] uppercase text-[#777]">
-                <span><span className="text-[#ff3300]">✓</span> 24hr reply</span>
-                <span><span className="text-[#ff3300]">✓</span> Zero pressure</span>
-                <span><span className="text-[#ff3300]">✓</span> Custom pricing</span>
+                <span><span className="text-[#ff3300]">✓</span> No spam</span>
+                <span><span className="text-[#ff3300]">✓</span> Early access</span>
+                <span><span className="text-[#ff3300]">✓</span> Limited spots</span>
               </div>
-
             </motion.form>
           )}
         </AnimatePresence>

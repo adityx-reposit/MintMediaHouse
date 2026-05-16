@@ -34,7 +34,7 @@ export default function Navbar() {
         {[
           { label: "Services", href: "#services" },
           { label: "Portfolio", href: "#work" },
-          { label: "Pricing", href: "#pricing" },
+          { label: "Packages", href: "#pricing" },
           { label: "FAQ", href: "#faq" },
         ].map((item) => (
           <a

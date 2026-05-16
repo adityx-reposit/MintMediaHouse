@@ -96,24 +96,18 @@ export const schemaMarkup = {
             "@type": "Offer",
             "name": "UI Animations",
             "description": "Custom UI animations for SaaS products",
-            "price": "50000",
-            "priceCurrency": "INR",
             "url": "https://mintmediahouse.in#pricing",
           },
           {
             "@type": "Offer",
             "name": "Launch Videos",
             "description": "Premium product launch videos",
-            "price": "75000",
-            "priceCurrency": "INR",
             "url": "https://mintmediahouse.in#pricing",
           },
           {
             "@type": "Offer",
             "name": "Personal Brand Videos",
             "description": "Monthly personal brand video series",
-            "price": "100000",
-            "priceCurrency": "INR",
             "url": "https://mintmediahouse.in#pricing",
           },
         ],
@@ -157,7 +151,7 @@ export const schemaMarkup = {
           "name": "How much does a launch video cost?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Launch videos start at ₹75,000. The final price depends on complexity, length, and number of revisions. We provide custom quotes within 24 hours.",
+            "text": "We provide fully custom quotes based on your project's complexity, length, and revision needs. Get in touch and we'll send a tailored proposal within 24 hours — no commitment required.",
           },
         },
         {
