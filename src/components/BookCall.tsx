@@ -4,14 +4,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Clock, Video } from "lucide-react";
 
-const TIME_SLOTS = [
-  { id: "10:00", label: "10:00 AM" },
-  { id: "11:00", label: "11:00 AM" },
-  { id: "14:00", label: "2:00 PM" },
-  { id: "15:00", label: "3:00 PM" },
-  { id: "16:00", label: "4:00 PM" },
-];
-
 function getTomorrowStr(): string {
   const d = new Date();
   d.setDate(d.getDate() + 1);
@@ -21,26 +13,41 @@ function getTomorrowStr(): string {
 function formatDateDisplay(dateStr: string): string {
   if (!dateStr) return "";
   const d = new Date(dateStr + "T00:00:00");
-  return d.toLocaleDateString("en-IN", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+  return d.toLocaleDateString("en-IN", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+function formatTime12h(time: string): string {
+  if (!time) return "";
+  const [h, m] = time.split(":").map(Number);
+  const period = h >= 12 ? "PM" : "AM";
+  const hour   = h % 12 || 12;
+  return `${hour}:${m.toString().padStart(2, "0")} ${period}`;
 }
 
 export default function BookCall() {
-  const [date, setDate] = useState("");
-  const [timeSlot, setTimeSlot] = useState("");
+  const [date, setDate]         = useState("");
+  const [time, setTime]         = useState("");
   const [formData, setFormData] = useState({ name: "", email: "", note: "" });
   const [submitted, setSubmitted] = useState(false);
-  const [meetLink, setMeetLink] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [meetLink, setMeetLink]   = useState("");
+  const [loading, setLoading]     = useState(false);
+  const [error, setError]         = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((p) => ({ ...p, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!date || !timeSlot || !formData.name || !formData.email) return;
+    if (!date || !time || !formData.name || !formData.email) return;
     setLoading(true);
     setError("");
 
@@ -48,20 +55,24 @@ export default function BookCall() {
       const res = await fetch("/api/book-call", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ date, timeSlot, ...formData }),
+        body: JSON.stringify({ date, time, ...formData }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Booking failed");
       setMeetLink(data.meetLink || "");
       setSubmitted(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const isFormComplete = date && timeSlot && formData.name && formData.email;
+  const isFormComplete = date && time && formData.name && formData.email;
 
   return (
     <>
@@ -83,7 +94,9 @@ export default function BookCall() {
             SESSION
           </h2>
           <p className="text-[0.9rem] text-[#888888] mt-4 max-w-[520px] mx-auto leading-relaxed font-light">
-            Pick a time that works — 30 minutes, zero pressure. We'll map out exactly how Mint Media House can grow your brand. Instant Google Meet confirmation.
+            Pick any date and time that works for you — 30 minutes, zero
+            pressure. We'll map out exactly how Mint Media House can grow your
+            brand.
           </p>
         </motion.div>
 
@@ -92,10 +105,10 @@ export default function BookCall() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10%" }}
           transition={{ duration: 0.65, delay: 0.1 }}
-          className="max-w-[640px] mx-auto"
+          className="max-w-[620px] mx-auto"
         >
           <AnimatePresence mode="wait">
-            {/* ── SUCCESS STATE ── */}
+            {/* ── SUCCESS ── */}
             {submitted ? (
               <motion.div
                 key="success"
@@ -110,7 +123,12 @@ export default function BookCall() {
                     key={i}
                     initial={{ scale: 0, opacity: 0.6 }}
                     animate={{ scale: 3.5, opacity: 0 }}
-                    transition={{ duration: 1.8, delay: i * 0.3, repeat: Infinity, ease: "easeOut" }}
+                    transition={{
+                      duration: 1.8,
+                      delay: i * 0.3,
+                      repeat: Infinity,
+                      ease: "easeOut",
+                    }}
                     className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border border-[#ff3300]"
                   />
                 ))}
@@ -118,7 +136,12 @@ export default function BookCall() {
                 <motion.div
                   initial={{ scale: 0, rotate: -30 }}
                   animate={{ scale: 1, rotate: 0 }}
-                  transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 18,
+                    delay: 0.1,
+                  }}
                   className="relative z-10 w-20 h-20 rounded-full bg-[#ff3300] flex items-center justify-center mx-auto mb-6 shadow-[0_0_40px_rgba(255,51,0,0.4)]"
                 >
                   <Video size={32} className="text-white" />
@@ -134,10 +157,9 @@ export default function BookCall() {
                     CALL CONFIRMED!
                   </h3>
                   <p className="text-[0.88rem] text-[#888] leading-relaxed mb-6">
-                    {formatDateDisplay(date)} at{" "}
-                    {TIME_SLOTS.find((s) => s.id === timeSlot)?.label} IST
+                    {formatDateDisplay(date)} at {formatTime12h(time)} IST
                     <br />
-                    Check your inbox for the calendar invite.
+                    Check your inbox — calendar invite + Meet link sent.
                   </p>
 
                   {meetLink && (
@@ -156,13 +178,17 @@ export default function BookCall() {
                   )}
 
                   <div className="mt-6 flex items-center justify-center gap-6 text-[0.65rem] tracking-[0.12em] uppercase text-[#555]">
-                    <span className="flex items-center gap-1.5"><span className="text-[#ff3300]">✓</span> Calendar invite sent</span>
-                    <span className="flex items-center gap-1.5"><span className="text-[#ff3300]">✓</span> Meet link ready</span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="text-[#ff3300]">✓</span> Calendar invite sent
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="text-[#ff3300]">✓</span> Meet link ready
+                    </span>
                   </div>
                 </motion.div>
               </motion.div>
             ) : (
-              /* ── BOOKING FORM ── */
+              /* ── FORM ── */
               <motion.form
                 key="form"
                 onSubmit={handleSubmit}
@@ -184,46 +210,50 @@ export default function BookCall() {
                     required
                     className="w-full px-4 py-3 bg-[#252525] border border-[#2e2e2e] rounded-lg text-white text-[0.88rem] focus:outline-none focus:border-[#ff3300] focus:ring-1 focus:ring-[#ff3300]/40 transition-colors [color-scheme:dark]"
                   />
-                  {date && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 text-[0.7rem] text-[#ff3300] tracking-[0.06em]"
-                    >
-                      {formatDateDisplay(date)}
-                    </motion.p>
-                  )}
-                  <p className="mt-2 text-[0.62rem] text-[#555] tracking-[0.08em]">
-                    Mon – Fri · All times in IST (Asia/Kolkata)
-                  </p>
+                  <AnimatePresence>
+                    {date && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="mt-2 text-[0.7rem] text-[#ff3300] tracking-[0.06em]"
+                      >
+                        {formatDateDisplay(date)}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
                 </div>
 
-                {/* STEP 2 — Time slot */}
+                {/* STEP 2 — Time (full 24-hour picker) */}
                 <div>
                   <p className="text-[0.62rem] tracking-[0.2em] uppercase text-[#888] mb-4 flex items-center gap-2">
                     <Clock size={11} className="text-[#ff3300]" />
-                    02 &nbsp;/&nbsp; Choose a time slot
+                    02 &nbsp;/&nbsp; Choose a time{" "}
+                    <span className="text-[#444] normal-case tracking-normal">
+                      — any time, IST (Asia/Kolkata)
+                    </span>
                   </p>
-                  <div className="grid grid-cols-5 gap-2">
-                    {TIME_SLOTS.map((slot) => (
-                      <motion.button
-                        key={slot.id}
-                        type="button"
-                        onClick={() => setTimeSlot(slot.id)}
-                        whileTap={{ scale: 0.96 }}
-                        className={`flex flex-col items-center gap-0.5 py-3 px-1 rounded-lg border text-center transition-all duration-200 ${
-                          timeSlot === slot.id
-                            ? "border-[#ff3300] bg-[#ff3300]/8 text-white shadow-[0_0_16px_rgba(255,51,0,0.15)]"
-                            : "border-[#2e2e2e] bg-[#222] text-[#aaa] hover:border-[#444] hover:text-[#ddd]"
-                        }`}
+
+                  <input
+                    type="time"
+                    value={time}
+                    onChange={(e) => setTime(e.target.value)}
+                    required
+                    className="w-full px-4 py-3 bg-[#252525] border border-[#2e2e2e] rounded-lg text-white text-[0.88rem] focus:outline-none focus:border-[#ff3300] focus:ring-1 focus:ring-[#ff3300]/40 transition-colors [color-scheme:dark]"
+                  />
+
+                  <AnimatePresence>
+                    {time && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="mt-2 text-[0.7rem] text-[#ff3300] tracking-[0.06em]"
                       >
-                        <span className="text-[0.78rem] font-semibold">{slot.label}</span>
-                        <span className={`text-[0.55rem] tracking-[0.08em] uppercase ${timeSlot === slot.id ? "text-[#ff3300]" : "text-[#555]"}`}>
-                          IST
-                        </span>
-                      </motion.button>
-                    ))}
-                  </div>
+                        {formatTime12h(time)} IST · 30-minute session
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
                 </div>
 
                 {/* STEP 3 — Contact */}
@@ -233,7 +263,10 @@ export default function BookCall() {
                   </p>
                   <div className="grid grid-cols-2 gap-3 mb-3">
                     <div>
-                      <label htmlFor="bc-name" className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5">
+                      <label
+                        htmlFor="bc-name"
+                        className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5"
+                      >
                         Full Name
                       </label>
                       <input
@@ -248,7 +281,10 @@ export default function BookCall() {
                       />
                     </div>
                     <div>
-                      <label htmlFor="bc-email" className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5">
+                      <label
+                        htmlFor="bc-email"
+                        className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5"
+                      >
                         Email
                       </label>
                       <input
@@ -264,8 +300,12 @@ export default function BookCall() {
                     </div>
                   </div>
                   <div>
-                    <label htmlFor="bc-note" className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5">
-                      Anything to share? <span className="normal-case text-[#333]">(optional)</span>
+                    <label
+                      htmlFor="bc-note"
+                      className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5"
+                    >
+                      Anything to share?{" "}
+                      <span className="normal-case text-[#333]">(optional)</span>
                     </label>
                     <textarea
                       id="bc-note"
@@ -289,7 +329,11 @@ export default function BookCall() {
                       className="text-red-400 text-[0.8rem] text-center -mt-2"
                     >
                       {error} —{" "}
-                      <button type="button" className="underline" onClick={() => setError("")}>
+                      <button
+                        type="button"
+                        className="underline"
+                        onClick={() => setError("")}
+                      >
                         try again
                       </button>
                     </motion.p>
@@ -314,7 +358,11 @@ export default function BookCall() {
                     <>
                       <motion.span
                         animate={{ rotate: 360 }}
-                        transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+                        transition={{
+                          duration: 0.8,
+                          repeat: Infinity,
+                          ease: "linear",
+                        }}
                         className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full inline-block"
                       />
                       Booking your call...
@@ -325,7 +373,11 @@ export default function BookCall() {
                       Book Discovery Call
                       <motion.span
                         animate={isFormComplete ? { x: [0, 4, 0] } : {}}
-                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
                       >
                         →
                       </motion.span>
@@ -335,9 +387,15 @@ export default function BookCall() {
 
                 {/* Trust line */}
                 <div className="pt-2 border-t border-[#2e2e2e] flex items-center justify-center gap-5 text-[0.65rem] tracking-[0.1em] uppercase text-[#777]">
-                  <span><span className="text-[#ff3300]">✓</span> Free 30-min call</span>
-                  <span><span className="text-[#ff3300]">✓</span> Google Meet link</span>
-                  <span><span className="text-[#ff3300]">✓</span> Zero commitment</span>
+                  <span>
+                    <span className="text-[#ff3300]">✓</span> Free 30-min call
+                  </span>
+                  <span>
+                    <span className="text-[#ff3300]">✓</span> Google Meet link
+                  </span>
+                  <span>
+                    <span className="text-[#ff3300]">✓</span> Zero commitment
+                  </span>
                 </div>
               </motion.form>
             )}
@@ -366,7 +424,8 @@ export default function BookCall() {
             COLLABORATE?
           </div>
           <p className="text-[0.95rem] text-[#888888] my-6 mx-auto max-w-[420px] font-light">
-            Have a project in mind? Let's create something extraordinary together.
+            Have a project in mind? Let's create something extraordinary
+            together.
           </p>
           <div className="mt-10 flex justify-center gap-4 flex-wrap">
             <a
