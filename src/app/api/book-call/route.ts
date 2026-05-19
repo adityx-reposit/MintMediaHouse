@@ -53,7 +53,7 @@ async function createCalendarEventWithMeet(
     sendUpdates: "all",           // sends calendar invite to attendee
     requestBody: {
       summary:     `Discovery Call — ${name} × Mint Media House`,
-      description: `Client: ${name}\nEmail: ${email}${note ? `\nNote: ${note}` : ""}`,
+      description: `30-minute Discovery Call with Mint Media House\n\nGuest: ${name}\nEmail: ${email}${note ? `\n\nNote from ${name}: ${note}` : ""}\n\n——\nmintmediahouse.in`,
       start: { dateTime: buildIST(date, time, 0),  timeZone: "Asia/Kolkata" },
       end:   { dateTime: buildIST(date, time, 30), timeZone: "Asia/Kolkata" },
       attendees: [{ email }],
@@ -116,29 +116,164 @@ function teamEmail(
 function clientEmail(
   name: string, date: string, time: string, meetLink: string
 ): string {
-  return `<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;background:#f4f4f4;padding:20px;margin:0;">
-  <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-    <div style="background:#111;padding:24px 32px;text-align:center;">
-      <h1 style="color:#fff;margin:0;font-size:18px;letter-spacing:2px;">MINT<span style="color:#ff3300;">MEDIA</span>HOUSE</h1>
-    </div>
-    <div style="padding:36px 32px;">
-      <p style="margin:0 0 16px;font-size:16px;color:#111;font-weight:600;">Hey ${name},</p>
-      <p style="margin:0 0 20px;color:#333;line-height:1.7;font-size:15px;">Your <strong>30-minute discovery call</strong> is confirmed! Here are your details:</p>
-      <div style="margin:0 0 24px;padding:20px 24px;background:#f9f9f9;border-left:4px solid #ff3300;border-radius:0 4px 4px 0;">
-        <p style="margin:0 0 10px;font-size:13px;color:#444;"><strong>📅 Date:</strong> ${date}</p>
-        <p style="margin:0 0 16px;font-size:13px;color:#444;"><strong>🕐 Time:</strong> ${formatTime12h(time)} IST</p>
-        <p style="margin:0 0 10px;font-size:13px;color:#444;"><strong>🎥 Google Meet:</strong></p>
-        <a href="${meetLink}" style="display:inline-block;padding:10px 22px;background:#ff3300;color:#fff;text-decoration:none;border-radius:20px;font-size:13px;font-weight:600;">Join Google Meet →</a>
-        <p style="margin:10px 0 0;font-size:11px;color:#aaa;word-break:break-all;">${meetLink}</p>
-      </div>
-      <p style="margin:0 0 8px;color:#888;font-size:13px;">You should also receive a Google Calendar invite — check your inbox and accept it so the call appears in your calendar.</p>
-      <p style="margin:12px 0 0;color:#888;font-size:13px;">Questions? Reply to this email or visit <a href="https://mintmediahouse.in" style="color:#ff3300;text-decoration:none;">mintmediahouse.in</a></p>
-    </div>
-    <div style="background:#f4f4f4;padding:16px 32px;text-align:center;border-top:1px solid #eee;">
-      <p style="margin:0;color:#bbb;font-size:11px;letter-spacing:0.5px;">— The Mint Media House Team</p>
-    </div>
-  </div>
-</body></html>`;
+  const firstName = name.split(" ")[0];
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Your Discovery Call is Confirmed</title></head>
+<body style="margin:0;padding:0;background:#0a0a0a;font-family:'Helvetica Neue',Arial,sans-serif;">
+
+  <!-- Outer wrapper -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0a0a0a;padding:40px 16px;">
+    <tr><td align="center">
+
+      <!-- Card -->
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;background:#111111;border-radius:12px;overflow:hidden;border:1px solid #1e1e1e;">
+
+        <!-- ── Top accent bar ── -->
+        <tr>
+          <td style="background:linear-gradient(90deg,#ff3300 0%,#ff6600 100%);height:4px;font-size:0;line-height:0;">&nbsp;</td>
+        </tr>
+
+        <!-- ── Header ── -->
+        <tr>
+          <td style="padding:36px 40px 28px;border-bottom:1px solid #1e1e1e;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td>
+                  <p style="margin:0;font-size:11px;letter-spacing:3px;color:#ff3300;text-transform:uppercase;font-weight:600;">// Confirmed</p>
+                  <h1 style="margin:10px 0 0;font-size:28px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;line-height:1.2;">
+                    MINT<span style="color:#ff3300;">MEDIA</span>HOUSE
+                  </h1>
+                </td>
+                <td align="right" valign="top">
+                  <div style="width:48px;height:48px;background:#ff3300;border-radius:50%;text-align:center;line-height:48px;font-size:22px;">✓</div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Greeting ── -->
+        <tr>
+          <td style="padding:36px 40px 0;">
+            <p style="margin:0 0 8px;font-size:22px;font-weight:700;color:#ffffff;">Hey ${firstName},</p>
+            <p style="margin:0;font-size:15px;color:#888888;line-height:1.7;">Your <span style="color:#ffffff;font-weight:600;">30-minute Discovery Call</span> with Mint Media House is locked in. Here's everything you need.</p>
+          </td>
+        </tr>
+
+        <!-- ── Details card ── -->
+        <tr>
+          <td style="padding:28px 40px 0;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#1a1a1a;border-radius:10px;border:1px solid #2a2a2a;overflow:hidden;">
+              <tr>
+                <td style="padding:24px 28px;">
+
+                  <!-- Date row -->
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+                    <tr>
+                      <td width="32" valign="top">
+                        <div style="width:32px;height:32px;background:#ff330015;border:1px solid #ff330040;border-radius:8px;text-align:center;line-height:32px;font-size:14px;">📅</div>
+                      </td>
+                      <td style="padding-left:12px;">
+                        <p style="margin:0;font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#555;font-weight:600;">Date</p>
+                        <p style="margin:4px 0 0;font-size:15px;color:#ffffff;font-weight:600;">${date}</p>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <!-- Time row -->
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #2a2a2a;">
+                    <tr>
+                      <td width="32" valign="top">
+                        <div style="width:32px;height:32px;background:#ff330015;border:1px solid #ff330040;border-radius:8px;text-align:center;line-height:32px;font-size:14px;">🕐</div>
+                      </td>
+                      <td style="padding-left:12px;">
+                        <p style="margin:0;font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#555;font-weight:600;">Time</p>
+                        <p style="margin:4px 0 0;font-size:15px;color:#ffffff;font-weight:600;">${formatTime12h(time)} <span style="color:#555;font-weight:400;font-size:13px;">India Standard Time</span></p>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <!-- Meet link -->
+                  <p style="margin:0 0 12px;font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#555;font-weight:600;">Google Meet Link</p>
+                  <a href="${meetLink}" style="display:block;text-align:center;padding:14px 24px;background:linear-gradient(135deg,#ff3300,#ff6600);color:#ffffff;text-decoration:none;border-radius:8px;font-size:15px;font-weight:700;letter-spacing:0.3px;">
+                    Join Google Meet &nbsp;→
+                  </a>
+                  <p style="margin:10px 0 0;font-size:11px;color:#444;text-align:center;word-break:break-all;">${meetLink}</p>
+
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── What to expect ── -->
+        <tr>
+          <td style="padding:28px 40px 0;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#161616;border-radius:10px;border:1px solid #1e1e1e;">
+              <tr>
+                <td style="padding:20px 24px;">
+                  <p style="margin:0 0 14px;font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#ff3300;font-weight:600;">What to expect</p>
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td style="padding:4px 0;font-size:13px;color:#888;">
+                        <span style="color:#ff3300;margin-right:8px;">—</span>We'll learn about your brand and content goals
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding:4px 0;font-size:13px;color:#888;">
+                        <span style="color:#ff3300;margin-right:8px;">—</span>We'll show you what a custom content strategy looks like
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding:4px 0;font-size:13px;color:#888;">
+                        <span style="color:#ff3300;margin-right:8px;">—</span>No pressure, no sales pitch — just clarity
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Calendar note ── -->
+        <tr>
+          <td style="padding:24px 40px 0;">
+            <p style="margin:0;font-size:13px;color:#555;line-height:1.7;text-align:center;">
+              A Google Calendar invite has been sent to your inbox — accept it so the call shows up in your calendar automatically.
+            </p>
+          </td>
+        </tr>
+
+        <!-- ── Footer ── -->
+        <tr>
+          <td style="padding:32px 40px 36px;margin-top:8px;border-top:1px solid #1e1e1e;margin-top:24px;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td>
+                  <p style="margin:0 0 4px;font-size:13px;color:#555;">Questions? Just reply to this email.</p>
+                  <a href="https://mintmediahouse.in" style="font-size:13px;color:#ff3300;text-decoration:none;font-weight:600;">mintmediahouse.in</a>
+                </td>
+                <td align="right">
+                  <p style="margin:0;font-size:11px;color:#333;letter-spacing:1px;">MINT<span style="color:#ff3300;">MEDIA</span>HOUSE</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+      </table>
+      <!-- /Card -->
+
+      <!-- Bottom note -->
+      <p style="margin:20px 0 0;font-size:11px;color:#333;text-align:center;">This confirmation was sent from mintmediahouse.in</p>
+
+    </td></tr>
+  </table>
+
+</body>
+</html>`;
 }
 
 // ── Handler ────────────────────────────────────────────────────────────────
