@@ -2,447 +2,391 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, Clock, Video } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock, Video, ArrowLeft } from "lucide-react";
 
-function getTomorrowStr(): string {
-  const d = new Date();
-  d.setDate(d.getDate() + 1);
-  return d.toISOString().split("T")[0];
+// All 30-min slots across 24 h
+const TIME_SLOTS: string[] = Array.from({ length: 48 }, (_, i) => {
+  const h = Math.floor(i / 2);
+  const m = i % 2 === 0 ? "00" : "30";
+  return `${String(h).padStart(2, "0")}:${m}`;
+});
+
+const MONTHS = [
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December",
+];
+const DAYS = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+
+function fmt12h(t: string) {
+  const [h, m] = t.split(":").map(Number);
+  const p = h >= 12 ? "PM" : "AM";
+  return `${h % 12 || 12}:${String(m).padStart(2,"0")} ${p}`;
 }
 
-function formatDateDisplay(dateStr: string): string {
-  if (!dateStr) return "";
-  const d = new Date(dateStr + "T00:00:00");
-  return d.toLocaleDateString("en-IN", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+function toDateStr(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
 
-function formatTime12h(time: string): string {
-  if (!time) return "";
-  const [h, m] = time.split(":").map(Number);
-  const period = h >= 12 ? "PM" : "AM";
-  const hour   = h % 12 || 12;
-  return `${hour}:${m.toString().padStart(2, "0")} ${period}`;
-}
+type Step = "calendar" | "time" | "form" | "success";
 
 export default function BookCall() {
-  const [date, setDate]         = useState("");
-  const [time, setTime]         = useState("");
-  const [formData, setFormData] = useState({ name: "", email: "", note: "" });
-  const [submitted, setSubmitted] = useState(false);
-  const [meetLink, setMeetLink]   = useState("");
-  const [loading, setLoading]     = useState(false);
-  const [error, setError]         = useState("");
+  const today = new Date();
+  today.setHours(0,0,0,0);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((p) => ({ ...p, [name]: value }));
+  const [viewYear,  setViewYear]  = useState(today.getFullYear());
+  const [viewMonth, setViewMonth] = useState(today.getMonth());
+  const [selDate,   setSelDate]   = useState<Date | null>(null);
+  const [selTime,   setSelTime]   = useState<string | null>(null);
+  const [step,      setStep]      = useState<Step>("calendar");
+  const [form,      setForm]      = useState({ name: "", email: "", note: "" });
+  const [loading,   setLoading]   = useState(false);
+  const [error,     setError]     = useState("");
+  const [meetLink,  setMeetLink]  = useState("");
+
+  const firstDay    = new Date(viewYear, viewMonth, 1).getDay();
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+  const isAvail = (d: Date) => d >= today;
+
+  const prevMonth = () => {
+    if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y - 1); }
+    else setViewMonth(m => m - 1);
+  };
+  const nextMonth = () => {
+    if (viewMonth === 11) { setViewMonth(0); setViewYear(y => y + 1); }
+    else setViewMonth(m => m + 1);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!date || !time || !formData.name || !formData.email) return;
-    setLoading(true);
-    setError("");
+  const pickDate = (day: number) => {
+    const d = new Date(viewYear, viewMonth, day);
+    if (!isAvail(d)) return;
+    setSelDate(d);
+    setSelTime(null);
+    setStep("time");
+  };
 
+  const pickTime = (t: string) => { setSelTime(t); setStep("form"); };
+
+  const goBack = () => {
+    if (step === "form")      { setStep("time");     setSelTime(null); }
+    else if (step === "time") { setStep("calendar"); setSelDate(null); }
+  };
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selDate || !selTime) return;
+    setLoading(true); setError("");
     try {
-      const res = await fetch("/api/book-call", {
-        method: "POST",
+      const res  = await fetch("/api/book-call", {
+        method:  "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ date, time, ...formData }),
+        body:    JSON.stringify({ date: toDateStr(selDate), time: selTime, ...form }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Booking failed");
-      setMeetLink(data.meetLink || "");
-      setSubmitted(true);
+      if (!res.ok || !data.success) throw new Error(data.error || "Booking failed");
+      setMeetLink(data.meetLink);
+      setStep("success");
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Something went wrong. Please try again."
-      );
+      setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
-  const isFormComplete = date && time && formData.name && formData.email;
+  const inputCls =
+    "w-full bg-[#0a0a0a] border border-[#1e1e1e] rounded-lg px-4 py-3 text-white text-sm placeholder-[#333] focus:outline-none focus:border-[#ff3300] transition-colors";
+  const labelCls =
+    "block text-[0.6rem] tracking-[0.18em] uppercase text-[#555] mb-1.5";
 
   return (
-    <>
-      {/* ── BOOK SECTION ── */}
-      <section id="book" className="bg-[#0a0a0a] py-[110px] px-[5vw]">
+    <section id="book" className="bg-[#0d0d0d] py-[110px] px-[5vw] border-t border-[#1e1e1e]">
+      <div className="max-w-7xl mx-auto">
+
+        {/* Section header */}
         <motion.div
-          initial={{ opacity: 0, y: 28 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.65 }}
-          className="text-center mb-14"
+          transition={{ duration: 0.6 }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-16 items-end mb-16"
         >
-          <div className="text-[0.65rem] tracking-[0.2em] uppercase text-muted mb-5 flex items-center justify-center gap-2">
-            <span className="text-[#ff3300]">//</span> Book a Call
+          <div>
+            <div className="text-[0.65rem] tracking-[0.2em] uppercase text-[#666] mb-5 flex items-center gap-3">
+              <span className="text-[#ff3300]">//</span> Schedule a Call
+            </div>
+            <h2 className="font-bebas text-[clamp(2.8rem,6vw,5.5rem)] leading-[0.95] tracking-[0.04em] text-white">
+              BOOK A <em className="not-italic text-[#ff3300]">DISCOVERY</em> CALL
+            </h2>
           </div>
-          <h2 className="font-bebas text-[clamp(2.8rem,6vw,5.5rem)] leading-[0.95] tracking-[0.04em] text-white">
-            FREE <em className="not-italic text-[#ff3300]">DISCOVERY</em>
-            <br />
-            SESSION
-          </h2>
-          <p className="text-[0.9rem] text-[#888888] mt-4 max-w-[520px] mx-auto leading-relaxed font-light">
-            Pick any date and time that works for you — 30 minutes, zero
-            pressure. We'll map out exactly how Mint Media House can grow your
-            brand.
+          <p className="text-sm text-[#888] font-light leading-[1.8]">
+            30 minutes. No sales pitch. Just a clear plan for your content strategy.
+            Pick a time that works — we&apos;ll handle the rest.
           </p>
         </motion.div>
 
+        {/* Cal.com-style card */}
         <motion.div
-          initial={{ opacity: 0, y: 28 }}
+          initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.65, delay: 0.1 }}
-          className="max-w-[620px] mx-auto"
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="rounded-2xl border border-[#1e1e1e] overflow-hidden bg-[#111]"
         >
-          <AnimatePresence mode="wait">
-            {/* ── SUCCESS ── */}
-            {submitted ? (
-              <motion.div
-                key="success"
-                initial={{ opacity: 0, scale: 0.92 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.92 }}
-                transition={{ duration: 0.4 }}
-                className="text-center py-16 bg-[#111111] border border-[#1e1e1e] rounded-2xl relative overflow-hidden"
-              >
-                {[1, 2, 3].map((i) => (
+          <div className="flex flex-col md:flex-row min-h-[600px]">
+
+            {/* ── Left panel ── */}
+            <div className="md:w-[280px] flex-shrink-0 p-8 border-b md:border-b-0 md:border-r border-[#1e1e1e]">
+              <div className="mb-5 w-14 h-10">
+                <svg viewBox="0 0 100 68" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+                  <rect x="4"  y="42" width="13" height="22" rx="2.5" fill="#EDEAE0"/>
+                  <rect x="22" y="28" width="13" height="36" rx="2.5" fill="#EDEAE0"/>
+                  <rect x="40" y="10" width="13" height="54" rx="2.5" fill="#EDEAE0"/>
+                  <path d="M59 6 L100 34 L59 62 Z" fill="#3DD9B5"/>
+                </svg>
+              </div>
+              <p className="text-[0.6rem] tracking-[0.22em] uppercase text-[#555] mb-1">Mint Media House</p>
+              <h3 className="font-bebas text-xl tracking-wide text-white mb-6">Discovery Call</h3>
+
+              <div className="space-y-3">
+                <div className="flex items-center gap-2.5 text-[#777] text-sm">
+                  <Clock size={13} className="text-[#ff3300] flex-shrink-0" />
+                  <span>30 minutes</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-[#777] text-sm">
+                  <Video size={13} className="text-[#ff3300] flex-shrink-0" />
+                  <span>Google Meet</span>
+                </div>
+              </div>
+
+              {selDate && (
+                <div className="mt-7 pt-7 border-t border-[#1e1e1e]">
+                  <p className="text-[0.58rem] tracking-[0.18em] uppercase text-[#444] mb-2">Selected</p>
+                  <p className="text-white text-[0.82rem] font-medium leading-snug">
+                    {selDate.toLocaleDateString("en-IN", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}
+                  </p>
+                  {selTime && (
+                    <p className="text-[#ff3300] text-[0.82rem] font-semibold mt-1">
+                      {fmt12h(selTime)} <span className="text-[#444] font-normal">IST</span>
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* ── Right panel ── */}
+            <div className="flex-1 p-6 md:p-10">
+              <AnimatePresence mode="wait">
+
+                {/* ── Calendar ── */}
+                {step === "calendar" && (
                   <motion.div
-                    key={i}
-                    initial={{ scale: 0, opacity: 0.6 }}
-                    animate={{ scale: 3.5, opacity: 0 }}
-                    transition={{
-                      duration: 1.8,
-                      delay: i * 0.3,
-                      repeat: Infinity,
-                      ease: "easeOut",
-                    }}
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border border-[#ff3300]"
-                  />
-                ))}
+                    key="cal"
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -16 }}
+                    transition={{ duration: 0.22 }}
+                  >
+                    <h4 className="text-white font-semibold text-[0.9rem] mb-6">Select a Date</h4>
 
-                <motion.div
-                  initial={{ scale: 0, rotate: -30 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 260,
-                    damping: 18,
-                    delay: 0.1,
-                  }}
-                  className="relative z-10 w-20 h-20 rounded-full bg-[#ff3300] flex items-center justify-center mx-auto mb-6 shadow-[0_0_40px_rgba(255,51,0,0.4)]"
-                >
-                  <Video size={32} className="text-white" />
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="relative z-10 px-8"
-                >
-                  <h3 className="font-bebas text-[2rem] tracking-[0.06em] text-white mb-2">
-                    CALL CONFIRMED!
-                  </h3>
-                  <p className="text-[0.88rem] text-[#888] leading-relaxed mb-6">
-                    {formatDateDisplay(date)} at {formatTime12h(time)} IST
-                    <br />
-                    Check your inbox — calendar invite + Meet link sent.
-                  </p>
-
-                  {meetLink && (
-                    <motion.a
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.6 }}
-                      href={meetLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2.5 px-7 py-3 bg-[#ff3300] hover:bg-[#e82d00] text-white rounded-full text-[0.7rem] tracking-[0.14em] uppercase font-bold transition-colors shadow-[0_4px_20px_rgba(255,51,0,0.35)] cursor-none"
-                    >
-                      <Video size={14} />
-                      Join Google Meet
-                    </motion.a>
-                  )}
-
-                  <div className="mt-6 flex items-center justify-center gap-6 text-[0.65rem] tracking-[0.12em] uppercase text-[#555]">
-                    <span className="flex items-center gap-1.5">
-                      <span className="text-[#ff3300]">✓</span> Calendar invite sent
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="text-[#ff3300]">✓</span> Meet link ready
-                    </span>
-                  </div>
-                </motion.div>
-              </motion.div>
-            ) : (
-              /* ── FORM ── */
-              <motion.form
-                key="form"
-                onSubmit={handleSubmit}
-                initial={{ opacity: 1 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="bg-[#1a1a1a] border border-[#2e2e2e] rounded-2xl p-8 space-y-8"
-              >
-                {/* STEP 1 — Date */}
-                <div>
-                  <p className="text-[0.62rem] tracking-[0.2em] uppercase text-[#888] mb-4 flex items-center gap-2">
-                    <Calendar size={11} className="text-[#ff3300]" />
-                    01 &nbsp;/&nbsp; Pick a date
-                  </p>
-                  <input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    min={getTomorrowStr()}
-                    required
-                    className="w-full px-4 py-3 bg-[#252525] border border-[#2e2e2e] rounded-lg text-white text-[0.88rem] focus:outline-none focus:border-[#ff3300] focus:ring-1 focus:ring-[#ff3300]/40 transition-colors [color-scheme:dark]"
-                  />
-                  <AnimatePresence>
-                    {date && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        className="mt-2 text-[0.7rem] text-[#ff3300] tracking-[0.06em]"
-                      >
-                        {formatDateDisplay(date)}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* STEP 2 — Time (full 24-hour picker) */}
-                <div>
-                  <p className="text-[0.62rem] tracking-[0.2em] uppercase text-[#888] mb-4 flex items-center gap-2">
-                    <Clock size={11} className="text-[#ff3300]" />
-                    02 &nbsp;/&nbsp; Choose a time{" "}
-                    <span className="text-[#444] normal-case tracking-normal">
-                      — any time, IST (Asia/Kolkata)
-                    </span>
-                  </p>
-
-                  <input
-                    type="time"
-                    value={time}
-                    onChange={(e) => setTime(e.target.value)}
-                    required
-                    className="w-full px-4 py-3 bg-[#252525] border border-[#2e2e2e] rounded-lg text-white text-[0.88rem] focus:outline-none focus:border-[#ff3300] focus:ring-1 focus:ring-[#ff3300]/40 transition-colors [color-scheme:dark]"
-                  />
-
-                  <AnimatePresence>
-                    {time && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        className="mt-2 text-[0.7rem] text-[#ff3300] tracking-[0.06em]"
-                      >
-                        {formatTime12h(time)} IST · 30-minute session
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* STEP 3 — Contact */}
-                <div>
-                  <p className="text-[0.62rem] tracking-[0.2em] uppercase text-[#888] mb-4">
-                    03 &nbsp;/&nbsp; Your details
-                  </p>
-                  <div className="grid grid-cols-2 gap-3 mb-3">
-                    <div>
-                      <label
-                        htmlFor="bc-name"
-                        className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5"
-                      >
-                        Full Name
-                      </label>
-                      <input
-                        type="text"
-                        id="bc-name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        placeholder="Alex Johnson"
-                        className="w-full px-4 py-3 bg-[#252525] border border-[#2e2e2e] rounded-lg text-white text-[0.88rem] placeholder-[#555] focus:outline-none focus:border-[#ff3300] focus:ring-1 focus:ring-[#ff3300]/40 transition-colors"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="bc-email"
-                        className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5"
-                      >
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        id="bc-email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        placeholder="alex@company.com"
-                        className="w-full px-4 py-3 bg-[#252525] border border-[#2e2e2e] rounded-lg text-white text-[0.88rem] placeholder-[#555] focus:outline-none focus:border-[#ff3300] focus:ring-1 focus:ring-[#ff3300]/40 transition-colors"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="bc-note"
-                      className="block text-[0.68rem] tracking-[0.1em] uppercase text-[#888] mb-1.5"
-                    >
-                      Anything to share?{" "}
-                      <span className="normal-case text-[#333]">(optional)</span>
-                    </label>
-                    <textarea
-                      id="bc-note"
-                      name="note"
-                      value={formData.note}
-                      onChange={handleChange}
-                      placeholder="Your product, goals, current challenges..."
-                      rows={2}
-                      className="w-full px-4 py-3 bg-[#252525] border border-[#2e2e2e] rounded-lg text-white text-[0.88rem] placeholder-[#555] focus:outline-none focus:border-[#ff3300] focus:ring-1 focus:ring-[#ff3300]/40 transition-colors resize-none"
-                    />
-                  </div>
-                </div>
-
-                {/* Error */}
-                <AnimatePresence>
-                  {error && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="text-red-400 text-[0.8rem] text-center -mt-2"
-                    >
-                      {error} —{" "}
+                    {/* Month nav */}
+                    <div className="flex items-center justify-between mb-5">
                       <button
-                        type="button"
-                        className="underline"
-                        onClick={() => setError("")}
+                        onClick={prevMonth}
+                        className="p-1.5 rounded-lg hover:bg-white/5 text-[#555] hover:text-white transition-colors"
                       >
-                        try again
+                        <ChevronLeft size={18} />
                       </button>
-                    </motion.p>
-                  )}
-                </AnimatePresence>
-
-                {/* Submit */}
-                <motion.button
-                  type="submit"
-                  disabled={loading || !isFormComplete}
-                  whileHover={!loading && isFormComplete ? { scale: 1.01 } : {}}
-                  whileTap={!loading && isFormComplete ? { scale: 0.99 } : {}}
-                  className={`w-full py-4 rounded-xl text-[0.72rem] tracking-[0.16em] uppercase font-bold flex items-center justify-center gap-3 transition-all duration-300 ${
-                    !isFormComplete
-                      ? "bg-[#252525] text-[#666] cursor-not-allowed border border-[#2e2e2e]"
-                      : loading
-                      ? "bg-[#ff3300]/70 text-white cursor-not-allowed"
-                      : "bg-[#ff3300] hover:bg-[#e82d00] text-white shadow-[0_4px_24px_rgba(255,51,0,0.3)] hover:shadow-[0_4px_32px_rgba(255,51,0,0.45)]"
-                  }`}
-                >
-                  {loading ? (
-                    <>
-                      <motion.span
-                        animate={{ rotate: 360 }}
-                        transition={{
-                          duration: 0.8,
-                          repeat: Infinity,
-                          ease: "linear",
-                        }}
-                        className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full inline-block"
-                      />
-                      Booking your call...
-                    </>
-                  ) : (
-                    <>
-                      <Video size={14} />
-                      Book Discovery Call
-                      <motion.span
-                        animate={isFormComplete ? { x: [0, 4, 0] } : {}}
-                        transition={{
-                          duration: 1.5,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }}
+                      <span className="text-white text-sm font-medium">
+                        {MONTHS[viewMonth]} {viewYear}
+                      </span>
+                      <button
+                        onClick={nextMonth}
+                        className="p-1.5 rounded-lg hover:bg-white/5 text-[#555] hover:text-white transition-colors"
                       >
-                        →
-                      </motion.span>
-                    </>
-                  )}
-                </motion.button>
+                        <ChevronRight size={18} />
+                      </button>
+                    </div>
 
-                {/* Trust line */}
-                <div className="pt-2 border-t border-[#2e2e2e] flex items-center justify-center gap-5 text-[0.65rem] tracking-[0.1em] uppercase text-[#777]">
-                  <span>
-                    <span className="text-[#ff3300]">✓</span> Free 30-min call
-                  </span>
-                  <span>
-                    <span className="text-[#ff3300]">✓</span> Google Meet link
-                  </span>
-                  <span>
-                    <span className="text-[#ff3300]">✓</span> Zero commitment
-                  </span>
-                </div>
-              </motion.form>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </section>
+                    {/* Day headers */}
+                    <div className="grid grid-cols-7 mb-1">
+                      {DAYS.map(d => (
+                        <div key={d} className="text-center text-[0.6rem] tracking-widest uppercase text-[#3a3a3a] py-1.5">
+                          {d}
+                        </div>
+                      ))}
+                    </div>
 
-      {/* ── CTA SECTION ── */}
-      <section id="cta" className="bg-[#111111] text-center py-[130px] px-[5vw]">
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.65 }}
-        >
-          <motion.div
-            className="text-[2.5rem] mb-8 inline-block"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-          >
-            ⊕
-          </motion.div>
-          <div className="font-bebas text-[clamp(3.5rem,9vw,10rem)] leading-[0.9] tracking-[0.03em] text-white">
-            READY TO
-            <br />
-            COLLABORATE?
-          </div>
-          <p className="text-[0.95rem] text-[#888888] my-6 mx-auto max-w-[420px] font-light">
-            Have a project in mind? Let's create something extraordinary
-            together.
-          </p>
-          <div className="mt-10 flex justify-center gap-4 flex-wrap">
-            <a
-              className="px-8 py-3.5 border border-white rounded-full text-white text-[0.7rem] tracking-[0.14em] uppercase font-medium transition-colors duration-200 hover:bg-white hover:text-black cursor-none"
-              href="#quote"
-            >
-              GET A QUOTE
-            </a>
-            <a
-              className="px-8 py-3.5 border border-[#ff3300] bg-[#ff3300] rounded-full text-white text-[0.7rem] tracking-[0.14em] uppercase font-medium transition-colors duration-200 hover:bg-[#e82d00] cursor-none"
-              href="#book"
-            >
-              BOOK A CALL
-            </a>
+                    {/* Grid */}
+                    <div className="grid grid-cols-7 gap-0.5">
+                      {Array.from({ length: firstDay }).map((_, i) => <div key={`_${i}`} />)}
+                      {Array.from({ length: daysInMonth }).map((_, i) => {
+                        const day = i + 1;
+                        const d   = new Date(viewYear, viewMonth, day);
+                        const avail   = isAvail(d);
+                        const isToday = d.toDateString() === today.toDateString();
+                        return (
+                          <button
+                            key={day}
+                            onClick={() => pickDate(day)}
+                            disabled={!avail}
+                            className={[
+                              "aspect-square rounded-lg text-[0.82rem] font-medium transition-all duration-150",
+                              avail
+                                ? "text-white hover:bg-[#ff3300] hover:text-white cursor-pointer"
+                                : "text-[#2a2a2a] cursor-not-allowed",
+                              isToday && avail  ? "ring-1 ring-[#ff3300] text-[#ff3300]" : "",
+                              isToday && !avail ? "ring-1 ring-[#2a2a2a]" : "",
+                            ].join(" ")}
+                          >
+                            {day}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <p className="mt-7 text-[0.6rem] tracking-wider text-[#333] uppercase">
+                      Timezone · India Standard Time (IST)
+                    </p>
+                  </motion.div>
+                )}
+
+                {/* ── Time slots ── */}
+                {step === "time" && (
+                  <motion.div
+                    key="time"
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -16 }}
+                    transition={{ duration: 0.22 }}
+                  >
+                    <button
+                      onClick={goBack}
+                      className="flex items-center gap-1.5 text-[#555] hover:text-white text-xs mb-6 transition-colors"
+                    >
+                      <ArrowLeft size={13} /> Back
+                    </button>
+                    <h4 className="text-white font-semibold text-[0.9rem] mb-1">
+                      {selDate?.toLocaleDateString("en-IN", { weekday: "long", month: "long", day: "numeric" })}
+                    </h4>
+                    <p className="text-[0.6rem] tracking-wider text-[#444] uppercase mb-6">
+                      Pick a time · IST
+                    </p>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-72 overflow-y-auto pr-1 scrollbar-hide">
+                      {TIME_SLOTS.map(t => (
+                        <button
+                          key={t}
+                          onClick={() => pickTime(t)}
+                          className="py-3 px-4 rounded-lg border border-[#1e1e1e] text-[#aaa] text-sm font-medium hover:border-[#ff3300] hover:text-white hover:bg-[#ff3300]/10 transition-all duration-150"
+                        >
+                          {fmt12h(t)}
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* ── Form ── */}
+                {step === "form" && (
+                  <motion.div
+                    key="form"
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -16 }}
+                    transition={{ duration: 0.22 }}
+                  >
+                    <button
+                      onClick={goBack}
+                      className="flex items-center gap-1.5 text-[#555] hover:text-white text-xs mb-6 transition-colors"
+                    >
+                      <ArrowLeft size={13} /> Back
+                    </button>
+                    <h4 className="text-white font-semibold text-[0.9rem] mb-6">Your Details</h4>
+                    <form onSubmit={submit} className="space-y-4 max-w-md">
+                      <div>
+                        <label className={labelCls}>Full Name *</label>
+                        <input
+                          type="text"
+                          required
+                          value={form.name}
+                          onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                          placeholder="Jane Smith"
+                          className={inputCls}
+                        />
+                      </div>
+                      <div>
+                        <label className={labelCls}>Email Address *</label>
+                        <input
+                          type="email"
+                          required
+                          value={form.email}
+                          onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                          placeholder="jane@brand.com"
+                          className={inputCls}
+                        />
+                      </div>
+                      <div>
+                        <label className={labelCls}>Note (optional)</label>
+                        <textarea
+                          rows={3}
+                          value={form.note}
+                          onChange={e => setForm(f => ({ ...f, note: e.target.value }))}
+                          placeholder="Tell us a bit about your brand or what you'd like to discuss..."
+                          className={`${inputCls} resize-none`}
+                        />
+                      </div>
+                      {error && (
+                        <p className="text-red-400 text-xs">{error}</p>
+                      )}
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full py-3.5 bg-[#ff3300] hover:bg-[#e02d00] text-white rounded-lg font-semibold tracking-[0.08em] text-sm uppercase transition-colors disabled:opacity-50 shadow-[0_8px_32px_rgba(255,51,0,0.28)]"
+                      >
+                        {loading ? "Confirming…" : "Confirm Booking"}
+                      </button>
+                    </form>
+                  </motion.div>
+                )}
+
+                {/* ── Success ── */}
+                {step === "success" && (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.94 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4 }}
+                    className="flex flex-col items-center justify-center text-center py-16"
+                  >
+                    <div className="w-16 h-16 rounded-full bg-[#ff3300] flex items-center justify-center mb-6 shadow-[0_0_48px_rgba(255,51,0,0.45)]">
+                      <span className="text-white text-2xl font-bold">✓</span>
+                    </div>
+                    <h4 className="font-bebas text-2xl tracking-wide text-white mb-2">You&apos;re booked!</h4>
+                    <p className="text-[#777] text-sm mb-1">
+                      {selDate?.toLocaleDateString("en-IN", { weekday: "long", month: "long", day: "numeric" })}
+                      {selTime ? ` · ${fmt12h(selTime)} IST` : ""}
+                    </p>
+                    <p className="text-[#444] text-xs mb-8 max-w-xs">
+                      A confirmation email + Google Calendar invite has been sent to your inbox.
+                    </p>
+                    {meetLink && (
+                      <a
+                        href={meetLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-7 py-3.5 bg-[#ff3300] hover:bg-[#e02d00] text-white text-sm rounded-lg font-semibold tracking-wide transition-colors shadow-[0_6px_24px_rgba(255,51,0,0.35)]"
+                      >
+                        Join Google Meet →
+                      </a>
+                    )}
+                  </motion.div>
+                )}
+
+              </AnimatePresence>
+            </div>
+
           </div>
         </motion.div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

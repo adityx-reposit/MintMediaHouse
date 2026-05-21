@@ -95,7 +95,10 @@ function teamEmail(
   return `<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;background:#f4f4f4;padding:20px;margin:0;">
   <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
     <div style="background:#ff3300;padding:24px 32px;">
-      <h1 style="color:#fff;margin:0;font-size:20px;letter-spacing:1px;">NEW DISCOVERY CALL BOOKING</h1>
+      <table cellpadding="0" cellspacing="0" border="0" style="width:100%;"><tr>
+        <td><img src="https://mintmediahouse.in/mint-logo.svg" alt="Mint Media" width="48" height="32" style="display:block;"/></td>
+        <td align="right"><span style="color:#fff;font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:700;">New Discovery Call</span></td>
+      </tr></table>
     </div>
     <div style="padding:32px;">
       <p style="margin:0 0 10px;"><strong>Name:</strong> ${name}</p>
@@ -141,9 +144,7 @@ function clientEmail(
               <tr>
                 <td>
                   <p style="margin:0;font-size:11px;letter-spacing:3px;color:#ff3300;text-transform:uppercase;font-weight:600;">// Confirmed</p>
-                  <h1 style="margin:10px 0 0;font-size:28px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;line-height:1.2;">
-                    MINT<span style="color:#ff3300;">MEDIA</span>HOUSE
-                  </h1>
+                  <img src="https://mintmediahouse.in/mint-logo.svg" alt="Mint Media House" width="80" height="54" style="margin:10px 0 0;display:block;" />
                 </td>
                 <td align="right" valign="top">
                   <div style="width:48px;height:48px;background:#ff3300;border-radius:50%;text-align:center;line-height:48px;font-size:22px;">✓</div>
@@ -256,7 +257,7 @@ function clientEmail(
                   <a href="https://mintmediahouse.in" style="font-size:13px;color:#ff3300;text-decoration:none;font-weight:600;">mintmediahouse.in</a>
                 </td>
                 <td align="right">
-                  <p style="margin:0;font-size:11px;color:#333;letter-spacing:1px;">MINT<span style="color:#ff3300;">MEDIA</span>HOUSE</p>
+                  <img src="https://mintmediahouse.in/mint-logo.svg" alt="Mint Media" width="44" height="30" style="display:block;" />
                 </td>
               </tr>
             </table>
