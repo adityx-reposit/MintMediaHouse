@@ -7,9 +7,6 @@ import Work from "@/components/Work";
 import CaseStudies from "@/components/CaseStudies";
 import TrustSignals from "@/components/TrustSignals";
 import Pricing from "@/components/Pricing";
-import SelfGrowthChannel from "@/components/SelfGrowthChannel";
-import Testimonials from "@/components/Testimonials";
-import Process from "@/components/Process";
 import FAQ from "@/components/FAQ";
 import ImprovedLeadForm from "@/components/ImprovedLeadForm";
 import BookCall from "@/components/BookCall";
@@ -30,9 +27,6 @@ export default function Home() {
         <CaseStudies />
         <TrustSignals />
         <Pricing />
-        <SelfGrowthChannel />
-        <Testimonials />
-        <Process />
         <FAQ />
         <ImprovedLeadForm />
         <BookCall />
