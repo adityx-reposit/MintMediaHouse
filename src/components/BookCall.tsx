@@ -136,15 +136,15 @@ export default function BookCall() {
 
             {/* ── Left panel ── */}
             <div className="md:w-[280px] flex-shrink-0 p-8 border-b md:border-b-0 md:border-r border-[#1e1e1e]">
-              <div className="mb-5 w-14 h-10">
+              <div className="mb-3 w-14 h-10">
                 <svg viewBox="0 0 100 68" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                  <rect x="4"  y="42" width="13" height="22" rx="2.5" fill="#EDEAE0"/>
-                  <rect x="22" y="28" width="13" height="36" rx="2.5" fill="#EDEAE0"/>
-                  <rect x="40" y="10" width="13" height="54" rx="2.5" fill="#EDEAE0"/>
-                  <path d="M59 6 L100 34 L59 62 Z" fill="#3DD9B5"/>
+                  <rect x="1"  y="44" width="13" height="22" rx="3" fill="#EDEAE0"/>
+                  <rect x="19" y="28" width="13" height="38" rx="3" fill="#EDEAE0"/>
+                  <rect x="37" y="8"  width="13" height="58" rx="3" fill="#EDEAE0"/>
+                  <path d="M52 6 L100 34 L52 62 Z" fill="#3DD9B5"/>
                 </svg>
               </div>
-              <p className="text-[0.6rem] tracking-[0.22em] uppercase text-[#555] mb-1">Mint Media House</p>
+              <p className="font-bebas text-[0.85rem] tracking-[0.18em] text-[#ff3300] mb-1">MINTMEDIAHOUSE</p>
               <h3 className="font-bebas text-xl tracking-wide text-white mb-6">Discovery Call</h3>
 
               <div className="space-y-3">
@@ -271,7 +271,14 @@ export default function BookCall() {
                     <p className="text-[0.6rem] tracking-wider text-[#444] uppercase mb-6">
                       Pick a time · IST
                     </p>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-72 overflow-y-auto pr-1 scrollbar-hide">
+                    <style>{`
+                      .slots-scroll::-webkit-scrollbar { width: 4px; }
+                      .slots-scroll::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 4px; }
+                      .slots-scroll::-webkit-scrollbar-thumb { background: #ff3300; border-radius: 4px; }
+                      .slots-scroll::-webkit-scrollbar-thumb:hover { background: #ff6600; }
+                      .slots-scroll { scrollbar-width: thin; scrollbar-color: #ff3300 #1a1a1a; }
+                    `}</style>
+                    <div className="slots-scroll grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-2">
                       {TIME_SLOTS.map(t => (
                         <button
                           key={t}
