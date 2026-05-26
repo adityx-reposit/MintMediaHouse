@@ -1,37 +1,19 @@
 import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
+import CinematicHero from "@/components/CinematicHero";
 import Stats from "@/components/Stats";
-import Services from "@/components/Services";
-import LaunchVideos from "@/components/LaunchVideos";
-import Work from "@/components/Work";
-import CaseStudies from "@/components/CaseStudies";
-import TrustSignals from "@/components/TrustSignals";
-import Pricing from "@/components/Pricing";
-import FAQ from "@/components/FAQ";
-import ImprovedLeadForm from "@/components/ImprovedLeadForm";
+import VideoGrid from "@/components/VideoGrid";
 import BookCall from "@/components/BookCall";
-import FloatingCTA from "@/components/FloatingCTA";
-import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
     <>
-      <FloatingCTA />
       <Navbar />
-      <main className="w-full">
-        <Hero />
+      <main id="work" className="w-full">
+        <CinematicHero />
         <Stats />
-        <Services />
-        <LaunchVideos />
-        <Work />
-        <CaseStudies />
-        <TrustSignals />
-        <Pricing />
-        <FAQ />
-        <ImprovedLeadForm />
+        <VideoGrid />
         <BookCall />
       </main>
-      <Footer />
     </>
   );
 }

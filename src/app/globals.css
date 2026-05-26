@@ -59,10 +59,40 @@ a, button, input, select, textarea {
 
 /* Hide scrollbar while keeping scroll functionality */
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  display: none;  /* Chrome, Safari and Opera */
+  display: none;
+}
+
+/* Ensure GSAP-pinned elements don't cause layout shift */
+.gsap-pin-spacer {
+  pointer-events: none !important;
+}
+
+/* Video card will-change hint */
+.video-card {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+/* Promote sticky hero to its own compositor layer */
+section > .sticky {
+  transform: translateZ(0);
+  contain: layout style;
+}
+
+/* Kill all motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  video {
+    display: none;
+  }
 }

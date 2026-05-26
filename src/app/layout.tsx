@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     template: "%s | Mint Media House",
   },
   description:
-    "UI animations, launch videos & ad creatives for SaaS founders. Mumbai-based creative studio — 10M+ views generated. Custom quote in 24 hours.",
+    "Mint Media House creates custom UI animations, launch videos & personal brand content for SaaS founders. We've helped 15+ startups generate millions of organic views and scale their revenue.",
   keywords: [
     "video production agency Mumbai",
     "UI animation services",

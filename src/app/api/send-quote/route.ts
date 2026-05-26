@@ -106,8 +106,8 @@ export async function POST(request: NextRequest) {
         <html>
           <body style="font-family:Arial,sans-serif;background:#f4f4f4;padding:20px;">
             <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
-              <div style="background:#111;padding:24px 32px;text-align:center;">
-                <h1 style="color:#fff;margin:0;font-size:18px;letter-spacing:1px;">MINT<span style="color:#ff3300;">MEDIA</span>HOUSE</h1>
+              <div style="background:#111;padding:20px 32px;text-align:center;">
+                <img src="https://mintmediahouse.in/logo/logo.png" alt="Mint Media House" width="120" height="48" style="display:block;margin:0 auto;filter:brightness(1.2);" />
               </div>
               <div style="padding:32px;">
                 <p style="margin:0 0 16px;">Hi ${senderName},</p>
