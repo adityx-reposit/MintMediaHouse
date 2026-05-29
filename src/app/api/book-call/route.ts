@@ -104,7 +104,7 @@ function teamEmail(
   <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
     <div style="background:#ff3300;padding:24px 32px;">
       <table cellpadding="0" cellspacing="0" border="0" style="width:100%;"><tr>
-        <td><img src="https://mintmediahouse.in/logo.png" alt="Mint Media" width="48" height="32" style="display:block;"/></td>
+        <td><img src="https://mintmediahouse.in/logo/logo.png" alt="Mint Media" width="48" height="32" style="display:block;"/></td>
         <td align="right"><span style="color:#fff;font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:700;">New Discovery Call</span></td>
       </tr></table>
     </div>
@@ -152,7 +152,7 @@ function clientEmail(
               <tr>
                 <td>
                   <p style="margin:0;font-size:11px;letter-spacing:3px;color:#ff3300;text-transform:uppercase;font-weight:600;">// Confirmed</p>
-                  <img src="https://mintmediahouse.in/logo.png" alt="Mint Media House" width="80" height="54" style="margin:10px 0 0;display:block;" />
+                  <img src="https://mintmediahouse.in/logo/logo.png" alt="Mint Media House" width="80" height="54" style="margin:10px 0 0;display:block;" />
                 </td>
                 <td align="right" valign="top">
                   <div style="width:48px;height:48px;background:#ff3300;border-radius:50%;text-align:center;line-height:48px;font-size:22px;">✓</div>
@@ -265,7 +265,7 @@ function clientEmail(
                   <a href="https://mintmediahouse.in" style="font-size:13px;color:#ff3300;text-decoration:none;font-weight:600;">mintmediahouse.in</a>
                 </td>
                 <td align="right">
-                  <img src="https://mintmediahouse.in/logo.png" alt="Mint Media" width="44" height="30" style="display:block;" />
+                  <img src="https://mintmediahouse.in/logo/logo.png" alt="Mint Media" width="44" height="30" style="display:block;" />
                 </td>
               </tr>
             </table>
