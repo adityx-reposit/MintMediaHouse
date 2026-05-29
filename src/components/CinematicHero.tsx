@@ -36,8 +36,14 @@ export default function CinematicHero() {
 
   // Client logos
   const clientOp    = useTransform(scrollYProgress, [0, 0.12, 0.44, 0.62], [0, 1, 1, 0]);
-  const xs = CLIENTS.map((c) => useTransform(scrollYProgress, [0, 0.65], [c.ix, c.dx]));
-  const ys = CLIENTS.map((c) => useTransform(scrollYProgress, [0, 0.65], [c.iy, c.dy]));
+  const x0 = useTransform(scrollYProgress, [0, 0.65], [CLIENTS[0].ix, CLIENTS[0].dx]);
+  const x1 = useTransform(scrollYProgress, [0, 0.65], [CLIENTS[1].ix, CLIENTS[1].dx]);
+  const x2 = useTransform(scrollYProgress, [0, 0.65], [CLIENTS[2].ix, CLIENTS[2].dx]);
+  const y0 = useTransform(scrollYProgress, [0, 0.65], [CLIENTS[0].iy, CLIENTS[0].dy]);
+  const y1 = useTransform(scrollYProgress, [0, 0.65], [CLIENTS[1].iy, CLIENTS[1].dy]);
+  const y2 = useTransform(scrollYProgress, [0, 0.65], [CLIENTS[2].iy, CLIENTS[2].dy]);
+  const xs = [x0, x1, x2];
+  const ys = [y0, y1, y2];
 
   return (
     <section ref={containerRef} className="relative h-[220vh]">
@@ -94,9 +100,6 @@ export default function CinematicHero() {
 
         {/* Logo lockup */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
           style={{ scale, opacity: logoOpacity, y: logoY }}
           className="relative z-10 flex flex-col items-center select-none"
         >
@@ -145,28 +148,27 @@ export default function CinematicHero() {
           {/* Tagline — disappears in first 2-3 scroll frames */}
           <motion.p
             style={{ opacity: tagOp }}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.7 }}
             className="mt-7 text-[0.66rem] tracking-[0.26em] uppercase text-[#3a3a3a] font-inter text-center"
           >
             UI Animation · Launch Videos · Motion Design
           </motion.p>
         </motion.div>
 
-        {/* Hero copy — bottom-left, visible when logo is black, fades on first scroll */}
+        {/* Hero copy — bottom-left on desktop, bottom-center on mobile */}
         <motion.div
           style={{ opacity: tagOp }}
-          className="absolute bottom-[10vh] left-[5vw] pointer-events-none hidden sm:block"
+          className="absolute bottom-[10vh] left-0 right-0 sm:left-[5vw] sm:right-auto pointer-events-none px-6 sm:px-0"
         >
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.5 }}
+            suppressHydrationWarning
+            className="flex flex-col items-center sm:items-start text-center sm:text-left"
           >
           <h1
             className="font-bebas leading-[0.88] text-white"
-            style={{ fontSize: "clamp(2rem, 4.5vw, 4.8rem)", letterSpacing: "0.03em" }}
+            style={{ fontSize: "clamp(2.6rem, 4.5vw, 4.8rem)", letterSpacing: "0.03em" }}
           >
             VIDEOS<br />
             THAT<br />
@@ -174,7 +176,7 @@ export default function CinematicHero() {
           </h1>
           <p
             className="mt-3 font-inter text-[#555] leading-relaxed"
-            style={{ fontSize: "clamp(0.6rem, 0.9vw, 0.78rem)", maxWidth: "min(300px, 24vw)" }}
+            style={{ fontSize: "clamp(0.65rem, 0.9vw, 0.78rem)", maxWidth: "min(320px, 80vw)" }}
           >
             Mint Media House creates custom UI animations, launch videos &amp; personal brand content for SaaS founders. We&apos;ve helped 15+ startups generate millions of organic views and scale their revenue.
           </p>
@@ -184,9 +186,6 @@ export default function CinematicHero() {
         {/* Scroll cue */}
         <motion.div
           style={{ opacity: tagOp }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 0.8 }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
           <span className="text-[0.5rem] tracking-[0.35em] uppercase text-[#2a2a2a]">Scroll</span>

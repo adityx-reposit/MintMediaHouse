@@ -7,8 +7,16 @@ import { NextRequest, NextResponse } from "next/server";
 function buildIST(date: string, time: string, offsetMinutes = 0): string {
   const [h, m] = time.split(":").map(Number);
   const total  = h * 60 + m + offsetMinutes;
-  const hh     = String(Math.floor(total / 60)).padStart(2, "0");
-  const mm     = String(total % 60).padStart(2, "0");
+  const dayOverflow = Math.floor(total / (24 * 60));
+  const mins   = total % (24 * 60);
+  const hh     = String(Math.floor(mins / 60)).padStart(2, "0");
+  const mm     = String(mins % 60).padStart(2, "0");
+  if (dayOverflow > 0) {
+    const d = new Date(`${date}T00:00:00+05:30`);
+    d.setDate(d.getDate() + dayOverflow);
+    const nd = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    return `${nd}T${hh}:${mm}:00+05:30`;
+  }
   return `${date}T${hh}:${mm}:00+05:30`;
 }
 

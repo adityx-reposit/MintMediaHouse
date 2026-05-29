@@ -72,46 +72,57 @@ function CalendarUI({ onClose }: { onClose: () => void }) {
   const labelCls = "block text-[0.58rem] tracking-[0.18em] uppercase text-[#555] mb-1.5";
 
   return (
-    <div className="flex flex-col md:flex-row h-full">
+    <div className="flex flex-col md:flex-row">
 
       {/* Left info panel */}
-      <div className="md:w-[220px] flex-shrink-0 p-6 border-b md:border-b-0 md:border-r border-[#1e1e1e] flex flex-col">
-        <img src="/logo/logo.png" alt="Mint Media House" className="mb-2 h-7 w-auto object-contain" style={{ filter: "brightness(0) invert(1)" }} />
-        <p className="font-bebas text-[0.7rem] tracking-[0.18em] text-[#ff3300] mb-0.5">MINTMEDIAHOUSE</p>
-        <h3 className="font-bebas text-lg tracking-wide text-white mb-4">Discovery Call</h3>
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-[#666] text-xs">
-            <Clock size={11} className="text-[#ff3300]" /><span>30 minutes</span>
+      <div className="md:w-[200px] flex-shrink-0 border-b md:border-b-0 md:border-r border-[#1e1e1e] flex flex-col">
+        {/* Mobile: compact single row */}
+        <div className="flex md:hidden items-center gap-2 px-4 py-3">
+          <img src="/logo/logo.png" alt="Mint Media House" className="h-5 w-auto object-contain flex-shrink-0" style={{ filter: "brightness(0) invert(1)" }} />
+          <div className="flex-1 min-w-0">
+            <p className="font-bebas text-[0.6rem] tracking-[0.18em] text-[#ff3300] leading-none">MINTMEDIAHOUSE</p>
+            <p className="font-bebas text-sm tracking-wide text-white leading-tight">Discovery Call</p>
           </div>
-          <div className="flex items-center gap-2 text-[#666] text-xs">
-            <Video size={11} className="text-[#ff3300]" /><span>Google Meet</span>
+          <div className="flex items-center gap-2 ml-auto flex-shrink-0">
+            <span className="flex items-center gap-1 text-[#555] text-[0.6rem]"><Clock size={9} className="text-[#ff3300]"/>30m</span>
+            <span className="flex items-center gap-1 text-[#555] text-[0.6rem]"><Video size={9} className="text-[#ff3300]"/>Meet</span>
           </div>
         </div>
-        {selDate && (
-          <div className="mt-5 pt-5 border-t border-[#1e1e1e]">
-            <p className="text-[0.52rem] tracking-[0.18em] uppercase text-[#444] mb-1.5">Selected</p>
-            <p className="text-white text-[0.75rem] font-medium leading-snug">
-              {selDate.toLocaleDateString("en-IN", { weekday:"short", month:"short", day:"numeric", year:"numeric" })}
-            </p>
-            {selTime && <p className="text-[#ff3300] text-[0.75rem] font-semibold mt-0.5">{fmt12h(selTime)} <span className="text-[#444] font-normal">IST</span></p>}
+        {/* Desktop: stacked */}
+        <div className="hidden md:flex flex-col p-6">
+          <img src="/logo/logo.png" alt="Mint Media House" className="mb-2 h-7 w-auto object-contain self-start" style={{ filter: "brightness(0) invert(1)" }} />
+          <p className="font-bebas text-[0.7rem] tracking-[0.18em] text-[#ff3300] mb-0.5">MINTMEDIAHOUSE</p>
+          <h3 className="font-bebas text-lg tracking-wide text-white mb-4">Discovery Call</h3>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-[#666] text-xs"><Clock size={11} className="text-[#ff3300]"/><span>30 minutes</span></div>
+            <div className="flex items-center gap-2 text-[#666] text-xs"><Video size={11} className="text-[#ff3300]"/><span>Google Meet</span></div>
           </div>
-        )}
+          {selDate && (
+            <div className="mt-5 pt-5 border-t border-[#1e1e1e]">
+              <p className="text-[0.52rem] tracking-[0.18em] uppercase text-[#444] mb-1.5">Selected</p>
+              <p className="text-white text-[0.75rem] font-medium leading-snug">
+                {selDate.toLocaleDateString("en-IN", { weekday:"short", month:"short", day:"numeric", year:"numeric" })}
+              </p>
+              {selTime && <p className="text-[#ff3300] text-[0.75rem] font-semibold mt-0.5">{fmt12h(selTime)} <span className="text-[#444] font-normal">IST</span></p>}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Right content panel */}
-      <div className="flex-1 p-5 md:p-8 overflow-y-auto" data-lenis-prevent>
+      <div className="flex-1 p-4 md:p-8 overflow-y-auto" data-lenis-prevent>
         <AnimatePresence mode="wait">
 
           {step === "calendar" && (
             <motion.div key="cal" initial={{ opacity:0, x:16 }} animate={{ opacity:1, x:0 }} exit={{ opacity:0, x:-16 }} transition={{ duration:0.22 }}>
-              <h4 className="text-white font-semibold text-[0.85rem] mb-4">Select a Date</h4>
-              <div className="flex items-center justify-between mb-4">
+              <h4 className="text-white font-semibold text-[0.85rem] mb-2 md:mb-4">Select a Date</h4>
+              <div className="flex items-center justify-between mb-2 md:mb-4">
                 <button onClick={prevMonth} className="p-1.5 rounded-lg hover:bg-white/5 text-[#555] hover:text-white transition-colors"><ChevronLeft size={16}/></button>
                 <span className="text-white text-sm font-medium">{MONTHS[viewMonth]} {viewYear}</span>
                 <button onClick={nextMonth} className="p-1.5 rounded-lg hover:bg-white/5 text-[#555] hover:text-white transition-colors"><ChevronRight size={16}/></button>
               </div>
-              <div className="grid grid-cols-7 mb-1">
-                {DAYS.map(d => <div key={d} className="text-center text-[0.58rem] tracking-widest uppercase text-[#3a3a3a] py-1.5">{d}</div>)}
+              <div className="grid grid-cols-7 mb-0.5">
+                {DAYS.map(d => <div key={d} className="text-center text-[0.55rem] tracking-widest uppercase text-[#3a3a3a] py-1">{d}</div>)}
               </div>
               <div className="grid grid-cols-7 gap-0.5">
                 {Array.from({ length: firstDay }).map((_,i) => <div key={`_${i}`}/>)}
@@ -119,7 +130,7 @@ function CalendarUI({ onClose }: { onClose: () => void }) {
                   const day=i+1, d=new Date(viewYear,viewMonth,day), avail=isAvail(d), isToday=d.toDateString()===today.toDateString();
                   return (
                     <button key={day} onClick={() => pickDate(day)} disabled={!avail}
-                      className={["aspect-square rounded-lg text-[0.8rem] font-medium transition-all duration-150",
+                      className={["h-9 w-full rounded-md text-[0.75rem] font-medium transition-all duration-150",
                         avail ? "text-white hover:bg-[#ff3300] cursor-pointer" : "text-[#2a2a2a] cursor-not-allowed",
                         isToday && avail ? "ring-1 ring-[#ff3300] text-[#ff3300]" : "",
                       ].join(" ")}>
@@ -128,19 +139,19 @@ function CalendarUI({ onClose }: { onClose: () => void }) {
                   );
                 })}
               </div>
-              <p className="mt-4 text-[0.52rem] tracking-wider text-[#333] uppercase">Timezone · India Standard Time (IST)</p>
+              <p className="mt-2 md:mt-4 text-[0.5rem] tracking-wider text-[#333] uppercase">Timezone · India Standard Time (IST)</p>
             </motion.div>
           )}
 
           {step === "time" && (
             <motion.div key="time" initial={{ opacity:0, x:16 }} animate={{ opacity:1, x:0 }} exit={{ opacity:0, x:-16 }} transition={{ duration:0.22 }}>
-              <button onClick={goBack} className="flex items-center gap-1.5 text-[#555] hover:text-white text-xs mb-5 transition-colors"><ArrowLeft size={12}/> Back</button>
-              <h4 className="text-white font-semibold text-[0.85rem] mb-1">{selDate?.toLocaleDateString("en-IN",{weekday:"long",month:"long",day:"numeric"})}</h4>
-              <p className="text-[0.58rem] tracking-wider text-[#444] uppercase mb-5">Pick a time · IST</p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-72 overflow-y-auto pr-1" data-lenis-prevent>
+              <button onClick={goBack} className="flex items-center gap-1.5 text-[#555] hover:text-white text-xs mb-3 md:mb-5 transition-colors"><ArrowLeft size={12}/> Back</button>
+              <h4 className="text-white font-semibold text-[0.85rem] mb-0.5">{selDate?.toLocaleDateString("en-IN",{weekday:"long",month:"long",day:"numeric"})}</h4>
+              <p className="text-[0.55rem] tracking-wider text-[#444] uppercase mb-3 md:mb-5">Pick a time · IST</p>
+              <div className="grid grid-cols-3 sm:grid-cols-3 gap-1.5 max-h-56 md:max-h-72 overflow-y-auto pr-1" data-lenis-prevent>
                 {TIME_SLOTS.map(t => (
                   <button key={t} onClick={() => { setSelTime(t); setStep("form"); }}
-                    className="py-3 px-4 rounded-lg border border-[#1e1e1e] text-[#aaa] text-sm font-medium hover:border-[#ff3300] hover:text-white hover:bg-[#ff3300]/10 transition-all duration-150">
+                    className="py-2 md:py-3 px-2 md:px-4 rounded-lg border border-[#1e1e1e] text-[#aaa] text-xs md:text-sm font-medium hover:border-[#ff3300] hover:text-white hover:bg-[#ff3300]/10 transition-all duration-150">
                     {fmt12h(t)}
                   </button>
                 ))}
@@ -259,7 +270,7 @@ export default function BookCall() {
               {/* Orange top bar */}
               <div style={{ height: 3, background: "linear-gradient(90deg,#ff3300,#ff6600)" }}/>
 
-              <div style={{ height: "calc(92svh - 3px)", overflow: "hidden" }}>
+              <div style={{ maxHeight: "calc(92svh - 3px)", overflowY: "auto" }}>
                 <CalendarUI onClose={() => setOpen(false)} />
               </div>
             </motion.div>
