@@ -29,6 +29,26 @@ function formatTime12h(time: string): string {
 
 // ── OAuth2 Google Calendar + Meet ─────────────────────────────────────────
 
+// Cached at module level so the access token is reused across requests
+// instead of being re-fetched from Google on every booking submission.
+let _oauth2Client: InstanceType<typeof google.auth.OAuth2> | null = null;
+function getOAuth2Client() {
+  if (_oauth2Client) return _oauth2Client;
+  const clientId     = process.env.GOOGLE_CLIENT_ID;
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+  const refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
+  if (!clientId || !clientSecret || !refreshToken) {
+    console.error(
+      "[Book API] OAuth2 credentials missing. " +
+      "Set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN in .env.local."
+    );
+    throw new Error("Google Calendar not configured. Contact mintmediahouse.in to book.");
+  }
+  _oauth2Client = new google.auth.OAuth2(clientId, clientSecret);
+  _oauth2Client.setCredentials({ refresh_token: refreshToken });
+  return _oauth2Client;
+}
+
 async function createCalendarEventWithMeet(
   date: string,
   time: string,
@@ -36,23 +56,8 @@ async function createCalendarEventWithMeet(
   email: string,
   note: string
 ): Promise<string> {
-  const clientId     = process.env.GOOGLE_CLIENT_ID;
-  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-  const refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
-  const calId        = process.env.GOOGLE_CALENDAR_ID || "primary";
-
-  if (!clientId || !clientSecret || !refreshToken) {
-    console.error(
-      "[Book API] OAuth2 credentials missing. " +
-      "Set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN in .env.local. " +
-      "Run: node scripts/get-google-token.mjs"
-    );
-    throw new Error("Google Calendar not configured. Contact mintmediahouse.in to book.");
-  }
-
-  const oauth2Client = new google.auth.OAuth2(clientId, clientSecret);
-  oauth2Client.setCredentials({ refresh_token: refreshToken });
-
+  const calId = process.env.GOOGLE_CALENDAR_ID || "primary";
+  const oauth2Client = getOAuth2Client();
   const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
   const res = await calendar.events.insert({
@@ -317,33 +322,30 @@ export async function POST(request: NextRequest) {
     const gmailUser     = process.env.GMAIL_USER;
     const gmailPassword = process.env.GMAIL_PASSWORD;
 
+    // Fire emails without awaiting — calendar event + Meet link are already secured,
+    // so there's no reason to make the user wait for SMTP to finish.
     if (gmailUser && gmailPassword) {
-      try {
-        const transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: { user: gmailUser, pass: gmailPassword },
-        } as any);
-
-        await Promise.all([
-          transporter.sendMail({
-            from:    `"Mint Media House" <${gmailUser}>`,
-            to:      "mintmediaconnect@gmail.com",
-            replyTo: safeEmail,
-            subject: `New Discovery Call — ${safeName} (${date} at ${formatTime12h(time)} IST)`,
-            html:    teamEmail(safeName, safeEmail, date, time, note, meetLink),
-          }),
-          transporter.sendMail({
-            from:    `"Mint Media House" <${gmailUser}>`,
-            to:      safeEmail,
-            subject: `Your Discovery Call is Confirmed — ${date} at ${formatTime12h(time)} IST`,
-            html:    clientEmail(safeName, date, time, meetLink),
-          }),
-        ]);
-        console.log("[Book API] ✅ Confirmation emails sent to team + client.");
-      } catch (mailErr) {
-        // Email failure is non-fatal — Meet link was already created
-        console.error("[Book API] Email send failed (non-fatal):", mailErr);
-      }
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: { user: gmailUser, pass: gmailPassword },
+      } as any);
+      Promise.all([
+        transporter.sendMail({
+          from:    `"Mint Media House" <${gmailUser}>`,
+          to:      "mintmediaconnect@gmail.com",
+          replyTo: safeEmail,
+          subject: `New Discovery Call — ${safeName} (${date} at ${formatTime12h(time)} IST)`,
+          html:    teamEmail(safeName, safeEmail, date, time, note, meetLink),
+        }),
+        transporter.sendMail({
+          from:    `"Mint Media House" <${gmailUser}>`,
+          to:      safeEmail,
+          subject: `Your Discovery Call is Confirmed — ${date} at ${formatTime12h(time)} IST`,
+          html:    clientEmail(safeName, date, time, meetLink),
+        }),
+      ])
+        .then(() => console.log("[Book API] ✅ Confirmation emails sent to team + client."))
+        .catch((mailErr) => console.error("[Book API] Email send failed (non-fatal):", mailErr));
     }
 
     return NextResponse.json({ success: true, meetLink }, { status: 200 });
