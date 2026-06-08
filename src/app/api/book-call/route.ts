@@ -322,30 +322,33 @@ export async function POST(request: NextRequest) {
     const gmailUser     = process.env.GMAIL_USER;
     const gmailPassword = process.env.GMAIL_PASSWORD;
 
-    // Fire emails without awaiting — calendar event + Meet link are already secured,
-    // so there's no reason to make the user wait for SMTP to finish.
     if (gmailUser && gmailPassword) {
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: { user: gmailUser, pass: gmailPassword },
       } as any);
-      Promise.all([
-        transporter.sendMail({
-          from:    `"Mint Media House" <${gmailUser}>`,
-          to:      "mintmediaconnect@gmail.com",
-          replyTo: safeEmail,
-          subject: `New Discovery Call — ${safeName} (${date} at ${formatTime12h(time)} IST)`,
-          html:    teamEmail(safeName, safeEmail, date, time, note, meetLink),
-        }),
-        transporter.sendMail({
-          from:    `"Mint Media House" <${gmailUser}>`,
-          to:      safeEmail,
-          subject: `Your Discovery Call is Confirmed — ${date} at ${formatTime12h(time)} IST`,
-          html:    clientEmail(safeName, date, time, meetLink),
-        }),
-      ])
-        .then(() => console.log("[Book API] ✅ Confirmation emails sent to team + client."))
-        .catch((mailErr) => console.error("[Book API] Email send failed (non-fatal):", mailErr));
+      try {
+        await Promise.all([
+          transporter.sendMail({
+            from:    `"Mint Media House" <${gmailUser}>`,
+            to:      "mintmediaconnect@gmail.com",
+            replyTo: safeEmail,
+            subject: `New Discovery Call — ${safeName} (${date} at ${formatTime12h(time)} IST)`,
+            html:    teamEmail(safeName, safeEmail, date, time, note, meetLink),
+          }),
+          transporter.sendMail({
+            from:    `"Mint Media House" <${gmailUser}>`,
+            to:      safeEmail,
+            subject: `Your Discovery Call is Confirmed — ${date} at ${formatTime12h(time)} IST`,
+            html:    clientEmail(safeName, date, time, meetLink),
+          }),
+        ]);
+        console.log("[Book API] ✅ Confirmation emails sent to team + client.");
+      } catch (mailErr) {
+        console.error("[Book API] Email send failed:", mailErr);
+      }
+    } else {
+      console.warn("[Book API] GMAIL_USER or GMAIL_PASSWORD not set — skipping confirmation emails.");
     }
 
     return NextResponse.json({ success: true, meetLink }, { status: 200 });
