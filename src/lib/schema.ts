@@ -3,19 +3,19 @@ export const schemaMarkup = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://mintmediahouse.in/#organization",
-      "name": "Mint Media House",
-      "alternateName": "MintMedia",
-      "url": "https://mintmediahouse.in",
+      "@id": "https://dreamlaunches.com/#organization",
+      "name": "DreamLaunches",
+      "alternateName": "Dream Launches",
+      "url": "https://dreamlaunches.com",
       "description":
         "UI Animation & Launch Video Agency for SaaS. Viral video content for founders. 10M+ views generated.",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://mintmediahouse.in/logo.png",
+        "url": "https://dreamlaunches.com/logo.png",
         "width": 512,
         "height": 512,
       },
-      "email": "hello@mintmediahouse.in",
+      "email": "hello@dreamlaunches.com",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Mumbai",
@@ -32,7 +32,7 @@ export const schemaMarkup = {
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "Customer Service",
-        "email": "hello@mintmediahouse.in",
+        "email": "hello@dreamlaunches.com",
         "areaServed": "IN",
         "availableLanguage": "en",
       },
@@ -44,10 +44,10 @@ export const schemaMarkup = {
     },
     {
       "@type": "LocalBusiness",
-      "@id": "https://mintmediahouse.in/#localbusiness",
-      "name": "Mint Media House",
-      "image": "https://mintmediahouse.in/logo.png",
-      "url": "https://mintmediahouse.in",
+      "@id": "https://dreamlaunches.com/#localbusiness",
+      "name": "DreamLaunches",
+      "image": "https://dreamlaunches.com/logo.png",
+      "url": "https://dreamlaunches.com",
       "telephone": "+91-9XXX-XXX-XXX",
       "address": {
         "@type": "PostalAddress",
@@ -70,22 +70,22 @@ export const schemaMarkup = {
     },
     {
       "@type": "WebSite",
-      "@id": "https://mintmediahouse.in/#website",
-      "url": "https://mintmediahouse.in",
-      "name": "Mint Media House",
+      "@id": "https://dreamlaunches.com/#website",
+      "url": "https://dreamlaunches.com",
+      "name": "DreamLaunches",
       "description": "UI Animation & Launch Video Agency for SaaS Founders",
       "potentialAction": {
         "@type": "SearchAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": "https://mintmediahouse.in?s={search_term_string}",
+          "urlTemplate": "https://dreamlaunches.com?s={search_term_string}",
         },
         "query-input": "required name=search_term_string",
       },
     },
     {
       "@type": "ProductCollection",
-      "@id": "https://mintmediahouse.in/#services",
+      "@id": "https://dreamlaunches.com/#services",
       "name": "Video Production Services",
       "description": "UI Animations, Launch Videos, Brand Films",
       "hasOfferCatalog": {
@@ -96,19 +96,19 @@ export const schemaMarkup = {
             "@type": "Offer",
             "name": "UI Animations",
             "description": "Custom UI animations for SaaS products",
-            "url": "https://mintmediahouse.in#pricing",
+            "url": "https://dreamlaunches.com#pricing",
           },
           {
             "@type": "Offer",
             "name": "Launch Videos",
             "description": "Premium product launch videos",
-            "url": "https://mintmediahouse.in#pricing",
+            "url": "https://dreamlaunches.com#pricing",
           },
           {
             "@type": "Offer",
             "name": "Personal Brand Videos",
             "description": "Monthly personal brand video series",
-            "url": "https://mintmediahouse.in#pricing",
+            "url": "https://dreamlaunches.com#pricing",
           },
         ],
       },
@@ -120,31 +120,31 @@ export const schemaMarkup = {
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "https://mintmediahouse.in",
+          "item": "https://dreamlaunches.com",
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": "Services",
-          "item": "https://mintmediahouse.in#services",
+          "item": "https://dreamlaunches.com#services",
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": "Portfolio",
-          "item": "https://mintmediahouse.in#work",
+          "item": "https://dreamlaunches.com#work",
         },
         {
           "@type": "ListItem",
           "position": 4,
           "name": "Pricing",
-          "item": "https://mintmediahouse.in#pricing",
+          "item": "https://dreamlaunches.com#pricing",
         },
       ],
     },
     {
       "@type": "FAQPage",
-      "@id": "https://mintmediahouse.in/#faqpage",
+      "@id": "https://dreamlaunches.com/#faqpage",
       "mainEntity": [
         {
           "@type": "Question",

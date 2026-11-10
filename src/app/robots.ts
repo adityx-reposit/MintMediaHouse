@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/"],
       },
     ],
-    sitemap: "https://mintmediahouse.in/sitemap.xml",
+    sitemap: "https://dreamlaunches.com/sitemap.xml",
   };
 }

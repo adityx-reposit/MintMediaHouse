@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 
 export default function Testimonials() {
   const testis = [
-    { i: 'AK', name: 'Arjun Kapoor', role: 'Founder, Flowdesk SaaS', text: '"MintMediaHouse completely transformed how our product is perceived. The UI animations increased our demo-to-close rate by 40% in just two months."' },
-    { i: 'PS', name: 'Priya Shah', role: 'CEO, Luminary Wellness', text: '"Our product launch video hit 2M views organically. The Mint team understood our vision immediately and delivered beyond what we even imagined."' },
+    { i: 'AK', name: 'Arjun Kapoor', role: 'Founder, Flowdesk SaaS', text: '"DreamLaunches completely transformed how our product is perceived. The UI animations increased our demo-to-close rate by 40% in just two months."' },
+    { i: 'PS', name: 'Priya Shah', role: 'CEO, Luminary Wellness', text: '"Our product launch video hit 2M views organically. The DreamLaunches team understood our vision immediately and delivered beyond what we even imagined."' },
     { i: 'RN', name: 'Rohan Naik', role: 'Business Coach & Speaker', text: '"I went from 500 to 50K followers in 3 months with their personal branding series. Genuinely game-changing for my entire coaching business."' },
-    { i: 'MV', name: 'Meera Verma', role: 'CMO, HealthStack App', text: '"The ad creatives Mint built cut our CPL in half. They\'re not just a video agency — they\'re performance marketers who truly understand creative."' },
+    { i: 'MV', name: 'Meera Verma', role: 'CMO, HealthStack App', text: '"The ad creatives DreamLaunches built cut our CPL in half. They\'re not just a video agency — they\'re performance marketers who truly understand creative."' },
   ];
 
   return (

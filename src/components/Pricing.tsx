@@ -11,7 +11,7 @@ const plans = [
     delivery: "7 business days",
     features: [
       "1 × UI/Product Animation Video (30–60s)",
-      "The mintmedia Motion Brief™",
+      "The DreamLaunches Motion Brief™",
       "Feature-to-Feeling Script™",
       "2 export formats: 16:9 + 1:1",
       "2 rounds of revisions",

@@ -25,7 +25,7 @@ const PAIRS: Array<{ ratio: string; left: VideoItem; right: VideoItem }> = [
   {
     ratio: "55fr 45fr",
     left:  { src: "/videos/new video.mp4",  category: "UI ANIMATION",  title: "Motion that Sells",        aspect: "9/10", testimonial: null },
-    right: { src: "/videos/video2.mp4",     category: "UI ANIMATION",  title: "Scroll-Stopping Design",   aspect: "3/4",  testimonial: { quote: "ROAS tripled after switching to Mint's creatives.", author: "Siddharth K.", role: "Growth Lead, PlayAI" } },
+    right: { src: "/videos/video2.mp4",     category: "UI ANIMATION",  title: "Scroll-Stopping Design",   aspect: "3/4",  testimonial: { quote: "ROAS tripled after switching to DreamLaunches' creatives.", author: "Siddharth K.", role: "Growth Lead, PlayAI" } },
   },
   {
     ratio: "43fr 57fr",

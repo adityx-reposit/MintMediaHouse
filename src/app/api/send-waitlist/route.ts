@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
     if (!gmailUser || !gmailPassword) {
       return NextResponse.json(
-        { error: "Email service not configured. Please contact hello@mintmediahouse.in", code: "MISSING_CONFIG" },
+        { error: "Email service not configured. Please contact hello@dreamlaunches.com", code: "MISSING_CONFIG" },
         { status: 503 }
       );
     }
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     });
 
     await transporter.sendMail({
-      from: `"Mint Media House" <${gmailUser}>`,
+      from: `"DreamLaunches" <${gmailUser}>`,
       to: safeEmail,
       subject: `We received your application — Self Growth Channel`,
       html: `
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
           <body style="font-family:Arial,sans-serif;background:#f4f4f4;padding:20px;margin:0;">
             <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
               <div style="background:#111;padding:20px 32px;text-align:center;">
-                <img src="https://mintmediahouse.in/logo/logo.png" alt="Mint Media House" width="120" height="48" style="display:block;margin:0 auto;filter:brightness(1.2);" />
+                <img src="https://dreamlaunches.com/logo/logo.png" alt="DreamLaunches" width="120" height="48" style="display:block;margin:0 auto;filter:brightness(1.2);" />
               </div>
               <div style="padding:36px 32px;">
                 <p style="margin:0 0 20px;font-size:16px;color:#111;font-weight:600;">Hey ${safeName},</p>
@@ -80,10 +80,10 @@ export async function POST(request: NextRequest) {
                   <p style="margin:0;font-size:13px;color:#444;">🎬 <strong>Frequency:</strong> ${frequency}</p>
                 </div>
                 <p style="margin:24px 0 8px;color:#888;font-size:13px;line-height:1.6;">Questions? Just reply to this email — we read every one.</p>
-                <p style="margin:0;color:#888;font-size:13px;">Or visit us at <a href="https://mintmediahouse.in" style="color:#ff3300;text-decoration:none;">mintmediahouse.in</a></p>
+                <p style="margin:0;color:#888;font-size:13px;">Or visit us at <a href="https://dreamlaunches.com" style="color:#ff3300;text-decoration:none;">dreamlaunches.com</a></p>
               </div>
               <div style="background:#f4f4f4;padding:16px 32px;text-align:center;border-top:1px solid #eee;">
-                <p style="margin:0;color:#bbb;font-size:11px;letter-spacing:0.5px;">— The Mint Media House Team</p>
+                <p style="margin:0;color:#bbb;font-size:11px;letter-spacing:0.5px;">— The DreamLaunches Team</p>
               </div>
             </div>
           </body>

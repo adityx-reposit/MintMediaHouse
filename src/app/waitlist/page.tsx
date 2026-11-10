@@ -6,9 +6,9 @@ import Footer from "@/components/Footer";
 export const metadata: Metadata = {
   title: "Join the Waitlist — Self Growth Channel",
   description:
-    "Create a premium self-growth personal brand with high-performing content strategies across social platforms. Join the Mint Media House waitlist.",
+    "Create a premium self-growth personal brand with high-performing content strategies across social platforms. Join the DreamLaunches waitlist.",
   alternates: {
-    canonical: "https://mintmediahouse.in/waitlist",
+    canonical: "https://dreamlaunches.com/waitlist",
   },
   robots: { index: true, follow: true },
 };

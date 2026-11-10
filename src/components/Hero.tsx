@@ -18,7 +18,7 @@ export default function Hero() {
           className="text-[0.68rem] tracking-[0.2em] uppercase text-muted mb-5 flex items-center gap-3"
         >
           <span className="block w-6 h-[1px] bg-muted" aria-hidden="true"></span>
-          <span className="sr-only">Mint Media House</span>
+          <span className="sr-only">DreamLaunches</span>
           10M+ VIEWS GENERATED · TRUSTED BY SAAS FOUNDERS
         </motion.div>
 
@@ -41,7 +41,7 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mt-8 max-w-[440px] text-[0.95rem] font-light text-[#888888] leading-relaxed"
         >
-          <strong>Mint Media House</strong> creates custom UI animations, launch videos & personal brand content for SaaS founders. We've helped 15+ startups generate millions of organic views and scale their revenue.
+          <strong>DreamLaunches</strong> creates custom UI animations, launch videos & personal brand content for SaaS founders. We've helped 15+ startups generate millions of organic views and scale their revenue.
         </motion.p>
 
         <motion.div
@@ -88,7 +88,7 @@ export default function Hero() {
             </text>
           </motion.svg>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full flex items-center justify-center shadow-2xl overflow-hidden z-10">
-            <img src="/android-chrome-512x512.png" alt="Mint Media House — UI animation and launch video agency for SaaS founders" width={96} height={96} className="w-full h-full object-contain" />
+            <img src="/android-chrome-512x512.png" alt="DreamLaunches — UI animation and launch video agency for SaaS founders" width={96} height={96} className="w-full h-full object-contain" />
           </div>
         </div>
 
@@ -98,7 +98,7 @@ export default function Hero() {
           transition={{ duration: 3.1, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-[8%] left-[-10%] bg-[#111111] border border-[#2a2a2a] rounded-[16px] p-6 flex items-center justify-center shadow-2xl z-20"
         >
-          <img src="/blackbox-logo.png" alt="Blackbox AI launch video client — Mint Media House SaaS case study" loading="lazy" decoding="async" width={160} height={80} className="h-[80px] w-auto object-contain" />
+          <img src="/blackbox-logo.png" alt="Blackbox AI launch video client — DreamLaunches SaaS case study" loading="lazy" decoding="async" width={160} height={80} className="h-[80px] w-auto object-contain" />
         </motion.div>
 
         <motion.div
@@ -106,7 +106,7 @@ export default function Hero() {
           transition={{ duration: 2.7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
           className="absolute top-[42%] right-[-8%] bg-[#111111] border border-[#2a2a2a] rounded-[16px] p-6 flex items-center justify-center shadow-2xl z-20"
         >
-          <img src="/playai.png" alt="PlayAI Network launch video client — Mint Media House" loading="lazy" decoding="async" width={160} height={80} className="h-[80px] w-auto object-contain" />
+          <img src="/playai.png" alt="PlayAI Network launch video client — DreamLaunches" loading="lazy" decoding="async" width={160} height={80} className="h-[80px] w-auto object-contain" />
         </motion.div>
 
         <motion.div
@@ -114,7 +114,7 @@ export default function Hero() {
           transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.9 }}
           className="absolute bottom-[5%] left-[2%] bg-[#111111] border border-[#2a2a2a] rounded-[16px] p-6 flex items-center justify-center shadow-2xl z-20"
         >
-          <img src="/base-logo.png" alt="Base L2 UI animation client — Mint Media House case study" loading="lazy" decoding="async" width={160} height={80} className="h-[80px] w-auto object-contain" />
+          <img src="/base-logo.png" alt="Base L2 UI animation client — DreamLaunches case study" loading="lazy" decoding="async" width={160} height={80} className="h-[80px] w-auto object-contain" />
         </motion.div>
       </motion.div>
     </section>

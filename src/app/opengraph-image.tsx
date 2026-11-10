@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Mint Media House - UI Animation & Launch Video Agency";
+export const alt = "DreamLaunches - UI Animation & Launch Video Agency";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -22,7 +22,7 @@ export default async function OGImage() {
       >
         {/* Logo */}
         <img
-          src="https://mintmediahouse.in/logo2.png"
+          src="https://dreamlaunches.com/logo2.png"
           width={320}
           height={213}
           style={{ objectFit: "contain", filter: "invert(1)" }}
@@ -57,7 +57,7 @@ export default async function OGImage() {
           <span>·</span>
           <span>15+ Clients</span>
           <span>·</span>
-          <span>mintmediahouse.in</span>
+          <span>dreamlaunches.com</span>
         </div>
       </div>
     ),

@@ -111,7 +111,7 @@ export default function CinematicHero() {
             {/* Dark logo — initial state, fades out on first scroll */}
             <motion.img
               src="/logo/logo.png"
-              alt="Mint Media House"
+              alt="DreamLaunches"
               style={{
                 width: "100%", height: "auto", objectFit: "contain",
                 position: "absolute", inset: 0,
@@ -178,7 +178,7 @@ export default function CinematicHero() {
             className="mt-3 font-inter text-[#555] leading-relaxed"
             style={{ fontSize: "clamp(0.65rem, 0.9vw, 0.78rem)", maxWidth: "min(320px, 80vw)" }}
           >
-            Mint Media House creates custom UI animations, launch videos &amp; personal brand content for SaaS founders. We&apos;ve helped 15+ startups generate millions of organic views and scale their revenue.
+            DreamLaunches creates custom UI animations, launch videos &amp; personal brand content for SaaS founders. We&apos;ve helped 15+ startups generate millions of organic views and scale their revenue.
           </p>
           </motion.div>
         </motion.div>

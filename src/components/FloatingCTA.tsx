@@ -60,7 +60,7 @@ export default function FloatingCTA() {
             boxShadow: "0 0 24px rgba(255,51,0,0.25)",
           }}
         >
-          {/* Mint Media logo */}
+          {/* DreamLaunches logo */}
           <svg viewBox="0 0 100 68" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-10 h-auto">
             <rect x="1"  y="44" width="13" height="22" rx="3" fill="#EDEAE0"/>
             <rect x="19" y="28" width="13" height="38" rx="3" fill="#EDEAE0"/>

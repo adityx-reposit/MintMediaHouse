@@ -4,12 +4,12 @@ import { motion } from "framer-motion";
 
 export default function Work() {
   const tweets = [
-    { i: 'SK', r: true, name: 'Siddharth Kulkarni', handle: '@siddkul', body: 'Just dropped our product launch video by <span class="text-[#ff3300] font-medium">@MintMediaHouse</span> — I\'ve never seen our audience this engaged. Comments are going crazy.', lk: 284, rt: 67, t: '2h' },
-    { i: 'NM', r: false, name: 'Neha Mehta', handle: '@neha_builds', body: 'The UI animation package from <span class="text-[#ff3300] font-medium">@MintMediaHouse</span> made our onboarding feel 10× more premium. Worth every single rupee for SaaS founders.', lk: 512, rt: 103, t: '4h' },
-    { i: 'VR', r: true, name: 'Vikram Rao', handle: '@vikramrao_', body: 'Hired <span class="text-[#ff3300] font-medium">@MintMediaHouse</span> for my personal brand — LinkedIn grew 4× in 6 weeks and I booked 12 new coaching clients. Genuinely game-changing.', lk: 731, rt: 188, t: '1d' },
-    { i: 'TA', r: false, name: 'Tara Ahuja', handle: '@taraahuja', body: 'Our course launch trailer by <span class="text-[#ff3300] font-medium">@MintMediaHouse</span> converted at 14% on a cold audience. If you\'re launching anything, talk to these guys.', lk: 344, rt: 89, t: '2d' },
-    { i: 'DK', r: true, name: 'Dev Khanna', handle: '@devkhanna_io', body: 'Meta ad creative from <span class="text-[#ff3300] font-medium">@MintMediaHouse</span> cut our CPL from ₹340 to ₹190 in week one. Creative really does make this much difference.', lk: 621, rt: 142, t: '3d' },
-    { i: 'RP', r: false, name: 'Riya Pillai', handle: '@riyapillai', body: 'Working with <span class="text-[#ff3300] font-medium">@MintMediaHouse</span> felt like having a full in-house creative team. Responsive, strategic, obsessed with quality.', lk: 198, rt: 44, t: '5d' },
+    { i: 'SK', r: true, name: 'Siddharth Kulkarni', handle: '@siddkul', body: 'Just dropped our product launch video by <span class="text-[#ff3300] font-medium">@DreamLaunches</span> — I\'ve never seen our audience this engaged. Comments are going crazy.', lk: 284, rt: 67, t: '2h' },
+    { i: 'NM', r: false, name: 'Neha Mehta', handle: '@neha_builds', body: 'The UI animation package from <span class="text-[#ff3300] font-medium">@DreamLaunches</span> made our onboarding feel 10× more premium. Worth every single rupee for SaaS founders.', lk: 512, rt: 103, t: '4h' },
+    { i: 'VR', r: true, name: 'Vikram Rao', handle: '@vikramrao_', body: 'Hired <span class="text-[#ff3300] font-medium">@DreamLaunches</span> for my personal brand — LinkedIn grew 4× in 6 weeks and I booked 12 new coaching clients. Genuinely game-changing.', lk: 731, rt: 188, t: '1d' },
+    { i: 'TA', r: false, name: 'Tara Ahuja', handle: '@taraahuja', body: 'Our course launch trailer by <span class="text-[#ff3300] font-medium">@DreamLaunches</span> converted at 14% on a cold audience. If you\'re launching anything, talk to these guys.', lk: 344, rt: 89, t: '2d' },
+    { i: 'DK', r: true, name: 'Dev Khanna', handle: '@devkhanna_io', body: 'Meta ad creative from <span class="text-[#ff3300] font-medium">@DreamLaunches</span> cut our CPL from ₹340 to ₹190 in week one. Creative really does make this much difference.', lk: 621, rt: 142, t: '3d' },
+    { i: 'RP', r: false, name: 'Riya Pillai', handle: '@riyapillai', body: 'Working with <span class="text-[#ff3300] font-medium">@DreamLaunches</span> felt like having a full in-house creative team. Responsive, strategic, obsessed with quality.', lk: 198, rt: 44, t: '5d' },
   ];
 
   return (

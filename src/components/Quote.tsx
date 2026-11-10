@@ -51,7 +51,7 @@ export default function Quote() {
           SOMETHING <em className="not-italic text-[#ff3300]">GREAT</em>
         </h2>
         <p className="text-[#888888] text-[0.88rem] mt-4 font-light">
-          Tell <strong>Mint Media House</strong> about your project — our production team will reply within 24 hours with a custom proposal.
+          Tell <strong>DreamLaunches</strong> about your project — our production team will reply within 24 hours with a custom proposal.
         </p>
       </motion.div>
 

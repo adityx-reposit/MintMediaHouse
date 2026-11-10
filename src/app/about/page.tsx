@@ -3,10 +3,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "About — The Team Behind Mint Media House",
+  title: "About — The Team Behind DreamLaunches",
   description:
-    "Mint Media House is a Mumbai-based creative studio building UI animations, launch videos and ad creatives for SaaS founders. Learn about our process, values and team.",
-  alternates: { canonical: "https://mintmediahouse.in/about" },
+    "DreamLaunches is a Mumbai-based creative studio building UI animations, launch videos and ad creatives for SaaS founders. Learn about our process, values and team.",
+  alternates: { canonical: "https://dreamlaunches.com/about" },
 };
 
 export default function AboutPage() {
@@ -24,7 +24,7 @@ export default function AboutPage() {
 
           <section className="space-y-6 text-[0.98rem] leading-[1.85]">
             <p>
-              Mint Media House is an independent creative studio based in Mumbai, India. We
+              DreamLaunches is an independent creative studio based in Mumbai, India. We
               produce UI animations, launch videos, and performance-driven ad creatives for
               SaaS founders who need motion work that converts, not just looks good.
             </p>

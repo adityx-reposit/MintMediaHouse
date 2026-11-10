@@ -5,8 +5,8 @@ import Footer from "@/components/Footer";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "How Mint Media House collects, uses, and protects the information you share when requesting a quote, booking a call, or browsing the site.",
-  alternates: { canonical: "https://mintmediahouse.in/privacy" },
+    "How DreamLaunches collects, uses, and protects the information you share when requesting a quote, booking a call, or browsing the site.",
+  alternates: { canonical: "https://dreamlaunches.com/privacy" },
 };
 
 export default function PrivacyPage() {
@@ -24,9 +24,9 @@ export default function PrivacyPage() {
 
           <section className="space-y-6 text-[0.95rem] leading-[1.8]">
             <p>
-              Mint Media House (&ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;) operates{" "}
-              <a href="https://mintmediahouse.in" className="text-[#ff3300] underline">
-                mintmediahouse.in
+              DreamLaunches (&ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;) operates{" "}
+              <a href="https://dreamlaunches.com" className="text-[#ff3300] underline">
+                dreamlaunches.com
               </a>{" "}
               (the &ldquo;Site&rdquo;). This policy explains what personal data we collect, how we
               use it, and the rights you have over that data.
@@ -65,8 +65,8 @@ export default function PrivacyPage() {
             </h2>
             <p>
               Quote-form submissions are delivered to{" "}
-              <a href="mailto:hello@mintmediahouse.in" className="text-[#ff3300] underline">
-                hello@mintmediahouse.in
+              <a href="mailto:hello@dreamlaunches.com" className="text-[#ff3300] underline">
+                hello@dreamlaunches.com
               </a>
               . We store them in our mailbox until the enquiry is resolved plus a reasonable
               retention window for accounting and tax compliance.
@@ -100,8 +100,8 @@ export default function PrivacyPage() {
             <p>
               You may request access to, correction of, or deletion of any personal data we hold
               about you at any time by emailing{" "}
-              <a href="mailto:hello@mintmediahouse.in" className="text-[#ff3300] underline">
-                hello@mintmediahouse.in
+              <a href="mailto:hello@dreamlaunches.com" className="text-[#ff3300] underline">
+                hello@dreamlaunches.com
               </a>
               . We respond within 30 days.
             </p>
@@ -110,9 +110,9 @@ export default function PrivacyPage() {
               7. Contact
             </h2>
             <p>
-              Mint Media House &middot; Mumbai, India &middot;{" "}
-              <a href="mailto:hello@mintmediahouse.in" className="text-[#ff3300] underline">
-                hello@mintmediahouse.in
+              DreamLaunches &middot; Mumbai, India &middot;{" "}
+              <a href="mailto:hello@dreamlaunches.com" className="text-[#ff3300] underline">
+                hello@dreamlaunches.com
               </a>
             </p>
           </section>

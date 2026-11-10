@@ -22,9 +22,9 @@ export default function Navbar() {
       <a
         className="font-bebas text-lg md:text-2xl tracking-[0.12em] text-white no-underline cursor-none"
         href="/"
-        aria-label="Mint Media House"
+        aria-label="DreamLaunches"
       >
-        MINT<span className="text-[#ff3300]">MEDIA</span>HOUSE
+        DREAM<span className="text-[#ff3300]">LAUNCHES</span>
       </a>
 
       <div className="hidden md:flex items-center gap-8 text-[0.65rem] tracking-[0.2em] uppercase text-[#555]">

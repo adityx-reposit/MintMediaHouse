@@ -42,7 +42,7 @@ function getOAuth2Client() {
       "[Book API] OAuth2 credentials missing. " +
       "Set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN in .env.local."
     );
-    throw new Error("Google Calendar not configured. Contact mintmediahouse.in to book.");
+    throw new Error("Google Calendar not configured. Contact dreamlaunches.com to book.");
   }
   _oauth2Client = new google.auth.OAuth2(clientId, clientSecret);
   _oauth2Client.setCredentials({ refresh_token: refreshToken });
@@ -65,8 +65,8 @@ async function createCalendarEventWithMeet(
     conferenceDataVersion: 1,
     sendUpdates: "all",           // sends calendar invite to attendee
     requestBody: {
-      summary:     `Discovery Call — ${name} × Mint Media House`,
-      description: `30-minute Discovery Call with Mint Media House\n\nGuest: ${name}\nEmail: ${email}${note ? `\n\nNote from ${name}: ${note}` : ""}\n\n——\nmintmediahouse.in`,
+      summary:     `Discovery Call — ${name} × DreamLaunches`,
+      description: `30-minute Discovery Call with DreamLaunches\n\nGuest: ${name}\nEmail: ${email}${note ? `\n\nNote from ${name}: ${note}` : ""}\n\n——\ndreamlaunches.com`,
       start: { dateTime: buildIST(date, time, 0),  timeZone: "Asia/Kolkata" },
       end:   { dateTime: buildIST(date, time, 30), timeZone: "Asia/Kolkata" },
       attendees: [{ email }],
@@ -109,7 +109,7 @@ function teamEmail(
   <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
     <div style="background:#ff3300;padding:24px 32px;">
       <table cellpadding="0" cellspacing="0" border="0" style="width:100%;"><tr>
-        <td><img src="https://mintmediahouse.in/logo/logo.png" alt="Mint Media" width="48" height="32" style="display:block;"/></td>
+        <td><img src="https://dreamlaunches.com/logo/logo.png" alt="DreamLaunches" width="48" height="32" style="display:block;"/></td>
         <td align="right"><span style="color:#fff;font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:700;">New Discovery Call</span></td>
       </tr></table>
     </div>
@@ -157,7 +157,7 @@ function clientEmail(
               <tr>
                 <td>
                   <p style="margin:0;font-size:11px;letter-spacing:3px;color:#ff3300;text-transform:uppercase;font-weight:600;">// Confirmed</p>
-                  <img src="https://mintmediahouse.in/logo/logo.png" alt="Mint Media House" width="80" height="54" style="margin:10px 0 0;display:block;" />
+                  <img src="https://dreamlaunches.com/logo/logo.png" alt="DreamLaunches" width="80" height="54" style="margin:10px 0 0;display:block;" />
                 </td>
                 <td align="right" valign="top">
                   <div style="width:48px;height:48px;background:#ff3300;border-radius:50%;text-align:center;line-height:48px;font-size:22px;">✓</div>
@@ -171,7 +171,7 @@ function clientEmail(
         <tr>
           <td style="padding:36px 40px 0;">
             <p style="margin:0 0 8px;font-size:22px;font-weight:700;color:#ffffff;">Hey ${firstName},</p>
-            <p style="margin:0;font-size:15px;color:#888888;line-height:1.7;">Your <span style="color:#ffffff;font-weight:600;">30-minute Discovery Call</span> with Mint Media House is locked in. Here's everything you need.</p>
+            <p style="margin:0;font-size:15px;color:#888888;line-height:1.7;">Your <span style="color:#ffffff;font-weight:600;">30-minute Discovery Call</span> with DreamLaunches is locked in. Here's everything you need.</p>
           </td>
         </tr>
 
@@ -267,10 +267,10 @@ function clientEmail(
               <tr>
                 <td>
                   <p style="margin:0 0 4px;font-size:13px;color:#555;">Questions? Just reply to this email.</p>
-                  <a href="https://mintmediahouse.in" style="font-size:13px;color:#ff3300;text-decoration:none;font-weight:600;">mintmediahouse.in</a>
+                  <a href="https://dreamlaunches.com" style="font-size:13px;color:#ff3300;text-decoration:none;font-weight:600;">dreamlaunches.com</a>
                 </td>
                 <td align="right">
-                  <img src="https://mintmediahouse.in/logo/logo.png" alt="Mint Media" width="44" height="30" style="display:block;" />
+                  <img src="https://dreamlaunches.com/logo/logo.png" alt="DreamLaunches" width="44" height="30" style="display:block;" />
                 </td>
               </tr>
             </table>
@@ -281,7 +281,7 @@ function clientEmail(
       <!-- /Card -->
 
       <!-- Bottom note -->
-      <p style="margin:20px 0 0;font-size:11px;color:#333;text-align:center;">This confirmation was sent from mintmediahouse.in</p>
+      <p style="margin:20px 0 0;font-size:11px;color:#333;text-align:center;">This confirmation was sent from dreamlaunches.com</p>
 
     </td></tr>
   </table>
@@ -330,14 +330,14 @@ export async function POST(request: NextRequest) {
       try {
         await Promise.all([
           transporter.sendMail({
-            from:    `"Mint Media House" <${gmailUser}>`,
+            from:    `"DreamLaunches" <${gmailUser}>`,
             to:      "mintmediaconnect@gmail.com",
             replyTo: safeEmail,
             subject: `New Discovery Call — ${safeName} (${date} at ${formatTime12h(time)} IST)`,
             html:    teamEmail(safeName, safeEmail, date, time, note, meetLink),
           }),
           transporter.sendMail({
-            from:    `"Mint Media House" <${gmailUser}>`,
+            from:    `"DreamLaunches" <${gmailUser}>`,
             to:      safeEmail,
             subject: `Your Discovery Call is Confirmed — ${date} at ${formatTime12h(time)} IST`,
             html:    clientEmail(safeName, date, time, meetLink),

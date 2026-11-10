@@ -98,7 +98,7 @@ export default function CaseStudies() {
             <em className="not-italic text-[#ff3300]">Stories</em>
           </h2>
           <p className="text-[0.95rem] text-[#888888] mt-4 max-w-2xl mx-auto">
-            Here's what happened when founders chose Mint Media for their video strategy.
+            Here's what happened when founders chose DreamLaunches for their video strategy.
           </p>
         </motion.div>
 

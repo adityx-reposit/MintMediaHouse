@@ -3,8 +3,8 @@ export default function Footer() {
     <footer className="bg-[#0a0a0a] border-t border-[#1e1e1e] pt-16 px-[5vw] pb-9">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-12 mb-16">
         <div>
-          <a className="block mb-6 cursor-none" href="/" aria-label="Mint Media House home">
-            <img src="/logo.png" alt="Mint Media House — UI animation & launch video agency for SaaS" width={200} height={64} className="h-10 md:h-12 lg:h-16 w-auto object-contain" />
+          <a className="block mb-6 cursor-none" href="/" aria-label="DreamLaunches home">
+            <img src="/logo.png" alt="DreamLaunches — UI animation & launch video agency for SaaS" width={200} height={64} className="h-10 md:h-12 lg:h-16 w-auto object-contain" />
           </a>
           <p className="text-[0.82rem] text-[#888888] leading-[1.75] max-w-[260px] font-light">
             A creative media agency helping founders and brands build authority through world-class content, animations, and strategy.
@@ -65,14 +65,14 @@ export default function Footer() {
           <h4 className="text-[0.62rem] tracking-[0.18em] uppercase text-muted mb-5">Connect</h4>
           <a href="#quote" className="block text-[0.82rem] text-[#888888] no-underline mb-2.5 transition-colors duration-200 hover:text-white cursor-none">Get a Quote</a>
           <a href="#book" className="block text-[0.82rem] text-[#888888] no-underline mb-2.5 transition-colors duration-200 hover:text-white cursor-none">Book a Call</a>
-          <a href="mailto:hello@mintmediahouse.in" className="block text-[0.82rem] text-[#888888] no-underline mb-2.5 transition-colors duration-200 hover:text-white cursor-none">hello@mintmediahouse.in</a>
+          <a href="mailto:hello@dreamlaunches.com" className="block text-[0.82rem] text-[#888888] no-underline mb-2.5 transition-colors duration-200 hover:text-white cursor-none">hello@dreamlaunches.com</a>
           <a href="/privacy" className="block text-[0.82rem] text-[#888888] no-underline mb-2.5 transition-colors duration-200 hover:text-white cursor-none">Privacy Policy</a>
         </div>
       </div>
 
       <div className="border-t border-[#1e1e1e] pt-6 flex flex-col md:flex-row justify-between items-center text-[0.68rem] tracking-[0.08em] text-muted gap-4">
-        <span>© {new Date().getFullYear()} Mint Media House. All rights reserved.</span>
-        <span>MUMBAI, IN · HELLO@MINTMEDIAHOUSE.IN</span>
+        <span>© {new Date().getFullYear()} DreamLaunches. All rights reserved.</span>
+        <span>MUMBAI, IN · HELLO@DREAMLAUNCHES.COM</span>
       </div>
     </footer>
   );

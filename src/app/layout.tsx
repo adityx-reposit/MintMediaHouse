@@ -23,14 +23,14 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mintmediahouse.in"),
+  metadataBase: new URL("https://dreamlaunches.com"),
   title: {
     default:
-      "Mint Media House — UI Animation & Launch Video Agency for SaaS Founders",
-    template: "%s | Mint Media House",
+      "DreamLaunches — UI Animation & Launch Video Agency for SaaS Founders",
+    template: "%s | DreamLaunches",
   },
   description:
-    "Mint Media House creates custom UI animations, launch videos & personal brand content for SaaS founders. We've helped 15+ startups generate millions of organic views and scale their revenue.",
+    "DreamLaunches creates custom UI animations, launch videos & personal brand content for SaaS founders. We've helped 15+ startups generate millions of organic views and scale their revenue.",
   keywords: [
     "video production agency Mumbai",
     "UI animation services",
@@ -44,16 +44,16 @@ export const metadata: Metadata = {
     "viral video agency"
   ],
   openGraph: {
-    title: "UI Animation & Launch Video Agency for SaaS | Mint Media House",
+    title: "UI Animation & Launch Video Agency for SaaS | DreamLaunches",
     description: "Viral video content for SaaS founders. 10M+ views generated. Custom UI animations, launch videos & brand films. Mumbai-based. Get quote →",
-    url: "https://mintmediahouse.in",
-    siteName: "Mint Media House",
+    url: "https://dreamlaunches.com",
+    siteName: "DreamLaunches",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Mint Media House - Video Production for SaaS",
+        alt: "DreamLaunches - Video Production for SaaS",
       },
     ],
     locale: "en_IN",
@@ -61,13 +61,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "UI Animation & Launch Video Agency | Mint Media House",
+    title: "UI Animation & Launch Video Agency | DreamLaunches",
     description: "Viral video content for SaaS founders. 10M+ views generated.",
     images: ["/og-image.png"],
     creator: "@mintmediahouse",
   },
   alternates: {
-    canonical: "https://mintmediahouse.in",
+    canonical: "https://dreamlaunches.com",
   },
   robots: {
     index: true,

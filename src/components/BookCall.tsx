@@ -78,9 +78,9 @@ function CalendarUI({ onClose }: { onClose: () => void }) {
       <div className="md:w-[200px] flex-shrink-0 border-b md:border-b-0 md:border-r border-[#1e1e1e] flex flex-col">
         {/* Mobile: compact single row */}
         <div className="flex md:hidden items-center gap-2 px-4 py-3">
-          <img src="/logo/logo.png" alt="Mint Media House" className="h-5 w-auto object-contain flex-shrink-0" style={{ filter: "brightness(0) invert(1)" }} />
+          <img src="/logo/logo.png" alt="DreamLaunches" className="h-5 w-auto object-contain flex-shrink-0" style={{ filter: "brightness(0) invert(1)" }} />
           <div className="flex-1 min-w-0">
-            <p className="font-bebas text-[0.6rem] tracking-[0.18em] text-[#ff3300] leading-none">MINTMEDIAHOUSE</p>
+            <p className="font-bebas text-[0.6rem] tracking-[0.18em] text-[#ff3300] leading-none">DREAMLAUNCHES</p>
             <p className="font-bebas text-sm tracking-wide text-white leading-tight">Discovery Call</p>
           </div>
           <div className="flex items-center gap-2 ml-auto flex-shrink-0">
@@ -90,8 +90,8 @@ function CalendarUI({ onClose }: { onClose: () => void }) {
         </div>
         {/* Desktop: stacked */}
         <div className="hidden md:flex flex-col p-6">
-          <img src="/logo/logo.png" alt="Mint Media House" className="mb-2 h-7 w-auto object-contain self-start" style={{ filter: "brightness(0) invert(1)" }} />
-          <p className="font-bebas text-[0.7rem] tracking-[0.18em] text-[#ff3300] mb-0.5">MINTMEDIAHOUSE</p>
+          <img src="/logo/logo.png" alt="DreamLaunches" className="mb-2 h-7 w-auto object-contain self-start" style={{ filter: "brightness(0) invert(1)" }} />
+          <p className="font-bebas text-[0.7rem] tracking-[0.18em] text-[#ff3300] mb-0.5">DREAMLAUNCHES</p>
           <h3 className="font-bebas text-lg tracking-wide text-white mb-4">Discovery Call</h3>
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-[#666] text-xs"><Clock size={11} className="text-[#ff3300]"/><span>30 minutes</span></div>
@@ -231,7 +231,7 @@ export default function BookCall() {
               className="h-8 w-auto object-contain"
               style={{ filter: "brightness(0) invert(1)" }} />
             <div className="text-left">
-              <p className="text-[0.58rem] tracking-[0.22em] uppercase text-[#555] font-inter mb-0.5">Mint Media House</p>
+              <p className="text-[0.58rem] tracking-[0.22em] uppercase text-[#555] font-inter mb-0.5">DreamLaunches</p>
               <p className="text-white font-bebas text-lg tracking-[0.1em]">Contact Us</p>
             </div>
             <div className="ml-2 text-[#ff3300] group-hover:translate-x-1 transition-transform duration-200">→</div>

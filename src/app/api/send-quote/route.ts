@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       
       return NextResponse.json(
         { 
-          error: "Email service not configured. Please contact support@mintmediahouse.in",
+          error: "Email service not configured. Please contact support@dreamlaunches.com",
           code: "MISSING_CONFIG"
         },
         { status: 503 }
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     const clientEmail = email.trim();
     const projectMessage = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-    // Email to Mint Media House
+    // Email to DreamLaunches
     console.log("[Quote API] Sending email to mintmediaconnect@gmail.com");
     await transporter.sendMail({
       from: `"${senderName}" <${gmailUser}>`,
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
     // Auto-reply to the sender
     console.log("[Quote API] Sending auto-reply to", clientEmail);
     await transporter.sendMail({
-      from: `"Mint Media House" <${gmailUser}>`,
+      from: `"DreamLaunches" <${gmailUser}>`,
       to: clientEmail,
       subject: `We received your request, ${senderName}!`,
       html: `
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
           <body style="font-family:Arial,sans-serif;background:#f4f4f4;padding:20px;">
             <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
               <div style="background:#111;padding:20px 32px;text-align:center;">
-                <img src="https://mintmediahouse.in/logo/logo.png" alt="Mint Media House" width="120" height="48" style="display:block;margin:0 auto;filter:brightness(1.2);" />
+                <img src="https://dreamlaunches.com/logo/logo.png" alt="DreamLaunches" width="120" height="48" style="display:block;margin:0 auto;filter:brightness(1.2);" />
               </div>
               <div style="padding:32px;">
                 <p style="margin:0 0 16px;">Hi ${senderName},</p>
@@ -120,8 +120,8 @@ export async function POST(request: NextRequest) {
                     <li>We'll email you the proposal directly</li>
                   </ul>
                 </div>
-                <p style="margin:24px 0 0;color:#888;font-size:13px;">Questions? Reply to this email or visit <a href="https://mintmediahouse.in" style="color:#ff3300;">mintmediahouse.in</a></p>
-                <p style="margin:12px 0 0;color:#999;font-size:12px;">— The Mint Media House Team</p>
+                <p style="margin:24px 0 0;color:#888;font-size:13px;">Questions? Reply to this email or visit <a href="https://dreamlaunches.com" style="color:#ff3300;">dreamlaunches.com</a></p>
+                <p style="margin:12px 0 0;color:#999;font-size:12px;">— The DreamLaunches Team</p>
               </div>
             </div>
           </body>
